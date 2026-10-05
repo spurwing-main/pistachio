@@ -4,7 +4,8 @@
  * instead of hiding, and the mobile menu opens groups in place instead of sub-screens.
  *
  * Markup contract (set in the Designer):
- *   [data-nav]                 the nav root; gets data-nav-scrolled and data-nav-menu-open
+ *   [data-nav]                 the nav root; gets data-nav-scrolled and data-nav-expanded
+ *                              (not data-nav-menu-open: Webflow's navbar CSS styles that name)
  *   [data-nav-menu]            the menu (dropdown row on desktop, the panel on mobile)
  *   [data-nav-group]           one group; gets data-open. It is the current section when
  *                              the page matches any link inside it (its trigger or items),
@@ -155,7 +156,7 @@ function setupNav(root) {
       if (event.key === "ArrowDown") {
         event.preventDefault();
         openGroup(group);
-        requestAnimationFrame(() => focusables(panelOf(group))[0]?.focus());
+        setTimeout(() => focusables(panelOf(group))[0]?.focus(), 0);
       }
     });
 
@@ -187,10 +188,10 @@ function setupNav(root) {
 
   /* ---- Mobile menu ---- */
   let lastFocused = null;
-  const menuOpen = () => root.dataset.navMenuOpen === "true";
+  const menuOpen = () => root.dataset.navExpanded === "true";
 
   const setMenu = (open) => {
-    root.dataset.navMenuOpen = String(open);
+    root.dataset.navExpanded = String(open);
     document.documentElement.classList.toggle("nav-menu-open", open);
     if (toggle) {
       toggle.setAttribute("aria-expanded", String(open));
@@ -199,19 +200,31 @@ function setupNav(root) {
     if (open) {
       const active = document.activeElement;
       lastFocused = active && root.contains(active) ? active : toggle;
-      requestAnimationFrame(() => focusables(menu || root)[0]?.focus());
+      setTimeout(() => focusables(menu || root)[0]?.focus(), 0);
     } else {
       closeGroups();
       lastFocused?.focus?.();
     }
   };
 
+  /* The button links to #nav-menu so the menu opens without this script. With it, keep
+     that out of the address: Webflow's in-page link handler would add it, and the CSS
+     opens the menu for it. */
+  const clearHash = () => {
+    if (menu?.id && window.location.hash === `#${menu.id}`) {
+      history.replaceState(null, "", window.location.pathname + window.location.search);
+    }
+  };
+  clearHash();
+
   if (toggle) {
     toggle.setAttribute("aria-expanded", "false");
     if (menu?.id) toggle.setAttribute("aria-controls", menu.id);
     toggle.addEventListener("click", (event) => {
       event.preventDefault();
+      event.stopPropagation();
       setMenu(!menuOpen());
+      clearHash();
     });
   }
 

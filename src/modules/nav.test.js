@@ -143,12 +143,12 @@ describe("mobile menu", () => {
   it("opens and closes from the button, labelled for screen readers, and locks the page", () => {
     const { nav, toggle } = mount();
     toggle.click();
-    expect(nav.dataset.navMenuOpen).toBe("true");
+    expect(nav.dataset.navExpanded).toBe("true");
     expect(toggle.getAttribute("aria-expanded")).toBe("true");
     expect(toggle.getAttribute("aria-label")).toBe("Close menu");
     expect(document.documentElement.classList.contains("nav-menu-open")).toBe(true);
     toggle.click();
-    expect(nav.dataset.navMenuOpen).toBe("false");
+    expect(nav.dataset.navExpanded).toBe("false");
     expect(document.documentElement.classList.contains("nav-menu-open")).toBe(false);
   });
 
@@ -158,14 +158,33 @@ describe("mobile menu", () => {
     trigger(platform).click();
     expect(platform.dataset.open).toBe("true");
     platform.querySelector('[data-nav-panel] a[href="/practice"]').click();
-    expect(nav.dataset.navMenuOpen).toBe("false");
+    expect(nav.dataset.navExpanded).toBe("false");
     expect(platform.dataset.open).toBe("false");
+  });
+
+  it("keeps #nav-menu out of the address", () => {
+    const { toggle } = mount("/#nav-menu");
+    expect(window.location.hash).toBe("");
+    toggle.click();
+    expect(window.location.hash).toBe("");
+  });
+
+  it("moves focus into the menu once it is open", () => {
+    // jsdom has no layout, so give elements the parent the visibility check looks for.
+    const offsetParent = vi.spyOn(HTMLElement.prototype, "offsetParent", "get").mockImplementation(function () {
+      return this.parentElement;
+    });
+    const { toggle } = mount();
+    toggle.click();
+    vi.advanceTimersByTime(1);
+    expect(document.activeElement.closest("[data-nav-menu]")).not.toBeNull();
+    offsetParent.mockRestore();
   });
 
   it("closes on Escape", () => {
     const { nav, toggle } = mount();
     toggle.click();
     document.dispatchEvent(new KeyboardEvent("keydown", { key: "Escape" }));
-    expect(nav.dataset.navMenuOpen).toBe("false");
+    expect(nav.dataset.navExpanded).toBe("false");
   });
 });

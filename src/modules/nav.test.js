@@ -108,6 +108,24 @@ describe("desktop dropdowns", () => {
     expect(platform.dataset.open).toBe("false");
   });
 
+  it("switches straight to the next group once one is open, from the side you came from", () => {
+    const { platform, resources } = mount();
+    const menu = document.querySelector("[data-nav-menu]");
+    platform.dispatchEvent(new Event("mouseenter"));
+    vi.advanceTimersByTime(70);
+    expect(menu.dataset.navSwitch).toBeUndefined();
+    platform.dispatchEvent(new Event("mouseleave"));
+    resources.dispatchEvent(new Event("mouseenter"));
+    vi.advanceTimersByTime(0);
+    expect(resources.dataset.open).toBe("true");
+    expect(menu.dataset.navSwitch).toBe("right");
+    expect(platform.hasAttribute("data-nav-leaving")).toBe(true);
+    resources.dispatchEvent(new Event("mouseleave"));
+    vi.advanceTimersByTime(120);
+    expect(menu.dataset.navSwitch).toBeUndefined();
+    expect(platform.hasAttribute("data-nav-leaving")).toBe(false);
+  });
+
   it("lets a mouse click go to the group's page", () => {
     const { platform } = mount();
     const click = new MouseEvent("click", { bubbles: true, cancelable: true });
@@ -179,6 +197,13 @@ describe("mobile menu", () => {
     vi.advanceTimersByTime(1);
     expect(document.activeElement.closest("[data-nav-menu]")).not.toBeNull();
     offsetParent.mockRestore();
+  });
+
+  it("closes from a tap on the scrim", () => {
+    const { nav, toggle } = mount();
+    toggle.click();
+    nav.click();
+    expect(nav.dataset.navExpanded).toBe("false");
   });
 
   it("closes on Escape", () => {

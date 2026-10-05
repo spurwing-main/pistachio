@@ -5,8 +5,10 @@
  *
  * Markup contract (set in the Designer):
  *   [data-nav]                 the nav root; gets data-nav-scrolled and data-nav-expanded
+ *                              (its ::before is the mobile scrim)
  *                              (not data-nav-menu-open: Webflow's navbar CSS styles that name)
- *   [data-nav-menu]            the menu (dropdown row on desktop, the panel on mobile)
+ *   [data-nav-menu]            the menu (dropdown row on desktop, the panel on mobile); gets
+ *                              --nav-panel-x/y/w/h and data-nav-switch for the desktop panel
  *   [data-nav-group]           one group; gets data-open. It is the current section when
  *                              the page matches any link inside it (its trigger or items),
  *                              so adding a Nav item is all it takes to add a page.
@@ -108,13 +110,39 @@ function setupNav(root) {
     triggerOf(group)?.setAttribute("aria-expanded", String(open));
   };
 
+  /* Desktop: one white panel behind the open group's items. It moves and resizes to the
+     next group when you switch, and the items slide in from the side you came from. */
+  const placeBackdrop = (group) => {
+    const panel = panelOf(group);
+    if (!menu || !panel) return;
+    menu.style.setProperty("--nav-panel-x", `${group.offsetLeft + panel.offsetLeft}px`);
+    menu.style.setProperty("--nav-panel-y", `${group.offsetTop + panel.offsetTop}px`);
+    menu.style.setProperty("--nav-panel-w", `${panel.offsetWidth}px`);
+    menu.style.setProperty("--nav-panel-h", `${panel.offsetHeight}px`);
+  };
+
   const openGroup = (target) => {
+    const prev = groups.find(isOpen);
+    if (menu && isDesktop()) {
+      if (prev && prev !== target) {
+        menu.dataset.navSwitch = groups.indexOf(target) > groups.indexOf(prev) ? "right" : "left";
+        groups.forEach((group) => group.toggleAttribute("data-nav-leaving", group === prev));
+        void menu.offsetWidth; // the new group's items take their starting side first
+      } else if (!prev) {
+        delete menu.dataset.navSwitch;
+      }
+      placeBackdrop(target);
+    }
     groups.forEach((group) => setGroup(group, group === target));
     syncMenu();
   };
 
   const closeGroups = () => {
-    groups.forEach((group) => setGroup(group, false));
+    groups.forEach((group) => {
+      setGroup(group, false);
+      group.removeAttribute("data-nav-leaving");
+    });
+    if (menu) delete menu.dataset.navSwitch;
     syncMenu();
   };
 
@@ -135,7 +163,8 @@ function setupNav(root) {
     group.addEventListener("mouseenter", () => {
       if (!mouseDesktop()) return;
       cancelTimers();
-      openTimer = setTimeout(() => openGroup(group), OPEN_DELAY);
+      /* Wait before the first panel opens; once one is open, switch straight away. */
+      openTimer = setTimeout(() => openGroup(group), groups.some(isOpen) ? 0 : OPEN_DELAY);
     });
 
     group.addEventListener("mouseleave", () => {
@@ -228,9 +257,11 @@ function setupNav(root) {
     });
   }
 
-  /* A real link inside the open menu closes it. */
+  /* A real link inside the open menu closes it, and so does a tap on the scrim (the nav's
+     own backdrop, outside the bar and the panel). */
   root.addEventListener("click", (event) => {
     if (!menuOpen()) return;
+    if (event.target === root) return setMenu(false);
     const link = closestWithin(root, event.target, "a[href]");
     if (!link || link.matches("[data-nav-trigger],[data-nav-menu-toggle]")) return;
     setMenu(false);

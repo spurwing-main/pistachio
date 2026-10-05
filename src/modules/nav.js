@@ -4,17 +4,16 @@
  * instead of hiding, and the mobile menu opens groups in place instead of sub-screens.
  *
  * Markup contract (set in the Designer):
- *   [data-nav]                 the nav root; gets data-nav-scrolled and data-nav-expanded
- *                              (its ::before is the mobile scrim)
- *                              (not data-nav-menu-open: Webflow's navbar CSS styles that name)
+ *   [data-nav]                 the nav root; gets data-nav-scrolled and data-nav-expanded (not
+ *                              data-nav-menu-open: Webflow's navbar CSS styles that name)
  *   [data-nav-menu]            the menu (dropdown row on desktop, the panel on mobile); gets
- *                              --nav-panel-x/y/w/h and data-nav-switch for the desktop panel
+ *                              data-nav-has-open, data-nav-switch and the white box's place
  *   [data-nav-group]           one group; gets data-open. It is the current section when
  *                              the page matches any link inside it (its trigger or items),
  *                              so adding a Nav item is all it takes to add a page.
  *     [data-nav-trigger]       the group's link; gets aria-expanded and aria-current
  *     [data-nav-panel]         the group's panel
- *   [data-nav-menu-toggle]     the mobile menu button
+ *   [data-nav-menu-toggle]     the mobile menu button (href "#")
  *
  * All looks live in the Nav embed's CSS, which styles off these attributes.
  */
@@ -99,39 +98,51 @@ function setupNav(root) {
     group.dataset.open = "false";
   });
 
-  const syncMenu = () => {
-    const open = groups.some((group) => group.dataset.open === "true");
-    if (open) menu?.setAttribute("data-nav-has-open", "");
-    else menu?.removeAttribute("data-nav-has-open");
-  };
+  const isOpen = (group) => group.dataset.open === "true";
+
+  const syncMenu = () => menu?.toggleAttribute("data-nav-has-open", groups.some(isOpen));
 
   const setGroup = (group, open) => {
     group.dataset.open = String(open);
     triggerOf(group)?.setAttribute("aria-expanded", String(open));
   };
 
-  /* Desktop: one white panel behind the open group's items. It moves and resizes to the
-     next group when you switch, and the items slide in from the side you came from. */
-  const placeBackdrop = (group) => {
-    const panel = panelOf(group);
-    if (!menu || !panel) return;
-    menu.style.setProperty("--nav-panel-x", `${group.offsetLeft + panel.offsetLeft}px`);
-    menu.style.setProperty("--nav-panel-y", `${group.offsetTop + panel.offsetTop}px`);
-    menu.style.setProperty("--nav-panel-w", `${panel.offsetWidth}px`);
-    menu.style.setProperty("--nav-panel-h", `${panel.offsetHeight}px`);
+  /* Desktop: one white box sits behind the open group's items (--nav-panel-*), and each
+     group's items are cut to it (their own place is --nav-list-*). */
+  const boxInMenu = (el) => {
+    let x = 0;
+    let y = 0;
+    for (let node = el; node && node !== menu; node = node.offsetParent) {
+      x += node.offsetLeft;
+      y += node.offsetTop;
+    }
+    return { x, y, w: el.offsetWidth, h: el.offsetHeight };
   };
 
+  const setBox = (el, name, box) =>
+    Object.entries(box).forEach(([key, value]) => el.style.setProperty(`--nav-${name}-${key}`, `${value}px`));
+
+  const placeBox = (group) => {
+    setBox(menu, "panel", boxInMenu(panelOf(group)));
+    groups.forEach((g) => {
+      const list = panelOf(g)?.firstElementChild;
+      if (list) setBox(list, "list", boxInMenu(list));
+    });
+  };
+
+  /* Switching groups moves the box, and the new items come in from the side you came from. */
   const openGroup = (target) => {
     const prev = groups.find(isOpen);
     if (menu && isDesktop()) {
-      if (prev && prev !== target) {
-        menu.dataset.navSwitch = groups.indexOf(target) > groups.indexOf(prev) ? "right" : "left";
-        groups.forEach((group) => group.toggleAttribute("data-nav-leaving", group === prev));
-        void menu.offsetWidth; // the new group's items take their starting side first
-      } else if (!prev) {
-        delete menu.dataset.navSwitch;
+      const switching = Boolean(prev) && prev !== target;
+      menu.toggleAttribute("data-nav-switch", switching);
+      groups.forEach((group) => group.toggleAttribute("data-nav-leaving", switching && group === prev));
+      if (switching) {
+        const rightwards = groups.indexOf(target) > groups.indexOf(prev);
+        menu.style.setProperty("--nav-from", rightwards ? "-0.75rem" : "0.75rem");
+        void menu.offsetWidth; // the new items take their starting side before they open
       }
-      placeBackdrop(target);
+      placeBox(target);
     }
     groups.forEach((group) => setGroup(group, group === target));
     syncMenu();
@@ -142,11 +153,10 @@ function setupNav(root) {
       setGroup(group, false);
       group.removeAttribute("data-nav-leaving");
     });
-    if (menu) delete menu.dataset.navSwitch;
+    menu?.removeAttribute("data-nav-switch");
+    menu?.style.removeProperty("--nav-from");
     syncMenu();
   };
-
-  const isOpen = (group) => group.dataset.open === "true";
 
   /* Desktop: hover intent with a mouse, click or keyboard otherwise. */
   let openTimer;
@@ -236,24 +246,12 @@ function setupNav(root) {
     }
   };
 
-  /* The button links to #nav-menu so the menu opens without this script. With it, keep
-     that out of the address: Webflow's in-page link handler would add it, and the CSS
-     opens the menu for it. */
-  const clearHash = () => {
-    if (menu?.id && window.location.hash === `#${menu.id}`) {
-      history.replaceState(null, "", window.location.pathname + window.location.search);
-    }
-  };
-  clearHash();
-
   if (toggle) {
     toggle.setAttribute("aria-expanded", "false");
     if (menu?.id) toggle.setAttribute("aria-controls", menu.id);
     toggle.addEventListener("click", (event) => {
       event.preventDefault();
-      event.stopPropagation();
       setMenu(!menuOpen());
-      clearHash();
     });
   }
 

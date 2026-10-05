@@ -23,7 +23,7 @@ function mount(path = "/") {
   window.history.replaceState({}, "", path);
   document.body.innerHTML = `
     <nav data-nav>
-      <a data-nav-menu-toggle href="#nav-menu" aria-label="Open menu">Menu</a>
+      <a data-nav-menu-toggle href="#" aria-label="Open menu">Menu</a>
       <div data-nav-menu id="nav-menu">
         <div data-nav-group="platform">
           <a data-nav-trigger href="/human-risk-management">Platform</a>
@@ -113,16 +113,17 @@ describe("desktop dropdowns", () => {
     const menu = document.querySelector("[data-nav-menu]");
     platform.dispatchEvent(new Event("mouseenter"));
     vi.advanceTimersByTime(70);
-    expect(menu.dataset.navSwitch).toBeUndefined();
+    expect(menu.hasAttribute("data-nav-switch")).toBe(false);
     platform.dispatchEvent(new Event("mouseleave"));
     resources.dispatchEvent(new Event("mouseenter"));
     vi.advanceTimersByTime(0);
     expect(resources.dataset.open).toBe("true");
-    expect(menu.dataset.navSwitch).toBe("right");
+    expect(menu.hasAttribute("data-nav-switch")).toBe(true);
+    expect(menu.style.getPropertyValue("--nav-from")).toBe("-0.75rem");
     expect(platform.hasAttribute("data-nav-leaving")).toBe(true);
     resources.dispatchEvent(new Event("mouseleave"));
     vi.advanceTimersByTime(120);
-    expect(menu.dataset.navSwitch).toBeUndefined();
+    expect(menu.hasAttribute("data-nav-switch")).toBe(false);
     expect(platform.hasAttribute("data-nav-leaving")).toBe(false);
   });
 
@@ -178,13 +179,6 @@ describe("mobile menu", () => {
     platform.querySelector('[data-nav-panel] a[href="/practice"]').click();
     expect(nav.dataset.navExpanded).toBe("false");
     expect(platform.dataset.open).toBe("false");
-  });
-
-  it("keeps #nav-menu out of the address", () => {
-    const { toggle } = mount("/#nav-menu");
-    expect(window.location.hash).toBe("");
-    toggle.click();
-    expect(window.location.hash).toBe("");
   });
 
   it("moves focus into the menu once it is open", () => {

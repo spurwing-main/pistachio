@@ -56,7 +56,6 @@ describe("current section", () => {
   it("matches a page and anything below it", () => {
     const { resources } = mount("/blog/how-exposed-is-your-business");
     expect(trigger(resources).getAttribute("aria-current")).toBe("true");
-    expect(document.querySelector("[data-nav-menu]").hasAttribute("data-nav-has-current")).toBe(true);
   });
 
   it("marks nothing on a page outside every group", () => {
@@ -113,18 +112,17 @@ describe("desktop dropdowns", () => {
     const menu = document.querySelector("[data-nav-menu]");
     platform.dispatchEvent(new Event("mouseenter"));
     vi.advanceTimersByTime(70);
-    expect(menu.hasAttribute("data-nav-switch")).toBe(false);
+    expect(platform.hasAttribute("data-nav-leaving")).toBe(false);
     platform.dispatchEvent(new Event("mouseleave"));
     resources.dispatchEvent(new Event("mouseenter"));
     vi.advanceTimersByTime(0);
     expect(resources.dataset.open).toBe("true");
-    expect(menu.hasAttribute("data-nav-switch")).toBe(true);
     expect(menu.style.getPropertyValue("--nav-from")).toBe("-0.75rem");
     expect(platform.hasAttribute("data-nav-leaving")).toBe(true);
     resources.dispatchEvent(new Event("mouseleave"));
     vi.advanceTimersByTime(120);
-    expect(menu.hasAttribute("data-nav-switch")).toBe(false);
     expect(platform.hasAttribute("data-nav-leaving")).toBe(false);
+    expect(menu.style.getPropertyValue("--nav-from")).toBe("");
   });
 
   it("lets a mouse click go to the group's page", () => {

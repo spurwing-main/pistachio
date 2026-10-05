@@ -137,10 +137,9 @@
   }
 
   async function getSource() {
-    if (environment === "live") return { url: liveUrl, kind: "live", localUp: null };
-    if (environment === "auto" && !devMode) {
-      return { url: liveUrl, kind: "live", localUp: null };
-    }
+    // Only look for a local bundle when asked (?env=local or the panel's Local button):
+    // probing localhost makes the browser ask visitors for local network access.
+    if (environment !== "local") return { url: liveUrl, kind: "live", localUp: null };
 
     const localUp = await localIsAvailable();
     if (localUp) return { url: localUrl, kind: "local", localUp: true };

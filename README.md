@@ -1,6 +1,6 @@
-# Pistachio — Webflow custom JS
+# Pistachio — Webflow custom code
 
-Use this repository for the custom JS of a Webflow project. Add one module for each independent behavior.
+The Designer owns HTML, ordinary styles and editable component content. `src/modules/` owns behaviour, with one module per concern. `embeds/` holds the paired Webflow CSS embeds for animation and selectors the Designer cannot express.
 
 The starter keeps source files, generated files, and the loader separate.
 
@@ -23,6 +23,8 @@ project/
 ```
 
 Commit `dist/bundle.js`. The CDN reads this file from GitHub.
+
+Keep the files and manifest in `embeds/` together. Pull fresh Webflow sources into this workspace before editing, compare against the live source, and push only the checked changes. A JavaScript release and a Webflow publish are separate steps; verify both before calling the result live.
 
 Do not commit project notes, reports, exports, or client data. Put these files in `local/`.
 

@@ -1,0 +1,113 @@
+<style>
+  /* Space between rich text blocks; the classes below set their own. */
+  :where(.w-richtext:not(.u-rich-text-gap-exempt) > *:not(:last-child)) {
+    margin-bottom: 1lh;
+  }
+
+  /* Rich text body (paragraphs, lists) */
+  .text-rich-text :is(p, ol, ul) {
+    font-size: var(--_rich-text---body--fs);
+    font-weight: var(--_rich-text---body--fw);
+    line-height: var(--_rich-text---body--lh);
+    letter-spacing: var(--_rich-text---body--ls);
+    font-family: var(--_rich-text---body--ff);
+  }
+
+  /* Headings */
+  .text-rich-text h1 {
+    font-size: var(--_rich-text---h1--fs);
+    font-weight: var(--_rich-text---h1--fw);
+    line-height: var(--_rich-text---h1--lh);
+    letter-spacing: var(--_rich-text---h1--ls);
+    font-family: var(--_rich-text---heading--ff);
+    margin-top: var(--_rich-text---h1--margin-top);
+    margin-bottom: var(--_rich-text---h1--margin-bottom);
+  }
+
+  .text-rich-text h2 {
+    font-size: var(--_rich-text---h2--fs);
+    font-weight: var(--_rich-text---h2--fw);
+    line-height: var(--_rich-text---h2--lh);
+    letter-spacing: var(--_rich-text---h2--ls);
+    font-family: var(--_rich-text---heading--ff);
+    margin-top: var(--_rich-text---h2--margin-top);
+    margin-bottom: var(--_rich-text---h2--margin-bottom);
+  }
+
+  .text-rich-text h3 {
+    font-size: var(--_rich-text---h3--fs);
+    font-weight: var(--_rich-text---h3--fw);
+    line-height: var(--_rich-text---h3--lh);
+    letter-spacing: var(--_rich-text---h3--ls);
+    font-family: var(--_rich-text---heading--ff);
+    margin-top: var(--_rich-text---h3--margin-top);
+    margin-bottom: var(--_rich-text---h3--margin-bottom);
+  }
+
+  .text-rich-text h4 {
+    font-size: var(--_rich-text---h4--fs);
+    font-weight: var(--_rich-text---h4--fw);
+    line-height: var(--_rich-text---h4--lh);
+    letter-spacing: var(--_rich-text---h4--ls);
+    font-family: var(--_rich-text---heading--ff);
+    margin-top: var(--_rich-text---h4--margin-top);
+    margin-bottom: var(--_rich-text---h4--margin-bottom);
+  }
+
+  .text-rich-text h5 {
+    font-size: var(--_rich-text---h5--fs);
+    font-weight: var(--_rich-text---h5--fw);
+    line-height: var(--_rich-text---h5--lh);
+    letter-spacing: var(--_rich-text---h5--ls);
+    font-family: var(--_rich-text---heading--ff);
+    margin-top: var(--_rich-text---h5--margin-top);
+    margin-bottom: var(--_rich-text---h5--margin-bottom);
+  }
+
+  .text-rich-text h6 {
+    font-size: var(--_rich-text---h6--fs);
+    font-weight: var(--_rich-text---h6--fw);
+    line-height: var(--_rich-text---h6--lh);
+    letter-spacing: var(--_rich-text---h6--ls);
+    font-family: var(--_rich-text---heading--ff);
+    margin-top: var(--_rich-text---h6--margin-top);
+    margin-bottom: var(--_rich-text---h6--margin-bottom);
+  }
+
+  /* Body elements spacing */
+  .text-rich-text p {
+    margin-top: var(--_rich-text---p--margin-top);
+    margin-bottom: var(--_rich-text---p--margin-bottom);
+  }
+
+  .text-rich-text figure {
+    margin-top: var(--_rich-text---figure--margin-top);
+    margin-bottom: var(--_rich-text---figure--margin-bottom);
+  }
+
+  .text-rich-text ul,
+  .text-rich-text ol {
+    margin-top: var(--_rich-text---list--margin-top);
+    margin-bottom: var(--_rich-text---list--margin-bottom);
+  }
+
+  .text-rich-text li {
+    margin-top: var(--_rich-text---li--margin-top);
+    margin-bottom: var(--_rich-text---li--margin-bottom);
+  }
+
+  .text-rich-text blockquote {
+    margin-top: var(--_rich-text---blockquote--margin-top);
+    margin-bottom: var(--_rich-text---blockquote--margin-bottom);
+  }
+
+  .text-rich-text pre {
+    margin-top: var(--_rich-text---pre--margin-top);
+    margin-bottom: var(--_rich-text---pre--margin-bottom);
+  }
+
+  .text-rich-text hr {
+    margin-top: var(--_rich-text---hr--margin-top);
+    margin-bottom: var(--_rich-text---hr--margin-bottom);
+  }
+</style>

@@ -1,0 +1,322 @@
+{
+  "version": 2,
+  "site": "6ac37057a89d003db6effd5c",
+  "shortName": "pistachioapp",
+  "embeds": [
+    {
+      "key": "footer-css",
+      "owner": {
+        "kind": "component",
+        "id": "ab5906ee-95fd-4e08-85ad-89419a2c3a44",
+        "name": "Footer"
+      },
+      "address": {
+        "component": "ab5906ee-95fd-4e08-85ad-89419a2c3a44",
+        "element": "23948374-a52e-701f-117d-d46ea948f43b"
+      },
+      "displayName": "Footer — CSS",
+      "parent": null,
+      "file": "components/ab5906ee-95fd-4e08-85ad-89419a2c3a44-d941ae1f/footer-css-d535f013.html",
+      "baseHash": "sha256:f31cfa20d5bbc62eef89400634e70b59d61a14de231e167d873460a836e98e5a"
+    },
+    {
+      "key": "arrow",
+      "owner": {
+        "kind": "component",
+        "id": "38a6996e-1d23-2310-600b-3396c6e5b3a0",
+        "name": "Custom code"
+      },
+      "address": {
+        "component": "38a6996e-1d23-2310-600b-3396c6e5b3a0",
+        "element": "4b7e0ce2-0886-6fb3-4aa7-2f43d8613d1d"
+      },
+      "displayName": "arrow",
+      "parent": null,
+      "file": "components/custom-code-67d36fd9/arrow-68737672.html",
+      "baseHash": "sha256:73722348b959b1ff749a00f03bf6da7630752b181b3cbe403f90bec0c9441d10"
+    },
+    {
+      "key": "button-77efeeb6",
+      "owner": {
+        "kind": "component",
+        "id": "38a6996e-1d23-2310-600b-3396c6e5b3a0",
+        "name": "Custom code"
+      },
+      "address": {
+        "component": "38a6996e-1d23-2310-600b-3396c6e5b3a0",
+        "element": "c8967372-11d6-c9a6-ee8b-4313731b35c7"
+      },
+      "displayName": "button",
+      "parent": null,
+      "file": "components/custom-code-67d36fd9/button-77efeeb6.html",
+      "baseHash": "sha256:762e12bec0f9116944435c52adcc9fccadf12341773544bfbf8319c7a4db6167"
+    },
+    {
+      "key": "designer-fa309ebc",
+      "owner": {
+        "kind": "component",
+        "id": "38a6996e-1d23-2310-600b-3396c6e5b3a0",
+        "name": "Custom code"
+      },
+      "address": {
+        "component": "38a6996e-1d23-2310-600b-3396c6e5b3a0",
+        "element": "38a6996e-1d23-2310-600b-3396c6e5b3a8"
+      },
+      "displayName": "designer",
+      "parent": null,
+      "file": "components/custom-code-67d36fd9/designer-fa309ebc.html",
+      "baseHash": "sha256:5cc3815613d7d65ecc07f71afe852d8ee621cd3f002c343aec756c7a9db530fc"
+    },
+    {
+      "key": "fluid-06adb638",
+      "owner": {
+        "kind": "component",
+        "id": "38a6996e-1d23-2310-600b-3396c6e5b3a0",
+        "name": "Custom code"
+      },
+      "address": {
+        "component": "38a6996e-1d23-2310-600b-3396c6e5b3a0",
+        "element": "38a6996e-1d23-2310-600b-3396c6e5b3a7"
+      },
+      "displayName": "fluid",
+      "parent": null,
+      "file": "components/custom-code-67d36fd9/fluid-06adb638.html",
+      "baseHash": "sha256:122bfbab9ab2d385c0a54def0880caaad88fce96a8e93f8ab21773f1a4374007"
+    },
+    {
+      "key": "form",
+      "owner": {
+        "kind": "component",
+        "id": "38a6996e-1d23-2310-600b-3396c6e5b3a0",
+        "name": "Custom code"
+      },
+      "address": {
+        "component": "38a6996e-1d23-2310-600b-3396c6e5b3a0",
+        "element": "277b0eac-5437-bb3c-774a-db3fbc256e0c"
+      },
+      "displayName": "form",
+      "parent": null,
+      "file": "components/custom-code-67d36fd9/form-a1b80703.html",
+      "baseHash": "sha256:5752d68f2e5199fa0a6cd9272f189af7ed7b39d9a185b000a30457aa69e18d8d"
+    },
+    {
+      "key": "icons-dc237c6d",
+      "owner": {
+        "kind": "component",
+        "id": "38a6996e-1d23-2310-600b-3396c6e5b3a0",
+        "name": "Custom code"
+      },
+      "address": {
+        "component": "38a6996e-1d23-2310-600b-3396c6e5b3a0",
+        "element": "f5805505-676d-9d66-a488-c515ff3cd403"
+      },
+      "displayName": "icons",
+      "parent": null,
+      "file": "components/custom-code-67d36fd9/icons-dc237c6d.html",
+      "baseHash": "sha256:8ce916a74bdc900bb594c4f2afb33941dad713a0dcbdddc0ee2a096625c7d6cd"
+    },
+    {
+      "key": "marquee",
+      "owner": {
+        "kind": "component",
+        "id": "38a6996e-1d23-2310-600b-3396c6e5b3a0",
+        "name": "Custom code"
+      },
+      "address": {
+        "component": "38a6996e-1d23-2310-600b-3396c6e5b3a0",
+        "element": "5ad6ea19-e007-4d07-e0cb-dded6d8c3818"
+      },
+      "displayName": "marquee",
+      "parent": null,
+      "file": "components/custom-code-67d36fd9/marquee-f3ee9f79.html",
+      "baseHash": "sha256:8269a14ff1a4c4764ac727011c011016a7d387a5c31c6f2d5dcd6948606ead24"
+    },
+    {
+      "key": "misc-08292bed",
+      "owner": {
+        "kind": "component",
+        "id": "38a6996e-1d23-2310-600b-3396c6e5b3a0",
+        "name": "Custom code"
+      },
+      "address": {
+        "component": "38a6996e-1d23-2310-600b-3396c6e5b3a0",
+        "element": "38a6996e-1d23-2310-600b-3396c6e5b3a3"
+      },
+      "displayName": "misc",
+      "parent": null,
+      "file": "components/custom-code-67d36fd9/misc-08292bed.html",
+      "baseHash": "sha256:1f9ba02a556b1b01a245d05eb87cb0bc9d61f487ec26c1674291117e9603d385"
+    },
+    {
+      "key": "motion-29ab0f04",
+      "owner": {
+        "kind": "component",
+        "id": "38a6996e-1d23-2310-600b-3396c6e5b3a0",
+        "name": "Custom code"
+      },
+      "address": {
+        "component": "38a6996e-1d23-2310-600b-3396c6e5b3a0",
+        "element": "85e1dd43-7031-5726-77f5-ae84d1557f12"
+      },
+      "displayName": "motion",
+      "parent": null,
+      "file": "components/custom-code-67d36fd9/motion-29ab0f04.html",
+      "baseHash": "sha256:d4e2da52721f32d3e0ff325cfb80901dccb2e56d6fde8149daa1bec085aeee3d"
+    },
+    {
+      "key": "reset-3a774b2d",
+      "owner": {
+        "kind": "component",
+        "id": "38a6996e-1d23-2310-600b-3396c6e5b3a0",
+        "name": "Custom code"
+      },
+      "address": {
+        "component": "38a6996e-1d23-2310-600b-3396c6e5b3a0",
+        "element": "38a6996e-1d23-2310-600b-3396c6e5b3a2"
+      },
+      "displayName": "reset",
+      "parent": null,
+      "file": "components/custom-code-67d36fd9/reset-3a774b2d.html",
+      "baseHash": "sha256:9499d0106522c25be42d295e191b7970851c6562e7d726cae6125feb1c7ad9ef"
+    },
+    {
+      "key": "rich-text-d1912da8",
+      "owner": {
+        "kind": "component",
+        "id": "38a6996e-1d23-2310-600b-3396c6e5b3a0",
+        "name": "Custom code"
+      },
+      "address": {
+        "component": "38a6996e-1d23-2310-600b-3396c6e5b3a0",
+        "element": "38a6996e-1d23-2310-600b-3396c6e5b3a5"
+      },
+      "displayName": "rich-text",
+      "parent": null,
+      "file": "components/custom-code-67d36fd9/rich-text-d1912da8.html",
+      "baseHash": "sha256:8ed2f433440699d09cbb50a4aceeba23fb240b2358dade0e48d576bef391c187"
+    },
+    {
+      "key": "rotate",
+      "owner": {
+        "kind": "component",
+        "id": "38a6996e-1d23-2310-600b-3396c6e5b3a0",
+        "name": "Custom code"
+      },
+      "address": {
+        "component": "38a6996e-1d23-2310-600b-3396c6e5b3a0",
+        "element": "86aa3564-c785-54f3-4f1d-cefedce93b91"
+      },
+      "displayName": "rotate",
+      "parent": null,
+      "file": "components/custom-code-67d36fd9/rotate-a517d137.html",
+      "baseHash": "sha256:e1d6a886333c5e82d2369b3ab825bc01692d785a0e713ab9be9df6dfc320d574"
+    },
+    {
+      "key": "tag-cc3926a3",
+      "owner": {
+        "kind": "component",
+        "id": "38a6996e-1d23-2310-600b-3396c6e5b3a0",
+        "name": "Custom code"
+      },
+      "address": {
+        "component": "38a6996e-1d23-2310-600b-3396c6e5b3a0",
+        "element": "a1873367-7bd3-a41b-8899-a972c0f2cb9b"
+      },
+      "displayName": "tag",
+      "parent": null,
+      "file": "components/custom-code-67d36fd9/tag-cc3926a3.html",
+      "baseHash": "sha256:ec2007be2ce31680f3daa14009ad7adb725cd2bf91119171851538ee41f72585"
+    },
+    {
+      "key": "text-link-56cfa9fa",
+      "owner": {
+        "kind": "component",
+        "id": "38a6996e-1d23-2310-600b-3396c6e5b3a0",
+        "name": "Custom code"
+      },
+      "address": {
+        "component": "38a6996e-1d23-2310-600b-3396c6e5b3a0",
+        "element": "3b297756-0893-1045-de2e-2289749d4e66"
+      },
+      "displayName": "text-link",
+      "parent": null,
+      "file": "components/custom-code-67d36fd9/text-link-56cfa9fa.html",
+      "baseHash": "sha256:42ec0182f3364223c54cb340e810abe442b7fdfe801716897a055202a91fb693"
+    },
+    {
+      "key": "type-7f23e1aa",
+      "owner": {
+        "kind": "component",
+        "id": "38a6996e-1d23-2310-600b-3396c6e5b3a0",
+        "name": "Custom code"
+      },
+      "address": {
+        "component": "38a6996e-1d23-2310-600b-3396c6e5b3a0",
+        "element": "38a6996e-1d23-2310-600b-3396c6e5b3a6"
+      },
+      "displayName": "type",
+      "parent": null,
+      "file": "components/custom-code-67d36fd9/type-7f23e1aa.html",
+      "baseHash": "sha256:de852879e72f276c004a30a2fb3bc18f606712c82a3b9a79c0852dd6efb2853c"
+    },
+    {
+      "key": "utils-3239411e",
+      "owner": {
+        "kind": "component",
+        "id": "38a6996e-1d23-2310-600b-3396c6e5b3a0",
+        "name": "Custom code"
+      },
+      "address": {
+        "component": "38a6996e-1d23-2310-600b-3396c6e5b3a0",
+        "element": "38a6996e-1d23-2310-600b-3396c6e5b3a4"
+      },
+      "displayName": "utils",
+      "parent": null,
+      "file": "components/custom-code-67d36fd9/utils-3239411e.html",
+      "baseHash": "sha256:a761509c7524e9d87b2090e83d9c738da4632c9bad0ecc7e17f80212bbafd481"
+    },
+    {
+      "key": "video",
+      "owner": {
+        "kind": "component",
+        "id": "38a6996e-1d23-2310-600b-3396c6e5b3a0",
+        "name": "Custom code"
+      },
+      "address": {
+        "component": "38a6996e-1d23-2310-600b-3396c6e5b3a0",
+        "element": "00ac35cd-f6db-c5d1-9769-e77f5c5eeb2b"
+      },
+      "displayName": "video",
+      "parent": null,
+      "file": "components/custom-code-67d36fd9/video-6ad7d802.html",
+      "baseHash": "sha256:eb3d50ae2cc0ccad5c84724edd8abcf4bfd642dc4e0f3fed4ea3e120a0bbe68a"
+    },
+    {
+      "key": "nav-css-ea8a0d83",
+      "owner": {
+        "kind": "component",
+        "id": "8cea7e17-9a61-31ff-c695-836543d51e73",
+        "name": "Nav"
+      },
+      "address": {
+        "component": "8cea7e17-9a61-31ff-c695-836543d51e73",
+        "element": "b5bfc639-2691-710d-3003-73230ce59911"
+      },
+      "displayName": "Nav — CSS",
+      "parent": null,
+      "file": "components/nav-e03aaa9b/nav-css-ea8a0d83.html",
+      "baseHash": "sha256:a1e4638901d74bf59605492e49f1eb14e4bf7dbee5890f1be5cc224165b68ecf"
+    }
+  ],
+  "partial": true,
+  "refreshed": [
+    "component:38a6996e-1d23-2310-600b-3396c6e5b3a0",
+    "component:8cea7e17-9a61-31ff-c695-836543d51e73",
+    "component:ab5906ee-95fd-4e08-85ad-89419a2c3a44"
+  ],
+  "owners": [
+    "component:38a6996e-1d23-2310-600b-3396c6e5b3a0",
+    "component:8cea7e17-9a61-31ff-c695-836543d51e73",
+    "component:ab5906ee-95fd-4e08-85ad-89419a2c3a44"
+  ]
+}

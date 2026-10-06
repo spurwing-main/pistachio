@@ -1,0 +1,50 @@
+<style>
+  /* Form states the Designer can't hold: the checkbox tick and the
+     arrow on the submit. Sizes, borders and transitions live on the form_* classes. */
+  /* Webflow adds a clearfix to checkbox labels; in a flex row it becomes an item and takes a gap. */
+  .form_check::before,
+  .form_check::after {
+    content: none;
+  }
+
+  .form_checkbox::before {
+    content: "";
+    width: 12px;
+    height: 12px;
+    background-color: var(--_color---violet--1000);
+    clip-path: polygon(14% 44%, 0 65%, 50% 100%, 100% 16%, 80% 0%, 43% 62%);
+    transform: scale(0);
+    transition: transform var(--motion-fast) var(--ease-out);
+  }
+
+  .form_checkbox:checked {
+    border-color: var(--_color---violet--600);
+    background-color: var(--_color---violet--000);
+  }
+
+  .form_checkbox:checked::before {
+    transform: scale(1);
+  }
+
+  .form_checkbox:focus-visible {
+    outline: 2px solid var(--_color---violet--600);
+    outline-offset: 2px;
+  }
+
+  /* The submit is a native input, so its arrow sits beside it: just after the centred text
+     on wide screens, at the far end on phones. Clicks pass through to the input. */
+  .form_submit-wrap .arrow {
+    position: absolute;
+    top: 50%;
+    left: calc(50% + 4.35rem);
+    translate: 0 -50%;
+    pointer-events: none;
+  }
+
+  @media (max-width: 479px) {
+    .form_submit-wrap .arrow {
+      left: auto;
+      right: 0.5rem;
+    }
+  }
+</style>

@@ -1,0 +1,21 @@
+<style>
+  /* Icons dropped into a slot take the size Figma draws: 26 in a 56 tile, 20 in a proof row. */
+  .icon-tile svg,
+  .icon-tile img {
+    width: 46%;
+    height: 46%;
+  }
+
+  .proof_icon svg,
+  .proof_icon img {
+    width: 100%;
+    height: 100%;
+  }
+
+  /* Video card: the play button grows a little on hover (transition in the Designer). */
+  @media (hover: hover) {
+    .video-card:hover .video-card_play-icon {
+      transform: scale(1.08);
+    }
+  }
+</style>

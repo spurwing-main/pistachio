@@ -1,0 +1,47 @@
+<style>
+  /* Colour comes from the section (body and section classes set the theme's text colour) and from
+     each title class (the theme's heading colour). Nothing here overrides it. */
+
+  /* All titles are balanced */
+  [class^='title-'] {
+    text-wrap: balance;
+  }
+
+  /* Headings and paragraphs are Rich Text (Build SOP): the class on the wrapper sets the look,
+     the tag inside (H1-H6, P) only sets the outline. Long-form articles (.text-rich-text) keep
+     their own per-tag styles. */
+  .w-richtext:not(.text-rich-text) > * {
+    margin: 0;
+    font: inherit;
+    letter-spacing: inherit;
+    text-transform: inherit;
+    color: inherit;
+  }
+
+  .w-richtext:not(.text-rich-text) > * + * {
+    margin-top: 0.75em;
+  }
+
+  /* Inline formatting the editor can add anywhere. */
+  .w-richtext strong {
+    font-weight: var(--_type---fw--bold);
+  }
+
+  .w-richtext a {
+    color: inherit;
+    text-decoration-line: underline;
+    text-decoration-thickness: 1px;
+    text-underline-offset: 0.15em;
+    transition: text-decoration-thickness var(--motion-base) var(--ease-out);
+  }
+
+  .w-richtext a:hover {
+    text-decoration-thickness: 2px;
+  }
+
+  /* An actions slot left empty takes no space (Section heading and friends). */
+  [class$="_actions"]:empty,
+  .section-heading_actions:has(> .section-heading_actions-slot:empty) {
+    display: none;
+  }
+</style>

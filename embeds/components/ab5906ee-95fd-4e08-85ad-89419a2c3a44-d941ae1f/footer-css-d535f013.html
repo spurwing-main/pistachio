@@ -1,0 +1,42 @@
+<style>
+  /* Footer: link arrows and the reveal. Legal underlines and colour transitions are on
+     the classes in the Designer. */
+
+  .footer_link svg {
+    transition: transform var(--motion-base) var(--ease-out);
+  }
+
+  @media (hover: hover) {
+    .footer_link:hover svg {
+      transform: translate(0.125rem, -0.125rem);
+    }
+
+  }
+
+  /* Footer reveal: as the page content lifts off the pinned footer, the footer's content rises
+     into place. Desktop only, where the footer is pinned; tied to scroll, so it needs no script. */
+  @supports (animation-timeline: view()) {
+    @media (min-width: 992px) and (prefers-reduced-motion: no-preference) {
+      html:not(.wf-design-mode) .page-wrap {
+        timeline-scope: --page-main;
+      }
+
+      html:not(.wf-design-mode) .main-wrap {
+        view-timeline: --page-main block;
+      }
+
+      html:not(.wf-design-mode) .footer_layout {
+        animation: footer-rise linear both;
+        animation-timeline: --page-main;
+        animation-range: exit 0% exit 60%;
+      }
+    }
+  }
+
+  @keyframes footer-rise {
+    from {
+      opacity: 0.4;
+      transform: translateY(3rem);
+    }
+  }
+</style>

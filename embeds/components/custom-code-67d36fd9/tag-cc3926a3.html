@@ -1,0 +1,15 @@
+<style>
+  /* Filter tag: selected when it carries aria-pressed or is the current page. */
+  .tag[aria-pressed="true"],
+  .tag.w--current {
+    background-color: var(--_color---violet--900);
+    border-color: var(--_color---violet--900);
+    color: var(--_color---white--100);
+  }
+
+  @media (hover: hover) {
+    .tag[aria-pressed]:hover:not([aria-pressed="true"]) {
+      border-color: var(--_theme---section--heading);
+    }
+  }
+</style>

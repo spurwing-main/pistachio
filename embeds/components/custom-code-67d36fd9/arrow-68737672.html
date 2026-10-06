@@ -1,0 +1,61 @@
+<style>
+  /* Arrow (Core / Arrow): two arrows side by side in a clipped circle. On hover or keyboard
+     focus of the link or button around it, both move one width right, so the arrow slides out
+     blurring and a fresh one slides in; the circle swaps colour. Rest colours are the variants
+     (Designer); the hover colours are here. A parent can turn it (rotate) to point down or out. */
+  .arrow {
+    --arrow-hover-bg: var(--_color---black--100);
+    --arrow-hover-fg: var(--_color---violet--400);
+  }
+
+  .arrow[data-wf--core-arrow--variant="lilac"] {
+    --arrow-hover-bg: var(--_color---black--100);
+    --arrow-hover-fg: var(--_color---white--100);
+  }
+
+  .arrow[data-wf--core-arrow--variant="violet"] {
+    --arrow-hover-bg: var(--_color---violet--000);
+    --arrow-hover-fg: var(--_color---violet--700);
+  }
+
+  .arrow[data-wf--core-arrow--variant="pale"] {
+    --arrow-hover-bg: var(--_color---white--100);
+    --arrow-hover-fg: var(--_color---violet--800);
+  }
+
+  .arrow[data-wf--core-arrow--variant="clear"] {
+    --arrow-hover-bg: color-mix(in srgb, currentColor 12%, transparent);
+    --arrow-hover-fg: currentColor;
+  }
+
+  .arrow_icon svg {
+    width: 50%;
+    height: auto;
+  }
+
+  @media (hover: hover) {
+    :is(a, button, .form_submit-wrap):hover .arrow {
+      background-color: var(--arrow-hover-bg);
+      color: var(--arrow-hover-fg);
+    }
+
+    :is(a, button, .form_submit-wrap):hover .arrow_icon {
+      transform: translateX(100%);
+    }
+
+    :is(a, button, .form_submit-wrap):hover .arrow_icon:last-child {
+      filter: blur(2px);
+    }
+  }
+
+  :is(a, button):focus-visible .arrow,
+  .form_submit-wrap:has(:focus-visible) .arrow {
+    background-color: var(--arrow-hover-bg);
+    color: var(--arrow-hover-fg);
+  }
+
+  :is(a, button):focus-visible .arrow_icon,
+  .form_submit-wrap:has(:focus-visible) .arrow_icon {
+    transform: translateX(100%);
+  }
+</style>

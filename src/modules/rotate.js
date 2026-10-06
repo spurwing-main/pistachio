@@ -1,7 +1,7 @@
 /**
  * Rotate: one quote at a time (the Book a demo quote card). A line along the card fills while
  * the quote shows; when it is full the next quote fades in. CSS draws the fade and the line
- * (the `rotate` embed); this marks the current quote and moves on when its line ends.
+ * (the `rotate` embed); this marks the current quote and owns the time between quotes.
  * It stops on hover, while anything inside has keyboard focus, offscreen and with the pause
  * button. With reduced motion it shows the first quote only and hides the button.
  *
@@ -43,9 +43,38 @@ function setupRotate(root) {
   };
   show(0);
 
-  track.addEventListener("animationend", (event) => {
-    if (event.target.matches("[data-rotate-bar]")) show(current + 1);
+  // The timer works even when the progress line is hidden on phones.
+  const duration = (Number(root.dataset.rotate) || SECONDS) * 1000;
+  let remaining = duration;
+  let started = 0;
+  let timer;
+  let hovered = false;
+  const updateTimer = () => {
+    if (timer !== undefined) {
+      clearTimeout(timer);
+      remaining = Math.max(0, remaining - (performance.now() - started));
+      timer = undefined;
+    }
+    const paused = hovered || root.contains(document.activeElement) ||
+      root.dataset.rotatePaused === "true" || root.dataset.rotateVisible !== "true" || document.hidden;
+    root.dataset.rotateStopped = String(paused);
+    if (paused) return;
+    started = performance.now();
+    timer = setTimeout(() => {
+      timer = undefined;
+      show(current + 1);
+      remaining = duration;
+      updateTimer();
+    }, remaining);
+  };
+  root.addEventListener("pointerenter", () => {
+    hovered = window.matchMedia("(hover: hover)").matches;
+    updateTimer();
   });
+  root.addEventListener("pointerleave", () => { hovered = false; updateTimer(); });
+  root.addEventListener("focusin", updateTimer);
+  root.addEventListener("focusout", () => queueMicrotask(updateTimer));
+  document.addEventListener("visibilitychange", updateTimer);
 
   if (button) {
     button.setAttribute("aria-pressed", "false");
@@ -59,11 +88,13 @@ function setupRotate(root) {
       const paused = button.getAttribute("aria-pressed") !== "true";
       button.setAttribute("aria-pressed", String(paused));
       root.dataset.rotatePaused = String(paused);
+      updateTimer();
     });
   }
 
   new IntersectionObserver(([entry]) => {
     root.dataset.rotateVisible = String(entry.isIntersecting);
+    updateTimer();
   }).observe(root);
 }
 

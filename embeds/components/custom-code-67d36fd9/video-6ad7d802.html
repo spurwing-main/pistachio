@@ -1,0 +1,70 @@
+<style>
+  /* Video pop-up (made by the video script): the video fills a 16:9 box, the page dims
+     behind it. Closing removes the player. A Video card with no video set isn't clickable. */
+  .video-card_play[href="#"] {
+    pointer-events: none;
+  }
+
+  .video-dialog {
+    width: min(100% - 2rem, 70rem);
+    max-width: none;
+    padding: 0;
+    border: 0;
+    border-radius: var(--radius--card);
+    background: #000;
+    overflow: visible;
+    opacity: 0;
+    scale: 0.97;
+    transition: opacity var(--motion-base) var(--ease-out), scale var(--motion-base) var(--ease-out),
+      overlay var(--motion-base) allow-discrete, display var(--motion-base) allow-discrete;
+  }
+
+  .video-dialog[open] {
+    opacity: 1;
+    scale: 1;
+  }
+
+  @starting-style {
+    .video-dialog[open] {
+      opacity: 0;
+      scale: 0.97;
+    }
+  }
+
+  .video-dialog::backdrop {
+    background: rgb(0 0 0 / 0.8);
+  }
+
+  .video-dialog_frame {
+    aspect-ratio: 16 / 9;
+    border-radius: inherit;
+    overflow: hidden;
+  }
+
+  .video-dialog_frame iframe {
+    display: block;
+    width: 100%;
+    height: 100%;
+    border: 0;
+  }
+
+  .video-dialog_close {
+    position: absolute;
+    top: -3rem;
+    right: 0;
+    display: grid;
+    place-items: center;
+    width: 2.5rem;
+    height: 2.5rem;
+    border: 0;
+    border-radius: 50%;
+    color: var(--_color---violet--1000);
+    background: var(--_color---white--100);
+    cursor: pointer;
+    transition: scale var(--motion-fast) var(--ease-out);
+  }
+
+  .video-dialog_close:hover {
+    scale: 1.08;
+  }
+</style>

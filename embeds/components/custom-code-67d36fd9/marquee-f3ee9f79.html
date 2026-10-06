@@ -1,0 +1,82 @@
+<style>
+  /* Marquee (logo strips, testimonial sliders): the script copies the items once and sets
+     --marquee-duration so every row moves at the same speed. Edges fade out over
+     marquee/fade. It stops on hover, while anything inside has keyboard focus, offscreen, and
+     for anyone who asks for less motion (then the row scrolls sideways by hand instead). */
+  [data-marquee] {
+    overflow-x: auto;
+    mask-image: linear-gradient(90deg, transparent, #000 var(--marquee--fade), #000 calc(100% - var(--marquee--fade)), transparent);
+  }
+
+  [data-marquee-track] {
+    display: flex;
+    width: max-content;
+  }
+
+  /* Space after every item (not a gap), so half the track is exactly one full set. */
+  [data-marquee-track] > * {
+    flex-shrink: 0;
+    padding-right: var(--marquee--gap);
+  }
+
+  [data-marquee-ready] { overflow: hidden; }
+
+  [data-marquee-pause]:not([aria-pressed]) { display: none; }
+
+  [data-marquee-ready] [data-marquee-track] {
+    animation: marquee var(--marquee-duration, 40s) linear infinite;
+  }
+
+  [data-marquee]:hover [data-marquee-track],
+  [data-marquee]:focus-within [data-marquee-track],
+  [data-marquee-paused="true"] [data-marquee-track],
+  [data-marquee-visible="false"] [data-marquee-track] {
+    animation-play-state: paused;
+  }
+
+  @keyframes marquee {
+    to {
+      transform: translateX(-50%);
+    }
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    [data-marquee] {
+      overflow-x: auto;
+    }
+
+    [data-marquee-ready] [data-marquee-track] {
+      animation: none;
+    }
+
+    [data-marquee-pause] {
+      display: none;
+    }
+  }
+
+  /* Pause button (Pause Slider, the quote card): two bars that turn into a play triangle while
+     paused (aria-pressed, set by the script). Both shapes have 8 points so one morphs into the
+     other. The circle and its colours are on the pause-button classes in the Designer. */
+  .pause-button_icon::before {
+    content: "";
+    width: 36%;
+    height: 36%;
+    background-color: currentColor;
+    clip-path: polygon(0 0, 35% 0, 35% 100%, 65% 100%, 65% 0, 100% 0, 100% 100%, 0 100%);
+    transition: clip-path var(--motion-fast) var(--ease-out);
+  }
+
+  .pause-button[aria-pressed="true"] .pause-button_icon::before {
+    clip-path: polygon(15% 0, 15% 0, 15% 0, 15% 0, 15% 0, 100% 50%, 100% 50%, 15% 100%);
+  }
+
+  .pause-button[hidden] {
+    display: none;
+  }
+
+  @media (hover: hover) {
+    .pause-button:hover .pause-button_icon {
+      background-color: var(--_color---violet--100);
+    }
+  }
+</style>

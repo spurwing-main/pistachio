@@ -1,0 +1,56 @@
+<style>
+  /* Rotate (the Book a demo quote card): the quotes sit on top of each other and one shows.
+     Its line fills over --rotate-duration (set by the script); the script times and shows
+     the next quote, which fades in. The line stops on hover, while anything inside has
+     keyboard focus, offscreen and with the pause button. Before the script runs, and with
+     reduced motion, only the first quote shows. */
+  [data-rotate-track] {
+    display: grid;
+  }
+
+  [data-rotate-track] > * {
+    grid-area: 1 / 1;
+  }
+
+  [data-rotate-track] > * > * {
+    height: 100%;
+  }
+
+  [data-rotate]:not([data-rotate-ready]) [data-rotate-track] > :not(:first-child) {
+    display: none;
+  }
+
+  [data-rotate-ready] [data-rotate-track] > * {
+    opacity: 0;
+    visibility: hidden;
+    transition: opacity var(--motion-slow) var(--ease-out), visibility 0s var(--motion-slow);
+  }
+
+  [data-rotate-ready] [data-rotate-track] > [data-rotate-current] {
+    opacity: 1;
+    visibility: visible;
+    transition: opacity var(--motion-slow) var(--ease-out);
+  }
+
+  [data-rotate-ready] [data-rotate-bar] {
+    width: 100%;
+    clip-path: inset(0 100% 0 0);
+  }
+
+  [data-rotate-current] [data-rotate-bar] {
+    animation: rotate-bar var(--rotate-duration, 8s) linear forwards;
+  }
+
+  [data-rotate-stopped="true"] [data-rotate-bar] {
+    animation-play-state: paused;
+  }
+
+  @keyframes rotate-bar {
+    to {
+      clip-path: inset(0);
+    }
+  }
+  [data-rotate]:not([data-rotate-ready]) [data-rotate-pause] {
+    display: none;
+  }
+</style>

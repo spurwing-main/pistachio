@@ -1,0 +1,348 @@
+<style>
+  /* Nav states. The Designer holds the resting look (the "Open (for editing)" variant shows
+     the panels); the nav script sets the data attributes below. */
+
+  /* Where the dropdown's white box sits (set by the script); registered so it can glide. */
+  @property --nav-panel-x { syntax: "\3c length\3e "; inherits: true; initial-value: 0px; }
+  @property --nav-panel-y { syntax: "\3c length\3e "; inherits: true; initial-value: 0px; }
+  @property --nav-panel-w { syntax: "\3c length\3e "; inherits: true; initial-value: 0px; }
+  @property --nav-panel-h { syntax: "\3c length\3e "; inherits: true; initial-value: 0px; }
+
+  :root {
+    /* How far each side of the bar moves in when it shrinks. */
+    --nav-w: min(calc(100vw - (var(--container--padding) * 2)), var(--container--nav));
+    --nav-inset: max(0px, calc((var(--nav-w) - var(--nav--max-w-scrolled)) / 2));
+  }
+
+  html.nav-menu-open {
+    overflow: hidden;
+  }
+
+  /* The page you are on is warm (Webflow adds w--current); it and a hovered item show their
+     icon on white, as Figma's highlighted item. */
+  .nav-item.w--current {
+    background-color: var(--_color---warm--000);
+  }
+
+  .nav-item.w--current .nav-item_tile,
+  .nav-item:hover .nav-item_tile {
+    background-color: var(--_color---white--100);
+    border-color: var(--_color---white--100);
+  }
+
+  /* Menu button: the outer bars slide to the middle and the middle one goes, then they turn
+     into a close. Closing runs the same steps backwards. */
+  .nav_toggle-icon path {
+    transform-box: fill-box;
+    transform-origin: center;
+    transition:
+      rotate var(--motion-fast) var(--ease-out),
+      translate var(--motion-fast) var(--ease-out) 120ms,
+      scale var(--motion-fast) var(--ease-out) 120ms,
+      opacity var(--motion-fast) var(--ease-out) 120ms;
+  }
+
+  .nav_toggle[aria-expanded="true"] .nav_toggle-icon path {
+    transition:
+      translate var(--motion-fast) var(--ease-out),
+      scale var(--motion-fast) var(--ease-out),
+      opacity var(--motion-fast) var(--ease-out),
+      rotate var(--motion-slow) var(--ease-out-expo) 120ms;
+  }
+
+  .nav_toggle[aria-expanded="true"] .nav_toggle-icon path:nth-child(1) {
+    translate: 0 23.3px;
+    rotate: 45deg;
+  }
+
+  .nav_toggle[aria-expanded="true"] .nav_toggle-icon path:nth-child(2) {
+    scale: 0 1;
+    opacity: 0;
+  }
+
+  .nav_toggle[aria-expanded="true"] .nav_toggle-icon path:nth-child(3) {
+    translate: 0 -23.3px;
+    rotate: -45deg;
+  }
+
+  /* ---------- Desktop ---------- */
+  @media (min-width: 992px) {
+    /* Shrink: the pill is trimmed from both sides and the logo and buttons move in with it. */
+    .nav_bar {
+      clip-path: inset(0 0 round var(--radius--nav));
+      transition: clip-path var(--motion-slow) var(--ease-out-expo);
+    }
+
+    .nav_brand,
+    .nav_actions {
+      transition: transform var(--motion-slow) var(--ease-out-expo);
+    }
+
+    .nav_shell {
+      filter: drop-shadow(0 0 0 transparent);
+      transition: filter var(--motion-slow) var(--ease-out-expo);
+    }
+
+    .nav[data-nav-scrolled="true"] .nav_bar {
+      clip-path: inset(0 var(--nav-inset) round var(--radius--nav));
+    }
+
+    .nav[data-nav-scrolled="true"] .nav_brand {
+      transform: translateX(var(--nav-inset));
+    }
+
+    .nav[data-nav-scrolled="true"] .nav_actions {
+      transform: translateX(calc(var(--nav-inset) * -1));
+    }
+
+    .nav[data-nav-scrolled="true"] .nav_shell {
+      filter: drop-shadow(0 0 0.5px rgba(26, 18, 34, 0.3));
+    }
+
+    /* Current section full, the others faded; an open group takes over. */
+    .nav_menu:has([aria-current="true"]) .nav_trigger:not([aria-current="true"]) {
+      opacity: 0.4;
+    }
+
+    .nav_menu:has([data-open="true"]) .nav_group .nav_trigger {
+      opacity: 0.3;
+    }
+
+    .nav_menu:has([data-open="true"]) .nav_group[data-open="true"] .nav_trigger {
+      opacity: 1;
+    }
+
+    /* Covers the gap under each item, so the pointer can reach its panel. */
+    .nav_panel::before {
+      content: "";
+      position: absolute;
+      left: 0;
+      right: 0;
+      bottom: 100%;
+      height: 1.5rem;
+    }
+
+    /* Dropdown. The groups' own panels go see-through and one white box sits behind the open
+       one, so switching groups moves one box. The items are cut to that box. */
+    .nav[data-nav-ready] .nav_panel {
+      opacity: 1;
+      transform: none;
+      background-color: transparent;
+      box-shadow: none;
+      transition: visibility 0s linear var(--motion-fast);
+    }
+
+    .nav[data-nav-ready] .nav_group[data-open="true"] .nav_panel {
+      visibility: visible;
+      transition: none;
+    }
+
+    .nav[data-nav-ready] .nav_menu::after {
+      content: "";
+      position: absolute;
+      z-index: -1;
+      left: var(--nav-panel-x);
+      top: var(--nav-panel-y);
+      width: var(--nav-panel-w);
+      height: var(--nav-panel-h);
+      border-radius: 0.75rem;
+      background-color: var(--_color---white--100);
+      box-shadow: 0 8px 24px rgba(26, 18, 34, 0.08);
+      pointer-events: none;
+      opacity: 0;
+      visibility: hidden;
+      transform: translateY(-4px) scale(0.98);
+      transform-origin: top left;
+      transition:
+        opacity var(--motion-fast) var(--ease-out),
+        transform var(--motion-fast) var(--ease-out),
+        visibility 0s linear var(--motion-fast);
+    }
+
+    .nav[data-nav-ready] .nav_menu:has([data-open="true"])::after {
+      opacity: 1;
+      visibility: visible;
+      transform: none;
+      transition:
+        opacity var(--motion-base) var(--ease-out),
+        transform var(--motion-base) var(--ease-out),
+        visibility 0s;
+    }
+
+    .nav_menu:has([data-nav-leaving]) {
+      --nav-rise: 0px;
+      transition:
+        --nav-panel-x var(--motion-slow) var(--ease-out-expo),
+        --nav-panel-y var(--motion-slow) var(--ease-out-expo),
+        --nav-panel-w var(--motion-slow) var(--ease-out-expo),
+        --nav-panel-h var(--motion-slow) var(--ease-out-expo);
+    }
+
+    .nav[data-nav-ready] .nav_panel-list {
+      clip-path: inset(
+        calc(var(--nav-panel-y) - var(--nav-list-y))
+        calc(var(--nav-list-x) + var(--nav-list-w) - var(--nav-panel-x) - var(--nav-panel-w))
+        calc(var(--nav-list-y) + var(--nav-list-h) - var(--nav-panel-y) - var(--nav-panel-h))
+        calc(var(--nav-panel-x) - var(--nav-list-x))
+        round 0.75rem
+      );
+    }
+
+    /* Items blur in one after another (from the side you came from when switching) and blur
+       away as they go. Their white and outline, and their icon's, stay off while they move. */
+    .nav[data-nav-ready] .nav-item {
+      opacity: 0;
+      filter: blur(6px);
+      transform: translate(var(--nav-from, 0px), var(--nav-rise, -0.25rem));
+      transition:
+        opacity var(--motion-fast) var(--ease-out),
+        filter var(--motion-fast) var(--ease-out),
+        transform var(--motion-fast) var(--ease-out),
+        background-color var(--motion-fast) var(--ease-out),
+        border-color var(--motion-fast) var(--ease-out);
+    }
+
+    .nav[data-nav-ready] .nav_group:not([data-open="true"]) :is(.nav-item, .nav-item_tile) {
+      background-color: transparent;
+      border-color: transparent;
+    }
+
+    .nav[data-nav-ready] .nav_group[data-open="true"] .nav-item {
+      opacity: 1;
+      filter: blur(0);
+      transform: none;
+      transition:
+        opacity var(--motion-base) var(--ease-out) var(--nav-delay, 0ms),
+        filter var(--motion-slow) var(--ease-out-expo) var(--nav-delay, 0ms),
+        transform var(--motion-slow) var(--ease-out-expo) var(--nav-delay, 0ms),
+        background-color var(--motion-base) var(--ease-out),
+        border-color var(--motion-base) var(--ease-out);
+    }
+
+    .nav[data-nav-ready] .nav_group[data-open="true"] :is(.nav-item, .nav-item_tile) {
+      animation: nav-box var(--motion-base) var(--ease-out) 220ms backwards;
+    }
+
+    .nav-item:nth-child(2) { --nav-delay: 30ms; }
+    .nav-item:nth-child(3) { --nav-delay: 60ms; }
+    .nav-item:nth-child(4) { --nav-delay: 90ms; }
+
+    /* Switching: the groups not involved jump straight to their waiting place, and the old
+       items drift on the way you are going. */
+    .nav_menu:has([data-nav-leaving]) .nav_group:not([data-open="true"]):not([data-nav-leaving]) .nav-item {
+      transition: none;
+    }
+
+    .nav_menu:has([data-nav-leaving]) .nav_group[data-nav-leaving] .nav-item {
+      transform: translateX(calc(var(--nav-from) * -1));
+    }
+  }
+
+  /* ---------- Mobile (991 and below) ---------- */
+  @media (max-width: 991px) {
+    .nav_menu {
+      transition:
+        opacity var(--motion-fast) var(--ease-out),
+        transform var(--motion-fast) var(--ease-out),
+        visibility 0s linear var(--motion-fast);
+    }
+
+    .nav[data-nav-expanded="true"] .nav_menu {
+      opacity: 1;
+      visibility: visible;
+      transform: none;
+      transition:
+        opacity var(--motion-base) var(--ease-out),
+        transform var(--motion-slow) var(--ease-out-expo),
+        visibility 0s;
+    }
+
+    /* Scrim: the page dims under the open menu; a tap on it closes the menu. */
+    .nav::before {
+      content: "";
+      position: fixed;
+      inset: 0;
+      z-index: -1;
+      background-color: var(--_color---violet--1000);
+      opacity: 0;
+      visibility: hidden;
+      transition:
+        opacity var(--motion-base) var(--ease-out),
+        visibility 0s linear var(--motion-base);
+    }
+
+    .nav[data-nav-expanded="true"]::before {
+      opacity: 0.4;
+      visibility: visible;
+      pointer-events: auto;
+      transition:
+        opacity var(--motion-slow) var(--ease-out),
+        visibility 0s;
+    }
+
+    /* Groups rise in one after another as the menu opens. */
+    .nav[data-nav-expanded="true"] :is(.nav_group, .nav_menu-actions) {
+      animation: nav-rise var(--motion-slow) var(--ease-out-expo) both;
+    }
+
+    .nav[data-nav-expanded="true"] .nav_group:nth-child(2) { animation-delay: 30ms; }
+    .nav[data-nav-expanded="true"] .nav_group:nth-child(3) { animation-delay: 60ms; }
+    .nav[data-nav-expanded="true"] .nav_group:nth-child(4) { animation-delay: 90ms; }
+    .nav[data-nav-expanded="true"] .nav_menu-actions { animation-delay: 120ms; }
+
+    /* Groups open in place; the items fade and settle. A closed group keeps no padding, so
+       nothing of it shows. */
+    .nav_panel {
+      transition: grid-template-rows var(--motion-slow) var(--ease-out-expo);
+    }
+
+    .nav_group[data-open="true"] .nav_panel {
+      grid-template-rows: 1fr;
+    }
+
+    .nav_panel-list {
+      transition:
+        padding var(--motion-slow) var(--ease-out-expo),
+        opacity var(--motion-fast) var(--ease-out),
+        transform var(--motion-slow) var(--ease-out-expo);
+    }
+
+    .nav[data-nav-ready] .nav_group:not([data-open="true"]) .nav_panel-list {
+      padding-top: 0;
+      padding-bottom: 0;
+      opacity: 0;
+      transform: translateY(-0.5rem);
+    }
+
+    .nav_group[data-open="true"] .nav_panel-list {
+      transition-delay: 0ms, 80ms, 0ms;
+    }
+
+    .nav_group[data-open="true"] .nav_chevron {
+      transform: rotate(180deg);
+    }
+
+    .nav_menu:where(:has([data-open="true"])) .nav_group:not([data-open="true"]) .nav_trigger {
+      opacity: 0.6;
+    }
+  }
+
+  /* Hover brings any faded group back to full (after the faded states, at their weight). */
+  .nav_menu .nav_group .nav_trigger:hover {
+    opacity: 1;
+  }
+
+  @keyframes nav-box {
+    from {
+      background-color: transparent;
+      border-color: transparent;
+    }
+  }
+
+  @keyframes nav-rise {
+    from {
+      opacity: 0;
+      transform: translateY(0.5rem);
+    }
+  }
+</style>

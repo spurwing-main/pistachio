@@ -1,7 +1,11 @@
-import { beforeAll, describe, expect, it, vi } from "vitest";
+import { afterEach, beforeEach, beforeAll, describe, expect, it, vi } from "vitest";
+
+beforeEach(() => vi.useFakeTimers());
+afterEach(() => vi.useRealTimers());
 
 let initRotate;
 let reduced = false;
+const observations = new WeakMap();
 beforeAll(async () => {
   vi.stubGlobal("matchMedia", () => ({ matches: reduced }));
   vi.stubGlobal(
@@ -10,7 +14,8 @@ beforeAll(async () => {
       constructor(callback) {
         this.callback = callback;
       }
-      observe() {
+      observe(root) {
+        observations.set(root, this.callback);
         this.callback([{ isIntersecting: true }]);
       }
     },
@@ -29,11 +34,6 @@ function mount(count = 3) {
   return document.querySelector("[data-rotate]");
 }
 
-const endBar = (slide) => {
-  const event = new Event("animationend", { bubbles: true });
-  slide.querySelector("[data-rotate-bar]").dispatchEvent(event);
-};
-
 describe("rotate", () => {
   it("shows the first quote and hides the others from screen readers", () => {
     const root = mount();
@@ -43,12 +43,12 @@ describe("rotate", () => {
     expect(root.style.getPropertyValue("--rotate-duration")).toBe("6s");
   });
 
-  it("moves on when the line is full, and back to the first after the last", () => {
+  it("rotates without a progress-line animation, and returns after the last", () => {
     const root = mount(2);
     const slides = root.querySelectorAll("[data-rotate-track] > *");
-    endBar(slides[0]);
+    vi.advanceTimersByTime(6000);
     expect(slides[1].hasAttribute("data-rotate-current")).toBe(true);
-    endBar(slides[1]);
+    vi.advanceTimersByTime(6000);
     expect(slides[0].hasAttribute("data-rotate-current")).toBe(true);
   });
 
@@ -58,6 +58,35 @@ describe("rotate", () => {
     button.click();
     expect(button.getAttribute("aria-pressed")).toBe("true");
     expect(root.dataset.rotatePaused).toBe("true");
+    vi.advanceTimersByTime(12000);
+    expect(root.querySelector("[data-rotate-current]").textContent).toContain("Quote 0");
+    button.click();
+    vi.advanceTimersByTime(6000);
+    expect(root.querySelector("[data-rotate-current]").textContent).toContain("Quote 1");
+  });
+
+  it("keeps the remaining time while offscreen", () => {
+    const root = mount();
+    vi.advanceTimersByTime(2000);
+    observations.get(root)([{ isIntersecting: false }]);
+    vi.advanceTimersByTime(12000);
+    expect(root.querySelector("[data-rotate-current]").textContent).toContain("Quote 0");
+    observations.get(root)([{ isIntersecting: true }]);
+    vi.advanceTimersByTime(3999);
+    expect(root.querySelector("[data-rotate-current]").textContent).toContain("Quote 0");
+    vi.advanceTimersByTime(1);
+    expect(root.querySelector("[data-rotate-current]").textContent).toContain("Quote 1");
+  });
+
+  it("stops while the pause control has keyboard focus", async () => {
+    const root = mount();
+    const button = root.querySelector("[data-rotate-pause]");
+    button.focus();
+    vi.advanceTimersByTime(12000);
+    expect(root.querySelector("[data-rotate-current]").textContent).toContain("Quote 0");
+    button.blur();
+    await vi.advanceTimersByTimeAsync(6000);
+    expect(root.querySelector("[data-rotate-current]").textContent).toContain("Quote 1");
   });
 
   it("does nothing with one quote, or with reduced motion", () => {

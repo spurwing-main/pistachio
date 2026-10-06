@@ -49,6 +49,11 @@ function setupRotate(root) {
 
   if (button) {
     button.setAttribute("aria-pressed", "false");
+    button.addEventListener("keydown", (event) => {
+      if (event.key !== " ") return;
+      event.preventDefault();
+      button.click();
+    });
     button.addEventListener("click", (event) => {
       event.preventDefault();
       const paused = button.getAttribute("aria-pressed") !== "true";

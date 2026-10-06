@@ -6,8 +6,11 @@
  * it stops when nobody can see it.
  *
  * Markup (set in the Designer):
- *   [data-marquee]          the visible window (edge fades); gets data-marquee-visible
+ *   [data-marquee]          the visible window (edge fades); gets data-marquee-visible and
+ *                           data-marquee-paused
  *     [data-marquee-track]  the element whose children scroll (a Collection List's items)
+ *   [data-marquee-pause]    optional pause button ("Pause Slider"), anywhere in the same block;
+ *                           it stops and starts the rows near it and gets aria-pressed
  */
 
 import { qsa } from "../utils/dom.js";
@@ -39,8 +42,35 @@ function setupMarquee(root) {
   }).observe(root);
 }
 
+/** The rows a pause button controls: those inside the nearest block around it that has any. */
+function rowsFor(button) {
+  let block = button.parentElement;
+  while (block && !block.querySelector("[data-marquee]")) block = block.parentElement;
+  return block ? qsa(block, "[data-marquee]") : [];
+}
+
+function setupPause(button) {
+  if (button.hasAttribute("aria-pressed")) return;
+  const rows = rowsFor(button);
+  if (!rows.length) return;
+  rows.forEach((row, i) => {
+    row.id ||= `marquee-${Math.random().toString(36).slice(2, 8)}-${i}`;
+  });
+  button.setAttribute("aria-controls", rows.map((row) => row.id).join(" "));
+  button.setAttribute("aria-pressed", "false");
+  button.addEventListener("click", (event) => {
+    event.preventDefault();
+    const paused = button.getAttribute("aria-pressed") !== "true";
+    button.setAttribute("aria-pressed", String(paused));
+    rows.forEach((row) => {
+      row.dataset.marqueePaused = String(paused);
+    });
+  });
+}
+
 export function initMarquee(root = document) {
   qsa(root, "[data-marquee]").forEach(setupMarquee);
+  qsa(root, "[data-marquee-pause]").forEach(setupPause);
 }
 
 export default { name: "marquee", init: initMarquee };

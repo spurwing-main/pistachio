@@ -56,3 +56,25 @@ describe("marquee", () => {
     expect(root.querySelectorAll("[data-marquee-track] > *")).toHaveLength(4);
   });
 });
+
+describe("marquee pause button", () => {
+  it("stops and starts the rows in its block", () => {
+    document.body.innerHTML = `
+      <div class="slider">
+        <div data-marquee><div data-marquee-track><div>A</div></div></div>
+        <div class="footer"><a href="#" data-marquee-pause>Pause Slider</a></div>
+      </div>`;
+    initMarquee(document);
+    const row = document.querySelector("[data-marquee]");
+    const button = document.querySelector("[data-marquee-pause]");
+    expect(button.getAttribute("aria-pressed")).toBe("false");
+    expect(button.getAttribute("aria-controls")).toBe(row.id);
+
+    button.click();
+    expect(button.getAttribute("aria-pressed")).toBe("true");
+    expect(row.dataset.marqueePaused).toBe("true");
+
+    button.click();
+    expect(row.dataset.marqueePaused).toBe("false");
+  });
+});

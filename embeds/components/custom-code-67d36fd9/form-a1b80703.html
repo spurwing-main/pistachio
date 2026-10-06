@@ -31,6 +31,22 @@
     outline-offset: 2px;
   }
 
+  /* The whole option responds, including keyboard focus on its checkbox. */
+  .form_check:has(.form_checkbox:checked) .form_check-label {
+    color: var(--_color---violet--1000);
+  }
+
+  /* Show a filled, invalid field after leaving it; keep an untouched form quiet. */
+  .form_input:invalid:not(:placeholder-shown):not(:focus) {
+    border-color: var(--_color---rose--900);
+    background-color: var(--_color---rose--000);
+  }
+
+  .form_input:focus-visible {
+    outline: 2px solid var(--_color---violet--600);
+    outline-offset: 3px;
+  }
+
   /* The submit is a native input, so its arrow sits beside it: just after the centred text
      on wide screens, at the far end on phones. Clicks pass through to the input. */
   .form_submit-wrap .arrow {

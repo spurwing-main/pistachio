@@ -1,4 +1,10 @@
 <style>
+  /* Match the browser background to a dark hero, without changing section themes. */
+  html:has(body[data-page-background="dark"]),
+  body[data-page-background="dark"] {
+    background-color: var(--_color---violet--1000);
+  }
+
   body {
     -webkit-font-smoothing: antialiased;
     -moz-osx-font-smoothing: grayscale;

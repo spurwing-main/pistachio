@@ -3,7 +3,8 @@
      each title class (the theme's heading colour). Nothing here overrides it. */
 
   /* All titles are balanced */
-  [class^='title-'] {
+  [class^='title-'],
+  .w-richtext:not(.text-rich-text) > :is(h1, h2, h3, h4, h5, h6) {
     text-wrap: balance;
   }
 

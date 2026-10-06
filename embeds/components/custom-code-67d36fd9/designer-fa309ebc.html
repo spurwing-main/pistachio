@@ -1,6 +1,25 @@
 <style>
   /* Designer only: outline links that still go nowhere ("#"). The menu and pause buttons are "#" on purpose. */
-  html.wf-design-mode a[href="#"]:not([data-nav-menu-toggle], .pause-button) {
+  html.wf-design-mode a[href='#']:not([data-nav-menu-toggle], .pause-button) {
     outline: 1px solid red !important;
+  }
+  /* Designer only. Empty elements: no 75px placeholder padding, dashed outline or inner shadow, so the canvas lays
+   out like the published page. Unlike turning off "Show empty elements", heights you set are kept. CMS empty
+   states and drag targets keep Webflow's hints. Select an empty element in the Navigator. */
+  html.wf-design-mode .wf-empty:not(.w-dyn-item, .w-locales-item, .wf-drop-target, .wf-drop-target-single, .wf-new-empty-section) {
+    padding-bottom: 0;
+    padding-right: 0;
+    box-shadow: none;
+    outline: none !important;
+  }
+
+  /* Designer only. Script-only Embeds: no 75px box and note, so nothing below them moves. */
+  html.wf-design-mode .w-embed.w-script {
+    min-height: 0;
+    margin-bottom: 0;
+    background-image: none;
+  }
+  html.wf-design-mode .w-embed.w-script::before {
+    content: none;
   }
 </style>

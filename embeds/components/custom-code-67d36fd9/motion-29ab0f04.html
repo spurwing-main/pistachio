@@ -40,11 +40,8 @@
     [data-reveal="hero"] [data-reveal-step="media"] { animation-delay: calc(var(--motion-step) * 1.5); }
   }
 
-  /* A card responds as one: the photograph and link arrow move together. */
-  .product-card_image {
-    transition: transform var(--motion-slow) var(--ease-out-expo);
-  }
-
+  /* A card responds as one: the photograph and link arrow move together
+     (the photograph's transition is on product-card_image in the Designer). */
   @media (hover: hover) and (pointer: fine) {
     .product-card:hover .product-card_image { transform: scale(1.035); }
     .product-card:hover .arrow { background-color: var(--arrow-hover-bg); color: var(--arrow-hover-fg); }

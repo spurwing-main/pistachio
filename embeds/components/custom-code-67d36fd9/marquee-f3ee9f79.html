@@ -3,20 +3,11 @@
      --marquee-duration so every row moves at the same speed. Edges fade out over
      marquee/fade. It stops on hover, while anything inside has keyboard focus, offscreen, and
      for anyone who asks for less motion (then the row scrolls sideways by hand instead). */
+  /* The row, track and item layout is on their classes in the Designer (overflow, flex,
+     max-content, and space after every item so half the track is one full set). The fade
+     stays here: Webflow drops calc() with a variable on a class. */
   [data-marquee] {
-    overflow-x: auto;
     mask-image: linear-gradient(90deg, transparent, #000 var(--marquee--fade), #000 calc(100% - var(--marquee--fade)), transparent);
-  }
-
-  [data-marquee-track] {
-    display: flex;
-    width: max-content;
-  }
-
-  /* Space after every item (not a gap), so half the track is exactly one full set. */
-  [data-marquee-track] > * {
-    flex-shrink: 0;
-    padding-right: var(--marquee--gap);
   }
 
   [data-marquee-ready] { overflow: hidden; }

@@ -37,7 +37,8 @@ describe("embedUrl", () => {
 
 describe("initVideo", () => {
   it("plays a video link in a dialog and removes the player on close", () => {
-    document.body.innerHTML = `<a data-video href="https://youtu.be/abc123"><span>2 min overview</span></a>`;
+    document.body.innerHTML = `<div class="video-card"><a data-video href="https://youtu.be/abc123"><span>2 min overview</span></a>
+      <dialog data-video-dialog><button type="button" data-video-close>Close</button><div data-video-frame></div></dialog></div>`;
     initVideo();
     const link = document.querySelector("a");
     expect(link.getAttribute("aria-haspopup")).toBe("dialog");
@@ -46,12 +47,23 @@ describe("initVideo", () => {
     link.querySelector("span").dispatchEvent(click);
     expect(click.defaultPrevented).toBe(true);
 
-    const dialog = document.querySelector(".video-dialog");
+    const dialog = document.querySelector("[data-video-dialog]");
     const frame = dialog.querySelector("iframe");
     expect(dialog.open).toBe(true);
     expect(frame.title).toBe("2 min overview");
 
-    dialog.close();
+    dialog.querySelector("[data-video-close]").click();
+    expect(dialog.open).toBe(false);
     expect(dialog.querySelector("iframe")).toBeNull();
+  });
+
+  it("follows the link when there is no dialog near it", () => {
+    document.body.innerHTML = `<a data-video href="https://youtu.be/abc123">Watch</a>`;
+    initVideo();
+    const link = document.querySelector("a");
+    expect(link.hasAttribute("aria-haspopup")).toBe(false);
+    const click = new MouseEvent("click", { bubbles: true, cancelable: true });
+    link.dispatchEvent(click);
+    expect(click.defaultPrevented).toBe(false);
   });
 });

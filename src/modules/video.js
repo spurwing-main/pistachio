@@ -2,12 +2,14 @@
  * Video: a link to a YouTube or Vimeo video plays in a pop-up on the page instead.
  * Any other link, or a page without this script, simply follows the link.
  *
- * Markup (set in the Designer):
- *   a[data-video]   the link; its href is the Video card's Video prop
+ * Markup (set in the Designer, inside the Video card):
+ *   a[data-video]                the link; its href is the Video card's Video prop
+ *   dialog[data-video-dialog]    the pop-up beside it, styled in the Designer
+ *     button[data-video-close]   closes it
+ *     [data-video-frame]         where the player goes
  *
- * The pop-up is one native <dialog>, made on first use and styled in the video embed.
  * Closing it (button, Escape or a click outside the video) removes the player, so
- * nothing keeps playing.
+ * nothing keeps playing. A link with no dialog near it simply follows its link.
  */
 
 import { closestWithin } from "../utils/dom.js";
@@ -39,50 +41,50 @@ export function embedUrl(href) {
   return null;
 }
 
-let dialog;
+const ready = new WeakSet();
 
-function getDialog() {
-  if (dialog) return dialog;
-  dialog = document.createElement("dialog");
-  dialog.className = "video-dialog";
-  dialog.innerHTML = `
-    <button class="video-dialog_close" type="button" aria-label="Close video">
-      <svg width="16" height="16" viewBox="0 0 16 16" aria-hidden="true"><path d="M3 3l10 10M13 3L3 13" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/></svg>
-    </button>
-    <div class="video-dialog_frame"></div>`;
-  dialog.querySelector(".video-dialog_close").addEventListener("click", () => dialog.close());
+/** The dialog in the nearest block around the link that has one. */
+function dialogFor(link) {
+  let block = link.parentElement;
+  while (block && !block.querySelector("dialog[data-video-dialog]")) block = block.parentElement;
+  return block ? block.querySelector("dialog[data-video-dialog]") : null;
+}
+
+function prepare(dialog) {
+  if (ready.has(dialog)) return;
+  ready.add(dialog);
+  dialog.querySelector("[data-video-close]")?.addEventListener("click", () => dialog.close());
   dialog.addEventListener("click", (event) => {
     if (event.target === dialog) dialog.close();
   });
-  dialog.addEventListener("close", () => dialog.querySelector(".video-dialog_frame").replaceChildren());
-  document.body.append(dialog);
-  return dialog;
+  dialog.addEventListener("close", () => dialog.querySelector("[data-video-frame]").replaceChildren());
 }
 
-function play(src, label) {
-  const box = getDialog();
+function play(dialog, src, label) {
+  prepare(dialog);
   const frame = document.createElement("iframe");
   frame.src = src;
   frame.title = label || "Video";
   frame.allow = "autoplay; fullscreen; picture-in-picture; encrypted-media";
   frame.allowFullscreen = true;
-  box.setAttribute("aria-label", label || "Video");
-  box.querySelector(".video-dialog_frame").replaceChildren(frame);
-  box.showModal();
+  dialog.setAttribute("aria-label", label || "Video");
+  dialog.querySelector("[data-video-frame]").replaceChildren(frame);
+  dialog.showModal();
 }
 
 function onClick(event) {
   const link = closestWithin(document, event.target, "a[data-video]");
   if (!link || event.metaKey || event.ctrlKey || event.shiftKey || event.button > 0) return;
   const src = embedUrl(link.getAttribute("href") || "");
-  if (!src) return;
+  const dialog = src && dialogFor(link);
+  if (!dialog) return;
   event.preventDefault();
-  play(src, link.textContent.trim().replace(/\s+/g, " "));
+  play(dialog, src, link.textContent.trim().replace(/\s+/g, " "));
 }
 
 export function initVideo() {
   document.querySelectorAll("a[data-video]").forEach((link) => {
-    if (embedUrl(link.getAttribute("href") || "")) link.setAttribute("aria-haspopup", "dialog");
+    if (embedUrl(link.getAttribute("href") || "") && dialogFor(link)) link.setAttribute("aria-haspopup", "dialog");
   });
   document.addEventListener("click", onClick);
 }

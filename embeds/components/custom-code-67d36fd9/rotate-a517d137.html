@@ -4,18 +4,7 @@
      the next quote, which fades in. The line stops on hover, while anything inside has
      keyboard focus, offscreen and with the pause button. Before the script runs, and with
      reduced motion, only the first quote shows. */
-  [data-rotate-track] {
-    display: grid;
-  }
-
-  [data-rotate-track] > * {
-    grid-area: 1 / 1;
-  }
-
-  [data-rotate-track] > * > * {
-    height: 100%;
-  }
-
+  /* The stack (one grid cell, cards full height) is on demo_quote-list and demo_quote-item. */
   [data-rotate]:not([data-rotate-ready]) [data-rotate-track] > :not(:first-child) {
     display: none;
   }

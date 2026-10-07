@@ -7,47 +7,87 @@ const motion = vi.hoisted(() => ({
 vi.mock("motion/mini", () => ({ animate: motion.animate }));
 vi.mock("motion", () => ({ inView: motion.inView }));
 
+const VALUES = "--motion-step:80ms;--reveal-duration:900ms;--reveal-from:translateY(1.5rem);--reveal-ease:cubic-bezier(0.16,1,0.3,1)";
+const below = { top: 2000, bottom: 2400 };
+const onScreen = { top: 100, bottom: 500 };
+
 let media;
 let enter;
 let cleanup;
+let rect;
 beforeEach(() => {
   vi.clearAllMocks();
+  rect = below;
   vi.spyOn(Element.prototype, "getClientRects").mockImplementation(function () { return this.hidden ? [] : [{}]; });
+  vi.spyOn(Element.prototype, "getBoundingClientRect").mockImplementation(() => rect);
   media = new EventTarget();
   media.matches = false;
   vi.stubGlobal("matchMedia", () => media);
   motion.inView.mockImplementation((block, callback) => { enter = callback; return motion.stop; });
   motion.animate.mockReturnValue({ complete: motion.complete });
-  document.body.innerHTML = `<div data-reveal="group" style="--reveal-opacity:0;--motion-step:80ms;--reveal-duration:320ms;--reveal-from:translateY(0.5rem);--reveal-ease:cubic-bezier(0,0.6,0.5,1)"><h2>Heading</h2><p>Content</p></div>`;
-  for (const child of document.querySelector("[data-reveal]").children) child.style.cssText=document.querySelector("[data-reveal]").style.cssText;
+  document.body.innerHTML = `<div data-reveal="group" style="${VALUES}"><h2>Heading</h2><p>Content</p></div>`;
 });
 afterEach(() => { cleanup?.(); vi.unstubAllGlobals(); vi.restoreAllMocks(); });
 
+const block = () => document.querySelector("[data-reveal]");
+
 describe("entrance motion", () => {
-  it("keeps content visible until it enters, and reads the shared motion values", () => {
+  it("sets a below-the-fold block's start state off screen, then plays it once in view", () => {
     cleanup = initReveal();
+    expect(document.querySelector("h2").style.opacity).toBe("0");
+    expect(document.querySelector("h2").style.transform).toBe("translateY(1.5rem)");
     expect(motion.animate).not.toHaveBeenCalled();
-    expect(document.querySelector("h2").style.opacity).toBe("");
     enter();
-    expect(motion.animate.mock.calls.map(call=>call[0])).toEqual([...document.querySelector("[data-reveal]").children]);
-    expect(motion.animate.mock.calls[0][2]).toMatchObject({ duration: 0.32, ease: [0, 0.6, 0.5, 1] });
-    expect(motion.animate.mock.calls.map(call=>call[2].delay)).toEqual([0, 0.08]);
+    expect(motion.animate.mock.calls.map((call) => call[0])).toEqual([...block().children]);
+    expect(motion.animate.mock.calls[0][1]).toEqual({ opacity: [0, 1], transform: ["translateY(1.5rem)", "none"] });
+    expect(motion.animate.mock.calls[0][2]).toMatchObject({ duration: 0.9, ease: [0.16, 1, 0.3, 1] });
+    expect(motion.animate.mock.calls.map((call) => call[2].delay)).toEqual([0, 0.08]);
   });
 
-  it("does not subscribe or animate when reduced motion is already selected", () => {
+  it("leaves a block that is already on screen alone, so nothing visible disappears", () => {
+    rect = onScreen;
+    cleanup = initReveal();
+    expect(motion.inView).not.toHaveBeenCalled();
+    expect(document.querySelector("h2").style.opacity).toBe("");
+  });
+
+  it("leaves the hero to CSS", () => {
+    block().dataset.reveal = "hero";
+    cleanup = initReveal();
+    expect(motion.inView).not.toHaveBeenCalled();
+    expect(document.querySelector("h2").style.opacity).toBe("");
+  });
+
+  it("staggers a lone wrapper's children, such as a slot", () => {
+    document.body.innerHTML = `<div data-reveal="group" style="${VALUES}"><div class="slot"><article>A</article><article>B</article></div></div>`;
+    cleanup = initReveal();
+    enter();
+    expect(motion.animate.mock.calls.map((call) => call[0].textContent)).toEqual(["A", "B"]);
+  });
+
+  it("brings in a plain block as one piece", () => {
+    block().dataset.reveal = "";
+    cleanup = initReveal();
+    enter();
+    expect(motion.animate).toHaveBeenCalledTimes(1);
+    expect(motion.animate.mock.calls[0][0]).toBe(block());
+  });
+
+  it("does nothing when reduced motion is already selected", () => {
     media.matches = true;
     cleanup = initReveal();
     expect(motion.inView).not.toHaveBeenCalled();
-    expect(motion.animate).not.toHaveBeenCalled();
+    expect(document.querySelector("h2").style.opacity).toBe("");
   });
 
-  it("finishes an active entrance when reduced motion changes", () => {
+  it("shows everything at rest when reduced motion is switched on", () => {
     cleanup = initReveal();
     enter();
     media.matches = true;
     media.dispatchEvent(new Event("change"));
     expect(motion.stop).toHaveBeenCalled();
     expect(motion.complete).toHaveBeenCalled();
+    expect(document.querySelector("h2").style.opacity).toBe("");
   });
 
   it("initializes each block once and releases it during cleanup", () => {
@@ -59,22 +99,7 @@ describe("entrance motion", () => {
     expect(motion.inView).toHaveBeenCalledTimes(2);
   });
 
-  it("sequences only marked hero content and respects the media's own entrance", () => {
-    const root = document.querySelector("[data-reveal]");
-    root.dataset.reveal = "hero";
-    root.children[0].dataset.revealStep = "content";
-    root.children[1].dataset.revealStep = "media";
-    root.children[1].style.setProperty("--reveal-duration", "640ms");
-    root.children[1].style.setProperty("--reveal-from", "translateY(1rem) scale(0.97)");
-    root.append(document.createElement("aside"));
-    cleanup = initReveal();
-    enter();
-    expect(motion.animate).toHaveBeenCalledTimes(2);
-    expect(motion.animate.mock.calls[1][1].transform).toEqual(["translateY(1rem) scale(0.97)", "none"]);
-    expect(motion.animate.mock.calls[1][2]).toMatchObject({ duration: 0.64, delay: 0.08 });
-  });
-
-  it("leaves hidden optional content out of the sequence", () => {
+  it("leaves hidden optional content out", () => {
     document.querySelector("p").hidden = true;
     cleanup = initReveal();
     enter();

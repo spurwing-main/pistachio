@@ -28,34 +28,37 @@
     --arrow-hover-fg: currentColor;
   }
 
+  /* Figma: a 13 × 9 arrow in a 32px circle, kept in proportion for other circle sizes. */
   .arrow_icon svg {
-    width: 50%;
+    width: 40.625%;
     height: auto;
   }
 
+  /* A Core / Button holds its link or submit beside the arrow, so the button itself is the
+     hover and focus target; other links and buttons still carry their arrow inside. */
   @media (hover: hover) {
-    :is(a, button, .form_submit-wrap):hover .arrow {
+    :is(a, button, .button):hover .arrow {
       background-color: var(--arrow-hover-bg);
       color: var(--arrow-hover-fg);
     }
 
-    :is(a, button, .form_submit-wrap):hover .arrow_icon {
+    :is(a, button, .button):hover .arrow_icon {
       transform: translateX(100%);
     }
 
-    :is(a, button, .form_submit-wrap):hover .arrow_icon:last-child {
+    :is(a, button, .button):hover .arrow_icon:last-child {
       filter: blur(2px);
     }
   }
 
   :is(a, button):focus-visible .arrow,
-  .form_submit-wrap:has(:focus-visible) .arrow {
+  .button:has(:focus-visible) .arrow {
     background-color: var(--arrow-hover-bg);
     color: var(--arrow-hover-fg);
   }
 
   :is(a, button):focus-visible .arrow_icon,
-  .form_submit-wrap:has(:focus-visible) .arrow_icon {
+  .button:has(:focus-visible) .arrow_icon {
     transform: translateX(100%);
   }
 </style>

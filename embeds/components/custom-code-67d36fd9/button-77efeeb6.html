@@ -13,5 +13,7 @@
   @media (max-width: 767px) {
     .button:has(> .button_text-mobile:not(:empty)) > .button_text { display: none; }
     .button > .button_text-mobile:not(:empty) { display: block; }
+    /* Full-width card buttons: text to the left, arrow to the right. */
+    .product-card_actions-slot .button { justify-content: space-between; }
   }
 </style>

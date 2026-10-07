@@ -5,41 +5,39 @@
     --motion-base: 240ms;
     --motion-slow: 500ms;
     --motion-rise: 0.75rem;
-    --motion-entry: 320ms;
-    --motion-feature: 640ms;
     --motion-step: 80ms;
+    --motion-reveal: 900ms;
+    --motion-reveal-rise: 1.5rem;
     /* Pistachio's own curve, from the current site's buttons. */
     --ease-out: cubic-bezier(0, 0.6, 0.5, 1);
     --ease-out-expo: cubic-bezier(0.16, 1, 0.3, 1);
     --ease-in-out: cubic-bezier(0.65, 0, 0.35, 1);
   }
 
+  /* Entrances: one effect everywhere, a short rise and fade on a long soft ease.
+     Blocks below the fold play as they scroll in (the reveal module reads these values). */
   [data-reveal] {
-    --reveal-duration: var(--motion-entry);
-    --reveal-from: translateY(0.5rem);
-    --reveal-ease: var(--ease-out);
-    --reveal-opacity: 0;
-  }
-
-  [data-reveal="hero"],
-  .cta[data-wf--blocks-cta-band--variant="split"] {
-    --reveal-duration: var(--motion-feature);
+    --reveal-duration: var(--motion-reveal);
+    --reveal-from: translateY(var(--motion-reveal-rise));
     --reveal-ease: var(--ease-out-expo);
   }
 
-  [data-reveal="hero"] [data-reveal-step="media"] {
-    --reveal-from: translateY(1rem) scale(0.97);
+  /* The hero plays on first paint with CSS alone, so it never flashes:
+     heading, copy, buttons, then the video. */
+  @keyframes reveal-in {
+    from {
+      opacity: 0;
+      transform: translateY(var(--motion-reveal-rise));
+    }
   }
 
-  /* Keep the first screen readable even if the bundle arrives after the first paint. */
-  [data-reveal="hero"] { --reveal-opacity: 0.7; }
-
-  .cta[data-wf--blocks-cta-band--variant="split"] .cta_content {
-    --reveal-duration: var(--motion-entry);
-  }
-
-  .cta[data-wf--blocks-cta-band--variant="split"] .cta_media {
-    --reveal-from: translateY(0.75rem) rotate(-1.5deg) scale(0.985);
+  @media (prefers-reduced-motion: no-preference) {
+    [data-reveal="hero"] [data-reveal-step] {
+      animation: reveal-in var(--motion-reveal) var(--ease-out-expo) both;
+    }
+    [data-reveal="hero"] [data-reveal-step]:nth-child(2) { animation-delay: calc(var(--motion-step) * 1); }
+    [data-reveal="hero"] [data-reveal-step]:nth-child(3) { animation-delay: calc(var(--motion-step) * 2); }
+    [data-reveal="hero"] [data-reveal-step="media"] { animation-delay: calc(var(--motion-step) * 1.5); }
   }
 
   /* A card responds as one: the photograph and link arrow move together. */

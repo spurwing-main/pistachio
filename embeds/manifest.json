@@ -306,6 +306,22 @@
       "parent": null,
       "file": "components/nav-e03aaa9b/nav-css-ea8a0d83.html",
       "baseHash": "sha256:a1e4638901d74bf59605492e49f1eb14e4bf7dbee5890f1be5cc224165b68ecf"
+    },
+    {
+      "key": "hero",
+      "owner": {
+        "kind": "component",
+        "id": "38a6996e-1d23-2310-600b-3396c6e5b3a0",
+        "name": "Custom code"
+      },
+      "address": {
+        "component": "38a6996e-1d23-2310-600b-3396c6e5b3a0",
+        "element": "802d7f1c-363b-6452-a436-e9d9c72f1d38"
+      },
+      "displayName": "hero",
+      "parent": null,
+      "file": "components/custom-code-67d36fd9/hero.html",
+      "baseHash": "sha256:3b22c94d8142225c5c12bee1614445467a409c3df122414acb0789be68170793"
     }
   ],
   "partial": true,

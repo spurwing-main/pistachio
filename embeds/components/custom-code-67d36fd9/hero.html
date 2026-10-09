@@ -1,0 +1,27 @@
+<style>
+/* Hero: structural selectors and responsive media switching live here.
+   Normal layout, typography, colour and spacing stay editable in Designer. */
+.hero_heading { text-wrap: balance; }
+.hero_highlights_slot > :nth-child(n+4) { display: none !important; }
+.hero_highlights_slot > :nth-child(1) { left: -3.1875rem; top: 1.9375rem; right: auto; bottom: auto; }
+.hero_highlights_slot > :nth-child(2) { left: auto; top: auto; right: -7.1875rem; bottom: 3.5rem; }
+.hero_highlights_slot > :nth-child(3) { left: -7.375rem; top: auto; right: auto; bottom: 1.125rem; }
+.hero_image-mobile { display: none; }
+.hero_visual:has(.hero_video:not(.w-condition-invisible)) > img { display: none; }
+@media (min-width: 768px) {
+  [data-wf--sections-hero--variant="split"] .hero_highlights_slot > :nth-child(1),
+  [data-wf--sections-hero--variant="split"] .hero_highlights_slot > :nth-child(3) { left: -2rem; }
+  [data-wf--sections-hero--variant="split"] .hero_highlights_slot > :nth-child(2) { right: -2rem; }
+}
+@media (max-width: 991px) {
+  .hero_highlights_slot > :nth-child(1) { left: -2rem; }
+  .hero_highlights_slot > :nth-child(2) { right: -2rem; }
+  .hero_highlights_slot > :nth-child(3) { left: -2rem; }
+}
+@media (max-width: 767px) {
+  .hero_image-mobile:not(.w-condition-invisible) { display: block; }
+  .hero_visual:has(.hero_image-mobile:not(.w-condition-invisible)) > .hero_image { display: none; }
+  .hero_visual:has(.hero_video:not(.w-condition-invisible)) > img { display: none; }
+  .hero_highlights_slot > :nth-child(-n+3) { position: relative; inset: auto; max-width: 100%; }
+}
+</style>

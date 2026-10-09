@@ -237,6 +237,42 @@ Keep visual values in Webflow or in an Embed. Use modules only for browser behav
 
 Use `data-*` attributes as the interface between Webflow, CSS, and JS. Do not use style class names as controls.
 
+## Accordions
+
+The accordion module starts automatically. Set these attributes in the Designer:
+
+| Element | Attribute | Purpose |
+| --- | --- | --- |
+| Group wrapper | `data-accordion="component"` | Keeps each group independent, including nested groups. |
+| Item wrapper | `data-accordion="item"` | Contains one trigger and one content panel. |
+| Button | `data-accordion="trigger"` | Opens or closes the item. Use a native `button` with `type="button"`. |
+| Content wrapper | `data-accordion="content"` | The panel whose height changes. Put padding and borders on a child wrapper. |
+| Group wrapper | `data-accordion-first-open="true"` | Opens the first valid item on load. Default: all closed. |
+| Group wrapper | `data-accordion-close-others="false"` | Allows several open items. Default: opening an item closes its siblings. |
+
+```html
+<div data-accordion="component" data-accordion-first-open="true">
+  <div data-accordion="item">
+    <button type="button" data-accordion="trigger">Question</button>
+    <div data-accordion="content"><div>Answer</div></div>
+  </div>
+</div>
+```
+
+Each item receives `is-open` and `data-accordion-open="true|false"`. Use these states
+to style the trigger or icon in Webflow. The script manages `aria-expanded`,
+`aria-controls`, `aria-hidden`, and `inert`. Native buttons provide Enter and Space
+activation. Invalid items without a button and panel are left unchanged.
+
+Height changes take 400 ms and respect reduced motion. Open panels return to auto
+height so their content can grow. Content stays visible if JavaScript does not load.
+Keep panel height, overflow, and visibility under script control.
+
+After CMS content changes, call `window.pistachio.modules.accordions(scope)` with
+the changed group or container. Calling it again does not add duplicate listeners.
+Each call returns a cleanup function for the items that call initialized; cleanup
+removes their listeners and restores their original attributes and inline styles.
+
 ## Commands
 
 | Command              | Result                                              |

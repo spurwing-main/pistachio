@@ -14,7 +14,7 @@
         "component": "ab5906ee-95fd-4e08-85ad-89419a2c3a44",
         "element": "23948374-a52e-701f-117d-d46ea948f43b"
       },
-      "displayName": "Footer — CSS",
+      "displayName": "Footer \u2014 CSS",
       "parent": null,
       "file": "components/ab5906ee-95fd-4e08-85ad-89419a2c3a44-d941ae1f/footer-css-d535f013.html",
       "baseHash": "sha256:f31cfa20d5bbc62eef89400634e70b59d61a14de231e167d873460a836e98e5a"
@@ -302,7 +302,7 @@
         "component": "8cea7e17-9a61-31ff-c695-836543d51e73",
         "element": "b5bfc639-2691-710d-3003-73230ce59911"
       },
-      "displayName": "Nav — CSS",
+      "displayName": "Nav \u2014 CSS",
       "parent": null,
       "file": "components/nav-e03aaa9b/nav-css-ea8a0d83.html",
       "baseHash": "sha256:a1e4638901d74bf59605492e49f1eb14e4bf7dbee5890f1be5cc224165b68ecf"
@@ -321,7 +321,55 @@
       "displayName": "hero",
       "parent": null,
       "file": "components/custom-code-67d36fd9/hero.html",
-      "baseHash": "sha256:3b22c94d8142225c5c12bee1614445467a409c3df122414acb0789be68170793"
+      "baseHash": "sha256:fa32765e70170169a38f7cd61facb82baacd38e4b19fc24866d3ca61d0612892"
+    },
+    {
+      "key": "faq-css-977be8e0",
+      "owner": {
+        "kind": "component",
+        "id": "9c929203-9a76-26d6-5462-1eecd1160d7d",
+        "name": "Items / FAQ item"
+      },
+      "address": {
+        "component": "9c929203-9a76-26d6-5462-1eecd1160d7d",
+        "element": "977be8e0-9c5c-dfcb-ad7c-adcc1eb8d21e"
+      },
+      "displayName": "FAQ \u2014 CSS",
+      "parent": null,
+      "file": "components/faq-item-9c929203/faq-css-977be8e0.html",
+      "baseHash": "sha256:955fd2d06d158c4fc6f2c57d30acd5812b556e8af3ea2ef186eb2415dff29295"
+    },
+    {
+      "key": "feature-row",
+      "owner": {
+        "kind": "component",
+        "id": "38a6996e-1d23-2310-600b-3396c6e5b3a0",
+        "name": "Custom code"
+      },
+      "address": {
+        "component": "38a6996e-1d23-2310-600b-3396c6e5b3a0",
+        "element": "c62a2a96-bd69-7622-428f-4161fe3fe23c"
+      },
+      "displayName": "Feature row \u2014 CSS",
+      "parent": null,
+      "file": "components/custom-code-67d36fd9/feature-row.html",
+      "baseHash": "sha256:61c0eba31a5a01b97e4f54787a5cc03ffd08774bc2df561dbcdaeb29ff4b7f35"
+    },
+    {
+      "key": "case-study",
+      "owner": {
+        "kind": "component",
+        "id": "cada64b7-9e25-0484-9416-2f16dcd7cca7",
+        "name": "Sections / Case study"
+      },
+      "address": {
+        "component": "cada64b7-9e25-0484-9416-2f16dcd7cca7",
+        "element": "f4eaba23-b338-6a08-0e84-f2bd5e0525c4"
+      },
+      "displayName": "Case study \u2014 CSS",
+      "parent": null,
+      "file": "components/case-study-cada64b7/case-study.html",
+      "baseHash": "sha256:690472934a64fe49f00eba97aa5ba5f24f3c5cba6fd5cb7ea89761c478672dc7"
     }
   ],
   "partial": true,

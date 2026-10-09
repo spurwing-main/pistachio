@@ -5,5 +5,6 @@ import rotate from "./rotate.js";
 import video from "./video.js";
 import reveal from "./reveal.js";
 import accordions from "./accordions.js";
+import externalGraphic from "./external-graphic.js";
 
-export const modules = [nav, marquee, rotate, video, reveal, accordions];
+export const modules = [nav, marquee, rotate, video, reveal, accordions, externalGraphic];

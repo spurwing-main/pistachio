@@ -3,7 +3,16 @@
 <g id="line">
 <path id="Vector" data-graphic-line="outgoing" d="M726.965 105.519H770.196" fill="none" stroke="#E5CBFF" stroke-width="3" stroke-linecap="round" stroke-dasharray="3.603 7.205" stroke-dashoffset="1.802"/>
 <path id="Vector_2" data-graphic-line="return" d="M345.406 105.519H388.637" fill="none" stroke="#E5CBFF" stroke-width="3" stroke-linecap="round" stroke-dasharray="3.603 7.205" stroke-dashoffset="1.802"/>
-<path id="Vector_3" data-graphic-line="arc" d="M840.189 98.9167A405.01044 405.01044 0 1 1 278.464 109.551" fill="none" stroke="#E5CBFF" stroke-width="1.5" stroke-linecap="round" stroke-dasharray="4.008 8.016" stroke-dashoffset="2.004"/>
+<path id="arc-01-02" data-graphic-line="01-02" d="M870.585743 130.309000A405.01044 405.01044 0 0 1 922.810769 206.473000" fill="none" stroke="#E5CBFF" stroke-width="1.5" stroke-linecap="round" stroke-dasharray="4.008 8.016" stroke-dashoffset="9.650344"/>
+<path id="arc-02-03" data-graphic-line="02-03" d="M968.919289 368.359000A405.01044 405.01044 0 0 1 969.087090 420.936000" fill="none" stroke="#E5CBFF" stroke-width="1.5" stroke-linecap="round" stroke-dasharray="4.008 8.016" stroke-dashoffset="7.232861"/>
+<path id="arc-03-04" data-graphic-line="03-04" d="M963.619543 466.757000A405.01044 405.01044 0 0 1 944.586259 536.767000" fill="none" stroke="#E5CBFF" stroke-width="1.5" stroke-linecap="round" stroke-dasharray="4.008 8.016" stroke-dashoffset="9.826167"/>
+<path id="arc-04-05" data-graphic-line="04-05" d="M903.666120 617.830000A405.01044 405.01044 0 0 1 867.315165 665.284000" fill="none" stroke="#E5CBFF" stroke-width="1.5" stroke-linecap="round" stroke-dasharray="4.008 8.016" stroke-dashoffset="5.135586"/>
+<path id="arc-05-06" data-graphic-line="05-06" d="M819.216380 711.105000A405.01044 405.01044 0 0 1 728.965000 766.206675" fill="none" stroke="#E5CBFF" stroke-width="1.5" stroke-linecap="round" stroke-dasharray="4.008 8.016" stroke-dashoffset="11.232384"/>
+<path id="arc-06-07" data-graphic-line="06-07" d="M386.637000 759.632270A405.01044 405.01044 0 0 1 308.170701 709.226000" fill="none" stroke="#E5CBFF" stroke-width="1.5" stroke-linecap="round" stroke-dasharray="4.008 8.016" stroke-dashoffset="1.847840"/>
+<path id="arc-07-08" data-graphic-line="07-08" d="M260.719764 663.405000A405.01044 405.01044 0 0 1 226.031654 617.830000" fill="none" stroke="#E5CBFF" stroke-width="1.5" stroke-linecap="round" stroke-dasharray="4.008 8.016" stroke-dashoffset="5.041280"/>
+<path id="arc-08-09" data-graphic-line="08-09" d="M185.111515 536.767000A405.01044 405.01044 0 0 1 166.078230 466.757000" fill="none" stroke="#E5CBFF" stroke-width="1.5" stroke-linecap="round" stroke-dasharray="4.008 8.016" stroke-dashoffset="9.072349"/>
+<path id="arc-09-10" data-graphic-line="09-10" d="M160.610684 420.936000A405.01044 405.01044 0 0 1 160.894485 366.709000" fill="none" stroke="#E5CBFF" stroke-width="1.5" stroke-linecap="round" stroke-dasharray="4.008 8.016" stroke-dashoffset="7.651881"/>
+<path id="arc-10-11" data-graphic-line="10-11" d="M207.765208 204.823000A405.01044 405.01044 0 0 1 259.112030 130.309000" fill="none" stroke="#E5CBFF" stroke-width="1.5" stroke-linecap="round" stroke-dasharray="4.008 8.016" stroke-dashoffset="3.239192"/>
 </g>
 <g id="main">
 <path id="Vector_4" d="M715.687 0H399.915C393.686 0 388.637 5.04915 388.637 11.2776V497.495C388.637 503.723 393.686 508.773 399.915 508.773H715.687C721.916 508.773 726.965 503.723 726.965 497.495V11.2776C726.965 5.04915 721.916 0 715.687 0Z" fill="#351950"/>

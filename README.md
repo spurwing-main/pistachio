@@ -33,7 +33,7 @@ commands from public/. This repository holds site code only.
 
 The [Pistachio build guide and page plans](https://github.com/spurwing-main/pistachio-private)
 record this site's decisions. General building methods under review and project templates
-live in the private [webflow-sops repository](https://github.com/spurwing-main/webflow-sops).
+live in the private [webflow-sops tim branch](https://github.com/spurwing-main/webflow-sops/tree/tim).
 
 ## System flow
 

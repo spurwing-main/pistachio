@@ -1,4 +1,4 @@
-<style>
+
   /* u-visually-hidden lives in the Designer (Style panel). */
 
   /* Hide or show at Webflow's breakpoints (991 / 767 / 478); showing never forces a display value. */
@@ -55,4 +55,3 @@
   a.u-cover {
     cursor: pointer;
   }
-</style>

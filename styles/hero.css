@@ -1,4 +1,4 @@
-<style>
+
 /* Hero: structural selectors and responsive media switching live here.
    Normal layout, typography, colour and spacing stay editable in Designer. */
 .hero_heading { text-wrap: balance; }
@@ -24,4 +24,3 @@
   .hero_visual:has(.hero_video:not(.w-condition-invisible)) > img { display: none; }
   .hero_highlights_slot > :nth-child(-n+3) { position: relative; inset: auto; max-width: 100%; }
 }
-</style>

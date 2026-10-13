@@ -1,4 +1,4 @@
-<style>
+
   /* Colour comes from the section (body and section classes set the theme's text colour) and from
      each title class (the theme's heading colour). Nothing here overrides it. */
 
@@ -45,4 +45,3 @@
   .section-heading_actions:has(> .section-heading_actions-slot:empty) {
     display: none;
   }
-</style>

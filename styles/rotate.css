@@ -1,4 +1,4 @@
-<style>
+
   /* Rotate (the Book a demo quote card): the quotes sit on top of each other and one shows.
      Its line fills over --rotate-duration (set by the script); the script times and shows
      the next quote, which fades in. The line stops on hover, while anything inside has
@@ -42,4 +42,3 @@
   [data-rotate]:not([data-rotate-ready]) [data-rotate-pause] {
     display: none;
   }
-</style>

@@ -1,4 +1,4 @@
-<style>
+
   /* Arrow (Core / Arrow): two arrows side by side in a clipped circle. On hover or keyboard
      focus of the link or button around it, both move one width right, so the arrow slides out
      blurring and a fresh one slides in; the circle swaps colour. Rest colours are the variants
@@ -61,4 +61,3 @@
   .button:has(:focus-visible) .arrow_icon {
     transform: translateX(100%);
   }
-</style>

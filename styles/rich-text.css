@@ -1,4 +1,4 @@
-<style>
+
   /* Space between rich text blocks; the classes below set their own. */
   :where(.w-richtext:not(.u-rich-text-gap-exempt) > *:not(:last-child)) {
     margin-bottom: 1lh;
@@ -110,4 +110,3 @@
     margin-top: var(--_rich-text---hr--margin-top);
     margin-bottom: var(--_rich-text---hr--margin-bottom);
   }
-</style>

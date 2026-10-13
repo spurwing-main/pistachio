@@ -1,4 +1,4 @@
-<style>
+
   /* Fluid root size. Figma's frames (390 and 1512) land on 16px; everything sized in rem
      follows. Each band runs linearly between its two ends:
        up to 390      12 → 16
@@ -40,4 +40,3 @@
       font-size: calc(0.75rem + 4 * 100vw / 390);
     }
   }
-</style>

@@ -1,4 +1,4 @@
-<style>
+
   /* Form states the Designer can't hold: the checkbox tick and the field states.
      Sizes, borders and transitions live on the form_* classes. */
   /* Webflow adds a clearfix to checkbox labels; in a flex row it becomes an item and takes a gap. */
@@ -48,4 +48,3 @@
     outline: 2px solid var(--_color---violet--600);
     outline-offset: 3px;
   }
-</style>

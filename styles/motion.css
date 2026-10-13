@@ -1,4 +1,4 @@
-<style>
+
   /* Motion tokens: the only place a duration or easing is defined. */
   :root {
     --motion-fast: 160ms;
@@ -58,4 +58,3 @@
       animation-duration: 0.01ms !important;
     }
   }
-</style>

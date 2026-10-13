@@ -1,4 +1,4 @@
-<style>
+
   /* Icons dropped into a slot take the size Figma draws: 26 in a 56 tile, 20 in a proof row. */
   .icon-tile svg,
   .icon-tile img {
@@ -19,4 +19,3 @@
       transform: scale(1.08);
     }
   }
-</style>

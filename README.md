@@ -1,6 +1,6 @@
 # Pistachio — Webflow custom code
 
-The Designer owns HTML, ordinary styles and editable component content. `src/modules/` owns behaviour, with one module per concern. `embeds/` holds the paired Webflow CSS embeds for animation and selectors the Designer cannot express.
+The Designer owns HTML, ordinary styles and editable component content. `src/modules/` owns behaviour, with one module per concern. [styles/](styles/README.md) holds readable CSS source for animation and selectors the Designer cannot express.
 
 The starter keeps source files, generated files, and the loader separate.
 
@@ -24,9 +24,9 @@ project/
 
 Commit `dist/bundle.js`. The CDN reads this file from GitHub.
 
-Keep the files and manifest in `embeds/` together. Pull fresh Webflow sources into this workspace before editing, compare against the live source, and push only the checked changes. A JavaScript release and a Webflow publish are separate steps; verify both before calling the result live.
+Compare a saved CSS file with its current Webflow code field before editing. See [styles/README.md](styles/README.md) for the component and code-field names. CSS changes are applied in Webflow; JavaScript is built from `src/`. A Git push and a Webflow publish are separate steps; check the served page before calling either change live.
 
-Do not commit project notes, reports, exports, or client data. Put these files in `local/`.
+Reviewed page plans, shared component decisions and readable QA belong in the separate private project repository inside ignored `private/`. Raw exports, original code snapshots, tool records and temporary work stay ignored locally. This public repository holds site code only.
 
 ## System flow
 

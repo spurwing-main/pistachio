@@ -1,4 +1,4 @@
-<style>
+
   /* Video pop-up: a dialog inside the Video card (Designer), sized and coloured on the
      video-dialog classes. Only its open and close motion and its backdrop live here.
      A Video card with no video set isn't clickable. */
@@ -36,4 +36,3 @@
     height: 100%;
     border: 0;
   }
-</style>

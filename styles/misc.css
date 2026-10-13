@@ -1,4 +1,4 @@
-<style>
+
   /* Match the browser background to a dark hero, without changing section themes. */
   html:has(body[data-page-background="dark"]),
   body[data-page-background="dark"] {
@@ -33,4 +33,3 @@
   [type='reset'] {
     touch-action: manipulation;
   }
-</style>

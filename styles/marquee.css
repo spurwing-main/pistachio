@@ -1,4 +1,4 @@
-<style>
+
   /* Marquee (logo strips, testimonial sliders): the script copies the items once and sets
      --marquee-duration so every row moves at the same speed. Edges fade out over
      marquee/fade. It stops on hover, while anything inside has keyboard focus, offscreen, and
@@ -70,4 +70,3 @@
       background-color: var(--_color---violet--100);
     }
   }
-</style>

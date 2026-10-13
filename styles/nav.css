@@ -1,4 +1,4 @@
-<style>
+
   /* Nav states. The Designer holds the resting look (the "Open (for editing)" variant shows
      the panels); the nav script sets the data attributes below. */
 
@@ -345,4 +345,3 @@
       transform: translateY(0.5rem);
     }
   }
-</style>

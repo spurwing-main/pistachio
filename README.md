@@ -26,7 +26,10 @@ Commit `dist/bundle.js`. The CDN reads this file from GitHub.
 
 Compare a saved CSS file with its current Webflow code field before editing. See [styles/README.md](styles/README.md) for the component and code-field names. CSS changes are applied in Webflow; JavaScript is built from `src/`. A Git push and a Webflow publish are separate steps; check the served page before calling either change live.
 
-Reviewed page plans, shared component decisions and readable QA belong in the separate private project repository inside ignored `private/`. Raw exports, original code snapshots, tool records and temporary work stay ignored locally. This public repository holds site code only.
+The project parent has no Git repo. This checkout is public/; sibling private/
+holds the site guide, page plans, decisions and QA. Sibling local/ holds raw
+exports and temporary workings outside both repositories. Run code and Git
+commands from public/. This repository holds site code only.
 
 The [Pistachio build guide and page plans](https://github.com/spurwing-main/pistachio-private)
 record this site's decisions. General building methods under review and project templates

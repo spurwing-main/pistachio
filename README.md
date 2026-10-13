@@ -28,6 +28,10 @@ Compare a saved CSS file with its current Webflow code field before editing. See
 
 Reviewed page plans, shared component decisions and readable QA belong in the separate private project repository inside ignored `private/`. Raw exports, original code snapshots, tool records and temporary work stay ignored locally. This public repository holds site code only.
 
+The [Pistachio build guide and page plans](https://github.com/spurwing-main/pistachio-private)
+record this site's decisions. General building methods under review and project templates
+live in the private [webflow-sops repository](https://github.com/spurwing-main/webflow-sops).
+
 ## System flow
 
 ### Source flow

@@ -1,0 +1,10 @@
+/* Only the Insider threat intro placement of the shared Section heading. */
+.insider-intro_heading .section-heading_title {
+  max-width: 32rem;
+}
+.insider-intro_heading .section-heading_text {
+  max-width: 48rem;
+  font-size: 1rem;
+  line-height: 1.375;
+  letter-spacing: 0;
+}

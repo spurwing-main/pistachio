@@ -20,6 +20,7 @@ here does not prove the current staging page uses it.
 | [form.css](form.css) | Custom code | form |
 | [hero.css](hero.css) | Custom code | hero |
 | [icons.css](icons.css) | Custom code | icons |
+| [insider-intro.css](insider-intro.css) | Custom code | Insider intro — CSS |
 | [marquee.css](marquee.css) | Custom code | marquee |
 | [misc.css](misc.css) | Custom code | misc |
 | [motion.css](motion.css) | Custom code | motion |

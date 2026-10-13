@@ -2,6 +2,7 @@ node_modules/
 coverage/
 .tmp/
 local/
+/private/
 .env
 .env.*
 !.env.example

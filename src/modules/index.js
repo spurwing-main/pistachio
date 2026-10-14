@@ -7,5 +7,6 @@ import reveal from "./reveal.js";
 import accordions from "./accordions.js";
 import externalGraphic from "./external-graphic.js";
 import statProgress from "./stat-progress.js";
+import riskStack from "./risk-stack.js";
 
-export const modules = [nav, marquee, rotate, video, reveal, accordions, externalGraphic, statProgress];
+export const modules = [nav, marquee, rotate, video, reveal, accordions, externalGraphic, statProgress, riskStack];

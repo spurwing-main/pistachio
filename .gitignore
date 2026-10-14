@@ -9,3 +9,6 @@ local/
 .DS_Store
 *.log
 /embeds/
+
+# Raw settings input retained at its existing local path.
+/schema/page-settings.json

@@ -20,9 +20,10 @@ src/modules/index.js. Returned startup promises settle before the module-ready
 marker; one module fault does not stop other modules starting.
 
 Production ignores development overrides and uses the tag’s revision or its
-configured default. Release with a commit-pinned tag. Source overrides work only on local
-or Webflow staging hosts. Local is selected explicitly with ?env=local; auto
-uses the pinned source without probing the visitor’s local network. A tunnel
+configured default. URL ?commit= values never select code on any host. Release
+with a commit-pinned tag. Local is selected deliberately with ?env=local, the
+panel/session choice or trusted default on a development host. Auto and Live use
+the CDN without probing the visitor’s local network. A tunnel
 must be configured through loader.js DEFAULTS.localBase or data-local-base on
 the trusted loader tag; URL parameters cannot select an arbitrary outside host.
 The panel reports the selected source, including fallback to the CDN.
@@ -31,8 +32,9 @@ The panel reports the selected source, including fallback to the CDN.
 
 Run npm test and npm run build. Commit source and its matching generated bundle;
 never edit dist/bundle.js by hand. npm run tag prints the loader tag pinned to
-the current commit. Apply it through the existing approved global code owner
-and publish only to the agreed destination. A Git push does not update Webflow.
+the current commit. The trusted loader tag must run once in the site-wide head,
+without async/defer, before content it gates can paint. An existing tag move needs
+approval; these code changes do not move it. Publish only to the agreed destination. A Git push does not update Webflow.
 
 The loader’s timeout keeps content visible if startup stalls or fails. A ready
 class is not proof all modules succeeded; check the page and its controls.

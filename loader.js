@@ -82,16 +82,12 @@
   const isLoopback = (hostname) => ["localhost", "127.0.0.1", "[::1]"].includes(hostname);
   // Query flags cannot grant permission to change which code runs.
   const isDevHost = isLoopback(location.hostname) || location.hostname.endsWith(".webflow.io");
-  const commitParam = isDevHost ? getParam("commit") : null;
-  const commitOverride = commitParam && /^[0-9a-f]{7,40}$/i.test(commitParam) ? commitParam : null;
-  if (commitParam && !commitOverride) {
-    console.warn("[loader] The commit value must be a Git commit SHA.");
-  }
 
   const owner = self?.owner || DEFAULTS.owner;
   const repository = self?.project || DEFAULTS.project;
-  const commit = commitOverride || self?.commit || DEFAULTS.commit;
+  const commit = self?.commit || DEFAULTS.commit;
   const parseBase = (value) => {
+    if (typeof value !== "string" || /[?#]/.test(value)) return null;
     try {
       const url = new URL(value);
       if (!/^https?:$/.test(url.protocol) || url.username || url.password || url.search || url.hash) return null;
@@ -116,7 +112,7 @@
   const selectedEnvironment = requestedEnvironment || storedEnvironment || DEFAULTS.environment;
   const environment = !isDevHost ? "live" : ["auto", "local", "live"].includes(selectedEnvironment)
     ? selectedEnvironment : DEFAULTS.environment;
-  const hasOverride = Boolean(requestedEnvironment || commitOverride || allowedBase || storedEnvironment);
+  const hasOverride = Boolean(requestedEnvironment || allowedBase || storedEnvironment);
 
   project.boot = {
     namespace,

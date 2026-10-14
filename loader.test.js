@@ -56,14 +56,14 @@ describe("loader", () => {
     });
   });
 
-  it("uses a valid commit override and shows the panel", async () => {
+  it("ignores a valid commit query and shows the requested dev panel", async () => {
     window.history.replaceState({}, "", "/?dev=1&env=live&commit=abcdef1234567");
     await runLoader();
 
     const bundle = document.head.querySelector('script[type="module"]');
-    expect(bundle.src).toContain("@abcdef1234567/dist/bundle.js");
+    expect(bundle.src).toContain("@1234567890abcdef/dist/bundle.js");
     expect(document.querySelector("[data-loader-panel]")).not.toBeNull();
-    expect(document.querySelector("[data-loader-commit]").textContent).toBe("abcdef1234");
+    expect(document.querySelector("[data-loader-commit]").textContent).toBe("1234567890");
   });
 
   it("shows content after the ready timeout", async () => {
@@ -153,7 +153,7 @@ describe("loader", () => {
 
 
 describe("code source boundaries", () => {
-  async function boot({ host = "example.webflow.io", query = "?env=local", data = {}, stored, defaultsBase } = {}) {
+  async function boot({ host = "example.webflow.io", query = "?env=local", data = {}, stored, defaultsBase, defaultsEnvironment } = {}) {
     const dom = new JSDOM("<!doctype html><html><head></head><body></body></html>", {
       url: `https://${host}/${query}`,
       runScripts: "outside-only",
@@ -165,7 +165,8 @@ describe("code source boundaries", () => {
       value: { src: loaderSource, dataset: data },
     });
     if (stored) dom.window.sessionStorage.setItem("pistachio_environment", stored);
-    const source = defaultsBase ? code.replace('localBase: "http://localhost:5500"', `localBase: ${JSON.stringify(defaultsBase)}`) : code;
+    let source = defaultsBase ? code.replace('localBase: "http://localhost:5500"', `localBase: ${JSON.stringify(defaultsBase)}`) : code;
+    if (defaultsEnvironment) source = source.replace('environment: "auto"', `environment: ${JSON.stringify(defaultsEnvironment)}`);
     dom.window.eval(source);
     for (let step = 0; step < 8; step += 1) await Promise.resolve();
     const urls = [...dom.window.document.querySelectorAll('script[type="module"]')].map((script) => script.src);
@@ -194,6 +195,37 @@ describe("code source boundaries", () => {
     }
   );
 
+  it.each(["example.com", "example.webflow.io", "localhost"])(
+    "ignores all commit query values on %s", async (host) => {
+      for (const ref of ["abcdef1234567", "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa", "../../other/repo@main", "main/../../evil", "refs/heads/fork"] ) {
+        const result = await boot({ host, query: `?dev=1&commit=${encodeURIComponent(ref)}` });
+        expect(result.fetchMock).not.toHaveBeenCalled();
+        expect(result.urls).toEqual([loaderSource.replace("/loader.js", "/dist/bundle.js")]);
+        expect(result.config.commit).toBe("1234567890abcdef");
+      }
+    }
+  );
+
+  it.each(["", "?env=auto", "?env=live", "?dev=1", "?mode=dev&env=auto"])(
+    "does not probe without an explicit Local choice: %s", async (query) => {
+      const result = await boot({ query });
+      expect(result.fetchMock).not.toHaveBeenCalled();
+      expect(result.urls).toEqual([loaderSource.replace("/loader.js", "/dist/bundle.js")]);
+    }
+  );
+
+  it("preserves an explicit trusted Local default", async () => {
+    const result = await boot({ query: "", defaultsEnvironment: "local" });
+    expect(result.fetchMock).toHaveBeenCalledOnce();
+    expect(result.urls).toEqual(["http://localhost:5500/bundle.js"]);
+  });
+
+  it("still probes after a tab's explicit panel Local selection", async () => {
+    const result = await boot({ query: "", stored: "local" });
+    expect(result.fetchMock).toHaveBeenCalledOnce();
+    expect(result.urls).toEqual(["http://localhost:5500/bundle.js"]);
+  });
+
   it("does not accept a lookalike of a configured tunnel", async () => {
     const result = await boot({ data: { localBase: "https://trusted-tunnel.example" }, query: "?env=local&local=https://trusted-tunnel.example.attacker.test" });
     expect(result.urls).toEqual(["https://trusted-tunnel.example/bundle.js"]);
@@ -202,7 +234,7 @@ describe("code source boundaries", () => {
   it.each([
     "https://attacker.test", "javascript://localhost/alert(1)", "ftp://localhost:5500",
     "http://localhost.attacker.test:5500", "https://trusted-tunnel.example.attacker.test",
-    "http://user:pass@localhost:5500", "//localhost:5500", "/local", "not a URL",
+    "http://user:pass@localhost:5500", "http://localhost:5500?", "http://localhost:5500#", "//localhost:5500", "/local", "not a URL",
   ])("does not fetch or execute the untrusted base %s", async (base) => {
     const result = await boot({ query: `?env=local&local=${encodeURIComponent(base)}` });
     expect(result.fetchMock).toHaveBeenCalledWith("http://localhost:5500/bundle.js", expect.any(Object));
@@ -232,7 +264,7 @@ describe("code source boundaries", () => {
     expect(result.urls).toEqual(["https://trusted-tunnel.example/dev/bundle.js"]);
   });
 
-  it.each(["javascript://localhost/evil", "https://user:pass@trusted-tunnel.example", "ftp://localhost"])(
+  it.each(["javascript://localhost/evil", "https://user:pass@trusted-tunnel.example", "ftp://localhost", "https://trusted-tunnel.example?", "https://trusted-tunnel.example#"])(
     "rejects invalid configured bases without a local request: %s", async (base) => {
       const result = await boot({ data: { localBase: base }, defaultsBase: base });
       expect(result.fetchMock).not.toHaveBeenCalled();

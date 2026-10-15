@@ -1,4 +1,5 @@
 // Import each module here. Keep the start order explicit.
+import aboutTeam from "./about-team.js";
 import marquee from "./marquee.js";
 import nav from "./nav.js";
 import rotate from "./rotate.js";
@@ -7,5 +8,7 @@ import reveal from "./reveal.js";
 import accordions from "./accordions.js";
 import externalGraphic from "./external-graphic.js";
 import statProgress from "./stat-progress.js";
+import sectionNav from "./section-nav.js";
+import articleContents from "./article-contents.js";
 
-export const modules = [nav, marquee, rotate, video, reveal, accordions, externalGraphic, statProgress];
+export const modules = [nav, marquee, aboutTeam, rotate, video, reveal, accordions, externalGraphic, statProgress, sectionNav, articleContents];

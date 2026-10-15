@@ -1,0 +1,7 @@
+/* Shared heading is opt-in; existing Hero defaults keep their original fields. */
+.section_hero[data-shared-heading="True"] .hero_content > :is(.hero_eyebrow,.hero_heading,.hero_intro) { display: none; }
+.section_hero[data-shared-heading="True"] .hero_heading-group { display: block; }
+.hero_heading-group .section-heading_title { text-wrap: balance; }
+.hero_heading-group .section-heading_title :is(h1,h2,h3,h4,h5,h6,p),
+.hero_heading-group .section-heading_text p { font: inherit; letter-spacing: inherit; margin: 0; }
+.section_hero > .w-embed { display: none; }

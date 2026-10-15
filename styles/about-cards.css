@@ -1,0 +1,12 @@
+.about-team-card_details, .about-team-card_spotlight { transition: opacity 160ms ease; pointer-events: none; }
+.about-team-card:hover .about-team-card_details,
+.about-team-card:hover .about-team-card_spotlight,
+.about-team-card:focus-within .about-team-card_details,
+.about-team-card:focus-within .about-team-card_spotlight { opacity: 1; pointer-events: auto; }
+[data-about-spotlight]:not([href]), [data-about-spotlight][href=""], [data-about-spotlight][href="#"] { display: none; }
+.about-media-card:hover .about-media-card_heading { text-decoration: underline; text-underline-offset: 0.15em; }
+.about-media-card_link::after { content: ""; position: absolute; inset: 0; }
+.about-media-card:focus-within { outline: 2px solid currentColor; outline-offset: 4px; }
+@media (hover: none), (max-width: 767px) {
+  .about-team-card_details, .about-team-card_spotlight { opacity: 1; pointer-events: auto; }
+}

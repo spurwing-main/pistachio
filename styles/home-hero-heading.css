@@ -1,0 +1,7 @@
+/* The retained direct Rich Text fields are also the native editing bridges. */
+.section_home-hero[data-shared-heading="True"] .home-hero_content > :is(.home-hero_title,.home-hero_text) { display: none; }
+.section_home-hero[data-shared-heading="True"] .home-hero_heading-group { display: block; }
+.home-hero_heading-group .section-heading_title :is(h1,h2,h3,h4,h5,h6,p),
+.home-hero_heading-group .section-heading_text p { font: inherit; letter-spacing: inherit; margin: 0; }
+.home-hero_heading-group .u-highlight em { color: inherit; }
+.section_home-hero > .w-embed { display: none; }

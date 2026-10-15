@@ -1,0 +1,24 @@
+/* FAQ page Current relationship; resting styles stay native. */
+#faq-page [data-section-nav] a.text-link[aria-current="location"],
+#faq-page [data-section-nav]:not(:has([aria-current="location"])) a.text-link.w--current {
+  color: var(--_theme---section--heading);
+}
+#faq-page [data-section-nav] a.text-link[aria-current="location"] > .text-link_category-icon,
+#faq-page [data-section-nav]:not(:has([aria-current="location"])) a.text-link.w--current > .text-link_category-icon {
+  opacity: 1;
+}
+@media screen and (max-width: 767px) {
+  #faq-page [data-section-nav] a.text-link[aria-current="location"],
+  #faq-page [data-section-nav]:not(:has([aria-current="location"])) a.text-link.w--current {
+    color: var(--_color---violet--900);
+  }
+  #faq-page [data-section-nav] a.text-link[aria-current="location"] > .text-link_category-icon,
+  #faq-page [data-section-nav]:not(:has([aria-current="location"])) a.text-link.w--current > .text-link_category-icon {
+    width: var(--_sizes---20);
+    height: var(--_sizes---28);
+  }
+}
+/* Keep the empty Partners anchor, with one separator until answers are added. */
+#faq-page .faq-page_groups:not(:has(#partners-msps [data-accordion="item"])) > .faq-page_rule-wrap:has(+ #partners-msps) {
+  display: none;
+}

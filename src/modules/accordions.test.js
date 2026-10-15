@@ -1,8 +1,10 @@
 import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
 import { initAccordions } from "./accordions.js";
 
-const item = () => `<div data-accordion="item"><button data-accordion="trigger">Question</button><div data-accordion="content"><a href="#">Answer</a></div></div>`;
+const item = () => `<div data-accordion-click-area><div data-accordion="item"><button data-accordion="trigger">Question</button><div data-accordion="content"><a href="#">Answer</a></div></div></div>`;
 const group = (attributes = "") => `<div data-accordion="component" ${attributes}>${item()}${item()}</div>`;
+const richItem = (id) => `<div data-accordion="item"><div data-accordion="label" id="${id}"><p>Rich <strong>question</strong></p></div><h3><button data-accordion="trigger" aria-labelledby="${id}">+</button></h3><div data-accordion="content">Answer</div></div>`;
+const labels = () => [...document.querySelectorAll('[data-accordion="label"]')];
 const triggers = () => [...document.querySelectorAll('[data-accordion="trigger"]')];
 const panels = () => [...document.querySelectorAll('[data-accordion="content"]')];
 const states = () => triggers().map((button) => button.getAttribute("aria-expanded"));
@@ -11,9 +13,142 @@ beforeEach(() => {
   document.body.innerHTML = group();
   vi.stubGlobal("matchMedia", () => ({ matches: true }));
 });
-afterEach(() => { cleanup?.(); vi.unstubAllGlobals(); vi.restoreAllMocks(); });
+afterEach(() => { cleanup?.(); window.getSelection().removeAllRanges(); vi.unstubAllGlobals(); vi.restoreAllMocks(); });
 
 describe("accordions", () => {
+  it("toggles opted-in whole items without doubling the native button click", () => {
+    document.body.innerHTML = group('data-accordion-item-toggle="true"');
+    cleanup = initAccordions();
+    const items = [...document.querySelectorAll('[data-accordion="item"]')];
+    items[0].parentElement.click();
+    expect(states()).toEqual(["true", "false"]);
+    expect(document.activeElement).toBe(triggers()[0]);
+    panels()[0].click();
+    expect(states()).toEqual(["false", "false"]);
+    triggers()[0].click();
+    expect(states()).toEqual(["true", "false"]);
+    items[1].click();
+    expect(states()).toEqual(["false", "true"]);
+  });
+
+  it("leaves answer links, controls, selected text and nested items independent", () => {
+    document.body.innerHTML = group('data-accordion-item-toggle="true"');
+    panels()[0].innerHTML = `<a href="#answer">Link</a><label><input type="checkbox">Choice</label><p>Selectable answer</p>${group()}`;
+    cleanup = initAccordions();
+    triggers()[0].click();
+    panels()[0].querySelector("a").click();
+    panels()[0].querySelector("label").click();
+    expect(states()[0]).toBe("true");
+    const range = document.createRange();
+    range.selectNodeContents(panels()[0].querySelector("p"));
+    window.getSelection().addRange(range);
+    panels()[0].querySelector("p").click();
+    expect(states()[0]).toBe("true");
+    window.getSelection().removeAllRanges();
+    document.querySelectorAll('[data-accordion="item"]')[1].click();
+    expect(states().slice(0, 2)).toEqual(["true", "true"]);
+    cleanup();
+    document.querySelector('[data-accordion="item"]').click();
+    expect(triggers()[0].hasAttribute("aria-expanded")).toBe(false);
+  });
+
+  it("keeps whole-item behaviour off without the placement opt-in", () => {
+    cleanup = initAccordions();
+    document.querySelector('[data-accordion="item"]').click();
+    expect(states()).toEqual(["false", "false"]);
+  });
+
+  it("does not forward outer padding to an unmarked nested accordion", () => {
+    document.body.innerHTML = group('data-accordion-item-toggle="true"');
+    panels()[0].innerHTML = `<div data-accordion="component"><div data-accordion="item"><button data-accordion="trigger">Inner</button><div data-accordion="content">Inner answer</div></div></div>`;
+    cleanup = initAccordions();
+    document.querySelector('[data-accordion-click-area]').click();
+    expect(states().slice(0, 2)).toEqual(["true", "false"]);
+    triggers()[1].click();
+    expect(states().slice(0, 2)).toEqual(["true", "true"]);
+  });
+
+  it("forwards a natively associated rich label to its button, focus and peer closure", () => {
+    document.body.innerHTML = `<div data-accordion="component">${richItem("question-one")}${richItem("question-two")}</div>`;
+    cleanup = initAccordions();
+    labels()[0].querySelector("strong").click();
+    expect(states()).toEqual(["true", "false"]);
+    expect(document.activeElement).toBe(triggers()[0]);
+    labels()[1].click();
+    expect(states()).toEqual(["false", "true"]);
+    expect(triggers()[1].getAttribute("aria-labelledby")).toBe("question-two");
+    expect(labels()[1].id).toBe("question-two");
+    labels()[1].click();
+    expect(states()).toEqual(["false", "false"]);
+  });
+
+  it("does not bind labels with unset or mismatched native IDs", () => {
+    document.body.innerHTML = `<div data-accordion="component">${richItem("question-one")}${richItem("question-two")}</div>`;
+    labels()[0].removeAttribute("id");
+    triggers()[1].setAttribute("aria-labelledby", "another-label");
+    const original = labels().map((label) => label.outerHTML);
+    cleanup = initAccordions();
+    labels().forEach((label) => label.click());
+    expect(states()).toEqual(["false", "false"]);
+    expect(labels().map((label) => label.outerHTML)).toEqual(original);
+    triggers()[0].click();
+    expect(states()).toEqual(["true", "false"]);
+  });
+
+  it("preserves text selection instead of toggling its rich question", () => {
+    document.body.innerHTML = `<div data-accordion="component">${richItem("question-one")}</div>`;
+    cleanup = initAccordions();
+    const range = document.createRange();
+    range.selectNodeContents(labels()[0].querySelector("strong"));
+    window.getSelection().addRange(range);
+    labels()[0].click();
+    expect(states()).toEqual(["false"]);
+    expect(window.getSelection().toString()).toBe("question");
+    window.getSelection().removeAllRanges();
+    labels()[0].click();
+    expect(states()).toEqual(["true"]);
+  });
+
+  it("leaves interactive or cancelled label clicks to their existing action", () => {
+    document.body.innerHTML = `<div data-accordion="component">${richItem("question-one")}</div>`;
+    labels()[0].insertAdjacentHTML("beforeend", '<button type="button">Source</button>');
+    cleanup = initAccordions();
+    labels()[0].querySelector("button").click();
+    expect(states()).toEqual(["false"]);
+    labels()[0].addEventListener("click", (event) => event.preventDefault(), { capture: true });
+    labels()[0].click();
+    expect(states()).toEqual(["false"]);
+  });
+
+  it("removes rich label handlers on cleanup and does not duplicate them on repeated setup", () => {
+    document.body.innerHTML = `<div data-accordion="component">${richItem("question-one")}</div>`;
+    const original = document.body.innerHTML;
+    cleanup = initAccordions();
+    initAccordions();
+    labels()[0].click();
+    expect(states()).toEqual(["true"]);
+    cleanup();
+    expect(document.body.innerHTML).toBe(original);
+    const buttonClick = vi.fn();
+    triggers()[0].addEventListener("click", buttonClick);
+    labels()[0].click();
+    expect(buttonClick).not.toHaveBeenCalled();
+    cleanup = initAccordions();
+    labels()[0].click();
+    expect(states()).toEqual(["true"]);
+    expect(buttonClick).toHaveBeenCalledTimes(1);
+  });
+
+  it("keeps nested rich labels and their buttons owned by their own group", () => {
+    document.body.innerHTML = `<div data-accordion="component">${richItem("outer-question")}</div>`;
+    panels()[0].innerHTML = `<div data-accordion="component">${richItem("inner-question")}</div>`;
+    cleanup = initAccordions();
+    labels()[0].click();
+    labels()[1].click();
+    expect(states()).toEqual(["true", "true"]);
+    expect(document.activeElement).toBe(triggers()[1]);
+  });
+
   it("starts closed and connects each button to an inaccessible collapsed panel", () => {
     cleanup = initAccordions();
     expect(states()).toEqual(["false", "false"]);

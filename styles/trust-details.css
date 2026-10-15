@@ -1,0 +1,14 @@
+/* Trust & Security "On this page" current link; resting styles stay native. */
+.trust-details_nav a.trust-details_link[aria-current="location"] {
+  background-color: var(--_color---warm--000);
+  color: var(--_color---violet--900);
+  font-weight: 500;
+}
+.trust-details_nav a.trust-details_link[aria-current="location"]::before {
+  content: "";
+  width: 0.375rem;
+  height: 0.375rem;
+  margin-right: 0.625rem;
+  border-radius: 50%;
+  background-color: currentColor;
+}

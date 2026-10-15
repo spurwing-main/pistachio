@@ -1,0 +1,25 @@
+/* Article current-link and empty-navigation relationships. */
+#resource-article .text-link[data-wf--core-text-link--variant="page-contents"][aria-current="location"] {
+  background-color: var(--_color---white--100);
+  color: var(--_color---violet--900);
+  font-weight: var(--_type---fw--medium);
+  padding-block: 0.625rem;
+}
+#resource-article .text-link[data-wf--core-text-link--variant="page-contents"][aria-current="location"] > .text-link_contents-dot {
+  display: block;
+}
+#resource-article .page-contents[data-wf--page-contents--variant="article"]:not(:has(.page-contents_rows a[href^="#"]:not([href="#"]))) {
+  display: none;
+}
+#resource-article .article-layout:not(:has(.page-contents[data-wf--page-contents--variant="article"] .page-contents_rows a[href^="#"]:not([href="#"]))) {
+  grid-template-columns: minmax(0, 1fr);
+}
+#resource-article .article-layout:not(:has(.page-contents[data-wf--page-contents--variant="article"] .page-contents_rows a[href^="#"]:not([href="#"]))) > .article-prose {
+  grid-column: auto;
+}
+@media (prefers-reduced-motion: reduce) {
+  /* Finsweet sets an inline html scroll behaviour when an offset is present. */
+  html:has(#resource-article) {
+    scroll-behavior: auto !important;
+  }
+}

@@ -1,0 +1,10 @@
+/* Article template: omit empty article sections and fields. */
+#resource-article .article-read_time:has(> :first-child:empty),
+#resource-article .article-metadata > .tag:has(.tag_text.w-dyn-bind-empty),
+#resource-article .article-metadata > .tag:has(.tag_text:empty),
+#resource-article .article-image.w-dyn-bind-empty,
+#resource-article .page-contents:not(:has(.page-contents_rows a)),
+#resource-article .article-prose:has(> .w-richtext:empty) > .article-share,
+#resource-article .article-related:not(:has(.w-dyn-item)) {
+  display: none;
+}

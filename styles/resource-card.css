@@ -1,8 +1,9 @@
 .resource-card>.w-embed{display:none}
-.resource-card:hover .resource-card_heading,.resource-card:focus-within .resource-card_heading{text-decoration:underline;text-underline-offset:.15em}
-.resource-card:hover .resource-card_read-more .arrow,.resource-card:focus-within .resource-card_read-more .arrow{background:var(--_color---violet--700);color:var(--_color---white--100)}
-.resource-card_read-more .button[data-wf--core-button--variant="text"]{position:static}
-.resource-card:focus-within{outline:2px solid #3a1247;outline-offset:4px}
+.resource-card:focus-within .resource-card_heading{text-decoration:underline;text-underline-offset:.15em}
+.resource-card:focus-within .resource-card_read-more .arrow{background:var(--_color---violet--700);color:var(--_color---white--100)}
+.resource-card_read-more .button[data-wf--core-button--variant="text" i]{position:static}
+.resource-card:focus-within{outline:2px solid var(--_color---violet--1000);outline-offset:4px}
 
 .resource-card_title-rich :is(h1,h2,h3,h4,h5,h6,p){font:inherit;letter-spacing:inherit;margin:0}
-.resource-card:hover .resource-card_title-rich,.resource-card:focus-within .resource-card_title-rich{text-decoration:underline;text-underline-offset:.15em}
+.resource-card:focus-within .resource-card_title-rich{text-decoration:underline;text-underline-offset:.15em}
+@media (hover: hover) and (pointer: fine){.resource-card:hover .resource-card_heading,.resource-card:hover .resource-card_title-rich{text-decoration:underline;text-underline-offset:.15em}.resource-card:hover .resource-card_read-more .arrow{background:var(--_color---violet--700);color:var(--_color---white--100)}}

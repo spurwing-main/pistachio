@@ -1,4 +1,3 @@
-
   /* Marquee (logo strips, testimonial sliders): the script copies the items once and sets
      --marquee-duration so every row moves at the same speed. Edges fade out over
      marquee/fade. It stops on hover, while anything inside has keyboard focus, offscreen, and
@@ -18,7 +17,6 @@
     animation: marquee var(--marquee-duration, 40s) linear infinite;
   }
 
-  [data-marquee]:hover [data-marquee-track],
   [data-marquee]:focus-within [data-marquee-track],
   [data-marquee-paused="true"] [data-marquee-track],
   [data-marquee-visible="false"] [data-marquee-track] {
@@ -65,7 +63,11 @@
     display: none;
   }
 
-  @media (hover: hover) {
+  @media (hover: hover) and (pointer: fine) {
+    [data-marquee]:hover [data-marquee-track] {
+      animation-play-state: paused;
+    }
+
     .pause-button:hover .pause-button_icon {
       background-color: var(--_color---violet--100);
     }

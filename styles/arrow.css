@@ -1,4 +1,3 @@
-
   /* Arrow (Core / Arrow): two arrows side by side in a clipped circle. On hover or keyboard
      focus of the link or button around it, both move one width right, so the arrow slides out
      blurring and a fresh one slides in; the circle swaps colour. Rest colours are the variants
@@ -8,22 +7,22 @@
     --arrow-hover-fg: var(--_color---violet--400);
   }
 
-  .arrow[data-wf--core-arrow--variant="lilac"] {
+  .arrow[data-wf--core-arrow--variant="lilac" i] {
     --arrow-hover-bg: var(--_color---black--100);
     --arrow-hover-fg: var(--_color---white--100);
   }
 
-  .arrow[data-wf--core-arrow--variant="violet"] {
+  .arrow[data-wf--core-arrow--variant="violet" i] {
     --arrow-hover-bg: var(--_color---violet--000);
     --arrow-hover-fg: var(--_color---violet--700);
   }
 
-  .arrow[data-wf--core-arrow--variant="pale"] {
+  .arrow[data-wf--core-arrow--variant="pale" i] {
     --arrow-hover-bg: var(--_color---white--100);
     --arrow-hover-fg: var(--_color---violet--800);
   }
 
-  .arrow[data-wf--core-arrow--variant="clear"] {
+  .arrow[data-wf--core-arrow--variant="clear" i] {
     --arrow-hover-bg: color-mix(in srgb, currentColor 12%, transparent);
     --arrow-hover-fg: currentColor;
   }

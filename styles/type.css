@@ -35,8 +35,10 @@
   transition: text-decoration-thickness var(--motion-base) var(--ease-out);
 }
 
-.w-richtext a:hover {
-  text-decoration-thickness: 2px;
+@media (hover: hover) and (pointer: fine) {
+  .w-richtext a:hover {
+    text-decoration-thickness: 2px;
+  }
 }
 
 /* An actions slot left empty takes no space (Section heading and friends). */

@@ -4,7 +4,6 @@
   animation: about-team-loop var(--about-team-duration) linear infinite;
 }
 [data-about-team-direction="reverse"] [data-about-team-track] { animation-direction: reverse; }
-[data-about-team-row]:hover [data-about-team-track],
 [data-about-team-row]:focus-within [data-about-team-track],
 [data-about-team-paused="true"] [data-about-team-track],
 [data-about-team-visible="false"] [data-about-team-track] { animation-play-state: paused; }
@@ -20,4 +19,7 @@
   [data-about-team-ready] { overflow-x: auto; }
   [data-about-team-row] [data-about-team-track] { animation: none; transform: none; }
   [data-about-team-clone], #about-team [data-about-team-duplicate], [data-about-team-pause] { display: none; }
+}
+@media (hover: hover) and (pointer: fine) {
+  [data-about-team-row]:hover [data-about-team-track] { animation-play-state: paused; }
 }

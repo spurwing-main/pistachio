@@ -169,6 +169,17 @@ describe("mobile menu", () => {
     expect(document.documentElement.classList.contains("nav-menu-open")).toBe(false);
   });
 
+  it("announces the toggle as a button and opens it from the keyboard", () => {
+    const { nav, toggle } = mount();
+    expect(toggle.getAttribute("role")).toBe("button");
+    expect(toggle.hasAttribute("href")).toBe(false);
+    expect(toggle.tabIndex).toBe(0);
+    toggle.dispatchEvent(new KeyboardEvent("keydown", { key: " ", bubbles: true }));
+    expect(nav.dataset.navExpanded).toBe("true");
+    toggle.dispatchEvent(new KeyboardEvent("keydown", { key: "Enter", bubbles: true }));
+    expect(nav.dataset.navExpanded).toBe("false");
+  });
+
   it("opens groups in place and closes when a real link is followed", () => {
     const { nav, platform, toggle } = mount();
     toggle.click();

@@ -188,7 +188,17 @@ function setupNav(root) {
   };
 
   toggle.setAttribute("aria-controls", menu.id);
+  // The toggle is a Webflow link block; announce and operate it as a button.
+  toggle.setAttribute("role", "button");
+  toggle.removeAttribute("href");
+  toggle.tabIndex = 0;
   setMenu(false);
+
+  toggle.addEventListener("keydown", (event) => {
+    if (event.key !== " " && event.key !== "Enter") return;
+    event.preventDefault();
+    setMenu(!menuOpen());
+  });
 
   toggle.addEventListener("click", (event) => {
     event.preventDefault();

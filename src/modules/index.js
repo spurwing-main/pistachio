@@ -10,5 +10,6 @@ import externalGraphic from "./external-graphic.js";
 import statProgress from "./stat-progress.js";
 import sectionNav from "./section-nav.js";
 import articleContents from "./article-contents.js";
+import riskStack from "./risk-stack.js";
 
-export const modules = [nav, marquee, aboutTeam, rotate, video, reveal, accordions, externalGraphic, statProgress, sectionNav, articleContents];
+export const modules = [nav, marquee, aboutTeam, rotate, video, reveal, accordions, externalGraphic, statProgress, riskStack, sectionNav, articleContents];

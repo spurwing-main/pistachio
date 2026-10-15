@@ -1,0 +1,13 @@
+.contact-form_choice > input:checked + .contact-form_choice-label {
+  background-color: var(--_color---violet--700);
+  border-color: var(--_color---violet--700);
+  color: var(--_color---white--100);
+}
+.contact-form_choice > input:focus-visible + .contact-form_choice-label {
+  outline: 2px solid var(--_color---violet--700);
+  outline-offset: 2px;
+}
+.contact-form .form_input.is-message {
+  field-sizing: content;
+  resize: vertical;
+}

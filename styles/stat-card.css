@@ -1,0 +1,20 @@
+/* Scoped to Items / Stat card; preserves standalone Stat styling. */
+.stat-card > .stat {
+  background-color: var(--_color---white--100);
+}
+.stat-card > .stat .stat_fact {
+  color: var(--_color---violet--400);
+}
+.stat-card_text > :is(p, ul, ol) {
+  font-size: inherit;
+  line-height: inherit;
+  letter-spacing: inherit;
+}
+.stat-card_text > :first-child,
+.stat-card > .stat .stat_text > :first-child {
+  margin-top: 0;
+}
+.stat-card_text > :last-child,
+.stat-card > .stat .stat_text > :last-child {
+  margin-bottom: 0;
+}

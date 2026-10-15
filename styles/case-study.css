@@ -1,0 +1,18 @@
+/* Slot children retain their own components and variants. */
+.case-study_items > .feature-row {
+  flex: 0 1 auto;
+  width: max-content;
+  min-width: calc((100% - var(--space--l) * 2) / 3);
+  max-width: 100%;
+}
+@media screen and (max-width: 991px) {
+  .case-study_items > .feature-row {
+    width: calc((100% - var(--space--l)) / 2);
+    min-width: 0;
+  }
+}
+@media screen and (max-width: 767px) {
+  .case-study_items > .feature-row {
+    width: 100%;
+  }
+}

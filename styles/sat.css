@@ -1,0 +1,6 @@
+.sat_graphic > svg {
+  display: block;
+  width: 100%;
+  height: auto;
+  overflow: visible !important;
+}

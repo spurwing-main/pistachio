@@ -8,3 +8,7 @@
   line-height: 1.375;
   letter-spacing: 0;
 }
+/* if section uses stat cards instead of stats, smaller gap between header and content */
+.insider-intro_layout:has(.stat-card) {
+  row-gap: 2.5rem;
+}

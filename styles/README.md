@@ -8,46 +8,53 @@ remain unchanged until their affected use and approved scope are established.
 These files are not bundled or loaded automatically from GitHub. Compare the
 source with the actual saved code before an approved delivery. All authored CSS
 and executable JS embeds target the global Custom Code component, with separate
-named concerns and component-scoped selectors. The table records existing
-locations and unknowns; it does not claim the global move or publication is done.
+named concerns and component-scoped selectors. Every file below matches its saved embed as of 15 October 2026; Webflow remains
+the source of truth, so refresh a file after editing its embed.
 
-| File | Recorded location | Code field | Position |
+| File | Location | Code field | Position |
 |---|---|---|---|
-| [about-cards.css](about-cards.css) | Global Custom Code | about-cards-css | Dated saved location; served revision remains separate |
-| [about-page.css](about-page.css) | Global Custom Code | about-page-css | Dated saved location; served revision remains separate |
-| [about-team.css](about-team.css) | Global Custom Code | about-team-css | Dated saved location; served revision remains separate |
-| [arrow.css](arrow.css) | Global Custom Code | arrow | Recorded location; current source/reach needs checking |
-| [article-contents.css](article-contents.css) | Global Custom Code | Article contents state | Saved Current/empty/reduced-motion relationships; deliver with matching repo Article module |
-| [article-template.css](article-template.css) | Global Custom Code | Article template empty states | Saved source; served revision remains separate |
-| [blog-listing.css](blog-listing.css) | Not established here | Not recorded | Source exists; reconcile saved destination before delivery |
-| [button.css](button.css) | Global Custom Code | button | Recorded location; current source/reach needs checking |
-| [customer-stories.css](customer-stories.css) | Not established here | Not recorded | Source exists; reconcile saved destination before delivery |
-| [designer.css](designer.css) | Global Custom Code | designer | Recorded location; current source/reach needs checking |
-| [fluid.css](fluid.css) | Global Custom Code | fluid | Recorded location; current source/reach needs checking |
-| [footer.css](footer.css) | Footer | Footer — CSS | Recorded old delivery; approved global move remains |
-| [faq-page-state.css](faq-page-state.css) | Global Custom Code | FAQ state CSS | FAQ-page Current relationships; saved delivery requires fresh readback |
-| [trust-details.css](trust-details.css) | Global Custom Code | Trust state CSS | Trust "On this page" current link (aria-current from section-nav); not yet installed |
-| [form.css](form.css) | Global Custom Code | form | Recorded location; current source/reach needs checking |
-| [hero-heading.css](hero-heading.css) | Not established here | Not recorded | Source exists; reconcile saved destination before delivery |
-| [hero.css](hero.css) | Global Custom Code | hero | Recorded location; current source/reach needs checking |
-| [home-hero-heading.css](home-hero-heading.css) | Not established here | Not recorded | Source exists; reconcile saved destination before delivery |
-| [icons.css](icons.css) | Global Custom Code | icons | Recorded location; current source/reach needs checking |
-| [insider-intro.css](insider-intro.css) | Global Custom Code | Insider intro — CSS | Sam’s committed source; current saved/served match needs checking |
-| [marquee.css](marquee.css) | Global Custom Code | marquee | Recorded location; current source/reach needs checking |
-| [misc.css](misc.css) | Global Custom Code | misc | Recorded location; current source/reach needs checking |
-| [motion.css](motion.css) | Global Custom Code | motion | Recorded location; current source/reach needs checking |
-| [nav.css](nav.css) | Nav | Nav — CSS | Recorded old delivery; approved global move remains |
-| [page-contents.css](page-contents.css) | Not installed | Not assigned | Earlier broad proposal; current Article delivery uses article-contents.css |
-| [reset.css](reset.css) | Global Custom Code | reset | Recorded location; current source/reach needs checking |
-| [resource-card.css](resource-card.css) | Its content component | Not recorded here | Dated component delivery; approved global move remains |
-| [rich-text.css](rich-text.css) | Global Custom Code | rich-text | Recorded location; current source/reach needs checking |
-| [rotate.css](rotate.css) | Global Custom Code | rotate | Recorded location; current source/reach needs checking |
-| [stat.css](stat.css) | Its content component | Not recorded here | Dated component delivery; approved global move remains |
-| [tag.css](tag.css) | Global Custom Code | tag | Recorded location; current source/reach needs checking |
-| [text-link.css](text-link.css) | Global Custom Code | text-link | Recorded location; current source/reach needs checking |
-| [type.css](type.css) | Global Custom Code | type | Recorded location; current source/reach needs checking |
-| [utils.css](utils.css) | Global Custom Code | utils | Recorded location; current source/reach needs checking |
-| [video.css](video.css) | Global Custom Code | video | Recorded location; current source/reach needs checking |
+| [about-cards.css](about-cards.css) | Global Custom Code | about-cards-css | Matches the saved embed, 15 October 2026 |
+| [about-page.css](about-page.css) | Global Custom Code | about-page-css | Matches the saved embed, 15 October 2026 |
+| [about-team.css](about-team.css) | Global Custom Code | about-team-css | Matches the saved embed, 15 October 2026 |
+| [arrow.css](arrow.css) | Global Custom Code | arrow | Matches the saved embed, 15 October 2026 |
+| [article-contents.css](article-contents.css) | Global Custom Code | Article contents state | Matches the saved embed, 15 October 2026 |
+| [article-template.css](article-template.css) | Global Custom Code | Article template empty states | Matches the saved embed, 15 October 2026 |
+| [blog-listing.css](blog-listing.css) | Global Custom Code | Blog filter states CSS | Matches the saved embed, 15 October 2026 |
+| [button.css](button.css) | Global Custom Code | button | Matches the saved embed, 15 October 2026 |
+| [case-study.css](case-study.css) | Global Custom Code | Case study — CSS | Matches the saved embed, 15 October 2026 |
+| [contact-form.css](contact-form.css) | Global Custom Code | Contact form state CSS | Matches the saved embed, 15 October 2026 |
+| [customer-stories.css](customer-stories.css) | Customer Stories page | Customer Stories — CSS | Its selector matches no current element; deletion awaits approval |
+| [designer.css](designer.css) | Global Custom Code | designer | Matches the saved embed, 15 October 2026 |
+| [faq-page-state.css](faq-page-state.css) | Global Custom Code | FAQ state CSS | Matches the saved embed, 15 October 2026 |
+| [feature-row.css](feature-row.css) | Global Custom Code | Feature row — CSS | Matches the saved embed, 15 October 2026 |
+| [fluid.css](fluid.css) | Global Custom Code | fluid | Matches the saved embed, 15 October 2026 |
+| [footer.css](footer.css) | Global Custom Code | Footer CSS | Matches the saved embed, 15 October 2026 |
+| [form.css](form.css) | Global Custom Code | form | Matches the saved embed, 15 October 2026 |
+| [hero-heading.css](hero-heading.css) | Global Custom Code | Hero heading reuse CSS | Matches the saved embed, 15 October 2026 |
+| [hero-media.css](hero-media.css) | Global Custom Code | Hero media CSS | Matches the saved embed, 15 October 2026 |
+| [hero.css](hero.css) | Global Custom Code | hero | Matches the saved embed, 15 October 2026 |
+| [home-hero-heading.css](home-hero-heading.css) | Global Custom Code | Home hero heading reuse CSS | Matches the saved embed, 15 October 2026 |
+| [icons.css](icons.css) | Global Custom Code | icons | Matches the saved embed, 15 October 2026 |
+| [insider-intro.css](insider-intro.css) | Global Custom Code | Insider intro — CSS | Matches the saved embed, 15 October 2026 |
+| [marquee.css](marquee.css) | Global Custom Code | marquee | Matches the saved embed, 15 October 2026 |
+| [misc.css](misc.css) | Global Custom Code | misc | Matches the saved embed, 15 October 2026 |
+| [motion.css](motion.css) | Global Custom Code | motion | Matches the saved embed, 15 October 2026 |
+| [nav.css](nav.css) | Global Custom Code | Nav CSS | Matches the saved embed, 15 October 2026 |
+| [page-contents.css](page-contents.css) | Not installed | Not assigned | Earlier proposal; Article delivery uses article-contents.css |
+| [reset.css](reset.css) | Global Custom Code | reset | Matches the saved embed, 15 October 2026 |
+| [resource-card.css](resource-card.css) | Global Custom Code | Resource card CSS | Matches the saved embed, 15 October 2026 |
+| [rich-text.css](rich-text.css) | Global Custom Code | rich-text | Matches the saved embed, 15 October 2026 |
+| [risk-stack.css](risk-stack.css) | Global Custom Code | Risk stack — CSS | Matches the saved embed, 15 October 2026 |
+| [rotate.css](rotate.css) | Global Custom Code | rotate | Matches the saved embed, 15 October 2026 |
+| [sat.css](sat.css) | Global Custom Code | SAT | Matches the saved embed, 15 October 2026 |
+| [stat-card.css](stat-card.css) | Global Custom Code | Stat card — CSS | Matches the saved embed, 15 October 2026 |
+| [stat.css](stat.css) | Global Custom Code | Stat rich fact CSS | Matches the saved embed, 15 October 2026 |
+| [tag.css](tag.css) | Global Custom Code | tag | Matches the saved embed, 15 October 2026 |
+| [text-link.css](text-link.css) | Global Custom Code | text-link | Matches the saved embed, 15 October 2026 |
+| [trust-details.css](trust-details.css) | Global Custom Code | Trust details CSS | Matches the saved embed, 15 October 2026 |
+| [type.css](type.css) | Global Custom Code | type | Matches the saved embed, 15 October 2026 |
+| [utils.css](utils.css) | Global Custom Code | utils | Matches the saved embed, 15 October 2026 |
+| [video.css](video.css) | Global Custom Code | video | Matches the saved embed, 15 October 2026 |
 
 The table accounts for every local CSS file. Do not invent a code-field match
 from a similar filename. Check dependencies, loading order, once-per-page reach,

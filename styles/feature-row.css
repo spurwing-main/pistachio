@@ -1,0 +1,13 @@
+/* Detailed feature row: the nested icon tile inherits this local colour.
+   Native variant styles own layout, typography, borders and spacing. */
+.feature-row[data-wf--items-feature-row--variant="detailed"] {
+  --_theme---section--tile-bg: var(--_color---violet--000);
+}
+
+/* Mobile Feature rows use a compact icon tile without changing other uses. */
+@media screen and (max-width: 767px) {
+  .feature-row {
+    --icon--tile: var(--_sizes---44);
+    --radius--tile: var(--_sizes---radius--8);
+  }
+}

@@ -1,0 +1,29 @@
+/* Native media variants position the highlight slot wrappers.
+   Keep each card in normal flow within its slot. */
+.hero-media .hero-media_highlights-slot .hero-highlight {
+  position: relative;
+  inset: auto;
+  max-width: 100%;
+}
+
+/* Webflow conditions handle video priority and missing media.
+   CSS handles the desktop/mobile image swap. */
+.hero-media_image-mobile {
+  display: none;
+}
+
+@media (max-width: 767px) {
+  /* The attribute confirms that a mobile image is available.
+     DOM presence alone is insufficient in Designer, where
+     conditionally hidden elements may still exist. */
+  .hero-media_visual[data-has-img-mbl='true'] > .hero-media_image-mobile {
+    display: block;
+  }
+
+  /* Hide the desktop image only when the attribute is true
+     and the mobile image element exists; otherwise retain it
+     as the fallback. */
+  .hero-media_visual[data-has-img-mbl='true']:has(> .hero-media_image-mobile) > .hero-media_image {
+    display: none;
+  }
+}

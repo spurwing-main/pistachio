@@ -1,3 +1,35 @@
+.faq-item_trigger[aria-expanded="true"] > .faq-item_icon-wrap .faq-item_icon {
+    transform: rotate(45deg);
+  }
+
+  @media (hover: hover) and (pointer: fine) {
+    .faq-item_trigger:hover .faq-item_icon-wrap,
+    :is([data-wf--items-faq-item--variant="rich-question"],[data-wf--items-faq-item--variant="page-question"]) .faq-item_question-row:hover .faq-item_icon-wrap {
+      background-color: color-mix(in srgb, var(--_color---violet--200) 18%, var(--_color---warm--000));
+      color: var(--_theme---section--heading);
+    }
+  }
+
+  .faq-item_trigger:focus-visible .faq-item_icon-wrap {
+    background-color: color-mix(in srgb, var(--_color---violet--200) 18%, var(--_color---warm--000));
+    color: var(--_theme---section--heading);
+  }
+  /* Category targets clear the existing 7rem contents/header offset. */
+  .faq-page_groups > [id] {
+    scroll-margin-top: 7rem;
+  }
+  /* FAQ category Current styling. */
+  .text-link:is([data-wf--core-text-link--variant="category"],[data-wf--core-text-link--variant="faq-category"])[aria-current="location"] {
+    color: var(--_theme---section--heading);
+  }
+  .text-link:is([data-wf--core-text-link--variant="category"],[data-wf--core-text-link--variant="faq-category"])[aria-current="location"] > .text-link_category-icon {
+    opacity: 1;
+  }
+  @media screen and (max-width: 767px) {
+    .text-link:is([data-wf--core-text-link--variant="category"],[data-wf--core-text-link--variant="faq-category"])[aria-current="location"] {
+      color: var(--_color---violet--900);
+    }
+  }
 /* FAQ page Current relationship; resting styles stay native. */
 #faq-page [data-section-nav] a.text-link[aria-current="location"],
 #faq-page [data-section-nav]:not(:has([aria-current="location"])) a.text-link.w--current {

@@ -27,7 +27,9 @@ function setupMarquee(root) {
     const copy = item.cloneNode(true);
     copy.setAttribute("aria-hidden", "true");
     const focusable = "a, button, input, select, textarea, [tabindex]";
-    [copy, ...qsa(copy, focusable)].filter((el) => el.matches(focusable)).forEach((el) => el.setAttribute("tabindex", "-1"));
+    [copy, ...qsa(copy, focusable)]
+      .filter((el) => el.matches(focusable))
+      .forEach((el) => el.setAttribute("tabindex", "-1"));
     track.append(copy);
   });
 

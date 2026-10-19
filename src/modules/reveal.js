@@ -41,7 +41,12 @@ export function initReveal(scope = document) {
     const from = style.getPropertyValue("--reveal-from").trim();
     const duration = parseFloat(style.getPropertyValue("--reveal-duration")) / 1000;
     const step = parseFloat(style.getPropertyValue("--motion-step")) / 1000;
-    const ease = style.getPropertyValue("--reveal-ease").trim().slice(13, -1).split(",").map(Number);
+    const ease = style
+      .getPropertyValue("--reveal-ease")
+      .trim()
+      .slice(13, -1)
+      .split(",")
+      .map(Number);
     const targets = targetsOf(block);
     const animations = [];
 
@@ -49,18 +54,31 @@ export function initReveal(scope = document) {
       target.style.opacity = "0";
       target.style.transform = from;
     });
-    const rest = () => targets.forEach((target) => {
-      target.style.opacity = "";
-      target.style.transform = "";
-    });
-
-    const stopObserving = inView(block, () => {
-      targets.forEach((target, index) => {
-        animations.push(animate(target, { opacity: [0, 1], transform: [from, "none"] }, {
-          duration, ease, delay: index * step,
-        }));
+    const rest = () =>
+      targets.forEach((target) => {
+        target.style.opacity = "";
+        target.style.transform = "";
       });
-    }, { amount: 0.15 });
+
+    const stopObserving = inView(
+      block,
+      () => {
+        targets.forEach((target, index) => {
+          animations.push(
+            animate(
+              target,
+              { opacity: [0, 1], transform: [from, "none"] },
+              {
+                duration,
+                ease,
+                delay: index * step,
+              },
+            ),
+          );
+        });
+      },
+      { amount: 0.15 },
+    );
 
     const finish = () => {
       stopObserving();

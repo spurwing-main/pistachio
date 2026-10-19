@@ -1,5 +1,5 @@
 /**
- * Accordion hooks match TPF and Suttons:
+ * Native accordion hooks:
  *   data-accordion="component" contains item, trigger (button), and content hooks.
  *   data-accordion-first-open="true" opens the first valid item (default false).
  *   data-accordion-close-others="false" allows several open items (default true).
@@ -18,16 +18,19 @@ let nextId = 0;
 
 function snapshot(element, names) {
   const values = names.map((name) => [name, element.getAttribute(name)]);
-  return () => values.forEach(([name, value]) => {
-    if (value === null) element.removeAttribute(name);
-    else element.setAttribute(name, value);
-  });
+  return () =>
+    values.forEach(([name, value]) => {
+      if (value === null) element.removeAttribute(name);
+      else element.setAttribute(name, value);
+    });
 }
 
 function owned(item, kind) {
-  return [...item.querySelectorAll(selector(kind))].find((element) =>
-    element.closest(selector("item")) === item &&
-    element.closest(selector("component")) === item.closest(selector("component")));
+  return [...item.querySelectorAll(selector(kind))].find(
+    (element) =>
+      element.closest(selector("item")) === item &&
+      element.closest(selector("component")) === item.closest(selector("component")),
+  );
 }
 
 function setupItem(item, component, initiallyOpen) {
@@ -41,7 +44,9 @@ function setupItem(item, component, initiallyOpen) {
     snapshot(content, ["id", "aria-hidden", "inert", "style"]),
   ];
   if (!content.id) {
-    do { nextId += 1; } while (content.ownerDocument.getElementById(`accordion-content-${nextId}`));
+    do {
+      nextId += 1;
+    } while (content.ownerDocument.getElementById(`accordion-content-${nextId}`));
     content.id = `accordion-content-${nextId}`;
   }
   trigger.setAttribute("aria-controls", content.id);
@@ -64,13 +69,21 @@ function setupItem(item, component, initiallyOpen) {
     content.style.height = open ? "auto" : "0px";
     content.style.overflow = open ? "" : "hidden";
 
-    if (!animate || !content.animate || view.matchMedia?.("(prefers-reduced-motion: reduce)").matches) return;
+    if (
+      !animate ||
+      !content.animate ||
+      view.matchMedia?.("(prefers-reduced-motion: reduce)").matches
+    )
+      return;
     const to = view.getComputedStyle(content).height;
     content.style.overflow = "hidden";
-    const current = content.animate({ height: [from, to] }, {
-      duration: 400,
-      easing: "cubic-bezier(0.25, 0.1, 0.25, 1)",
-    });
+    const current = content.animate(
+      { height: [from, to] },
+      {
+        duration: 400,
+        easing: "cubic-bezier(0.25, 0.1, 0.25, 1)",
+      },
+    );
     animation = current;
     current.onfinish = () => {
       if (animation !== current) return;
@@ -92,16 +105,26 @@ function setupItem(item, component, initiallyOpen) {
   };
   trigger.addEventListener("click", onClick);
   const label = owned(item, "label");
-  const area = item.closest('[data-accordion-click-area]');
-  const wholeItem = item.closest('[data-accordion-item-toggle="true"]') &&
+  const area = item.closest("[data-accordion-click-area]");
+  const wholeItem =
+    item.closest('[data-accordion-item-toggle="true"]') &&
     area?.querySelector(selector("item")) === item;
-  const useLabel = !wholeItem && label?.id && trigger.getAttribute("aria-labelledby")?.split(/\s+/).includes(label.id);
+  const useLabel =
+    !wholeItem &&
+    label?.id &&
+    trigger.getAttribute("aria-labelledby")?.split(/\s+/).includes(label.id);
   const clickArea = wholeItem ? area : label;
   const onAreaClick = (event) => {
-    if (event.defaultPrevented || event.button !== 0 ||
-        (wholeItem && event.target.closest('[data-accordion-click-area]') !== clickArea) ||
-        (event.target.closest(selector("item")) && event.target.closest(selector("item")) !== item) ||
-        event.target.closest("a,button,input,select,textarea,label,summary,[contenteditable],[role='button'],[role='link']")) return;
+    if (
+      event.defaultPrevented ||
+      event.button !== 0 ||
+      (wholeItem && event.target.closest("[data-accordion-click-area]") !== clickArea) ||
+      (event.target.closest(selector("item")) && event.target.closest(selector("item")) !== item) ||
+      event.target.closest(
+        "a,button,input,select,textarea,label,summary,[contenteditable],[role='button'],[role='link']",
+      )
+    )
+      return;
     const selection = item.ownerDocument.defaultView.getSelection();
     if (!selection.isCollapsed && selection.getRangeAt(0).intersectsNode(clickArea)) return;
     trigger.focus();
@@ -132,14 +155,24 @@ export function initAccordions(scope = document) {
   if (parent && !components.includes(parent)) components.unshift(parent);
   const created = [];
   components.forEach((component) => {
-    const items = [...component.querySelectorAll(selector("item"))].filter((item) =>
-      item.closest(selector("component")) === component);
+    const items = [...component.querySelectorAll(selector("item"))].filter(
+      (item) => item.closest(selector("component")) === component,
+    );
     let hasValidItem = false;
     items.forEach((item) => {
-      if (records.has(item)) { hasValidItem = true; return; }
-      const record = setupItem(item, component,
-        !hasValidItem && component.dataset.accordionFirstOpen?.toLowerCase() === "true");
-      if (record) { created.push(record); hasValidItem = true; }
+      if (records.has(item)) {
+        hasValidItem = true;
+        return;
+      }
+      const record = setupItem(
+        item,
+        component,
+        !hasValidItem && component.dataset.accordionFirstOpen?.toLowerCase() === "true",
+      );
+      if (record) {
+        created.push(record);
+        hasValidItem = true;
+      }
     });
   });
   return () => created.forEach((record) => record.destroy());

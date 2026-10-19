@@ -54,28 +54,46 @@ export function initStatProgress(scope = document) {
             // Stagger only cards arriving together, with no long queue for large slots.
             const delay = Math.max(0, Math.min((nextStarts.get(group) ?? now) - now, 0.3));
             nextStarts.set(group, now + delay + 0.1);
-            animation = animate(fill, { transform: ["scaleX(0)", end] }, {
-              delay,
-              duration: Number.isFinite(milliseconds) ? Math.max(0, milliseconds) / 1000 : 0.9,
-              ease: easing?.length === 4 && easing.every(Number.isFinite) ? easing : [0.16, 1, 0.3, 1],
-            });
-          } catch { fill.style.transform = end; }
+            animation = animate(
+              fill,
+              { transform: ["scaleX(0)", end] },
+              {
+                delay,
+                duration: Number.isFinite(milliseconds) ? Math.max(0, milliseconds) / 1000 : 0.9,
+                ease:
+                  easing?.length === 4 && easing.every(Number.isFinite)
+                    ? easing
+                    : [0.16, 1, 0.3, 1],
+              },
+            );
+          } catch {
+            fill.style.transform = end;
+          }
           // No leave callback: Motion unobserves this item after its first entry.
         };
         observe = () => {
           stop();
           // IntersectionObserver percentage margins resolve against width, so use height in px.
           stop = inView(stat, enter, {
-            margin: `0px 0px -${window.innerHeight * 0.25}px 0px`, amount: "some",
+            margin: `0px 0px -${window.innerHeight * 0.25}px 0px`,
+            amount: "some",
           });
         };
         observe();
-      } catch { finish(); }
+      } catch {
+        finish();
+      }
     }
-    const onPreference = () => { if (reduced.matches) finish(); };
+    const onPreference = () => {
+      if (reduced.matches) finish();
+    };
     const onResize = () => {
       if (played || reduced.matches) return;
-      try { observe(); } catch { finish(); }
+      try {
+        observe();
+      } catch {
+        finish();
+      }
     };
     reduced.addEventListener("change", onPreference);
     window.addEventListener("resize", onResize);

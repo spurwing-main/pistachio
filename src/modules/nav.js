@@ -1,6 +1,6 @@
 /**
  * Nav: shrink on scroll, current section, desktop dropdowns and the mobile menu.
- * The script only sets attributes; every look and movement is in the Nav's own embed.
+ * The script only sets attributes; every look and movement is in the global Nav CSS field.
  *
  * Markup (set in the Designer):
  *   [data-nav]               root; gets data-nav-scrolled and data-nav-expanded (not
@@ -23,11 +23,12 @@ const CLOSE_DELAY = 120;
 const DESKTOP = "(min-width: 992px)";
 
 const isDesktop = () => window.matchMedia(DESKTOP).matches;
-const withMouse = () => isDesktop() && window.matchMedia("(hover: hover) and (pointer: fine)").matches;
+const withMouse = () =>
+  isDesktop() && window.matchMedia("(hover: hover) and (pointer: fine)").matches;
 
 const focusables = (el) =>
   qsa(el, 'a[href],button,input,select,textarea,[tabindex]:not([tabindex="-1"])').filter(
-    (node) => !node.disabled && node.offsetParent !== null,
+    (node) => !node.disabled && !node.closest("[inert]") && node.offsetParent !== null,
   );
 
 /** Site-relative paths of the links in a group, without trailing slashes. */
@@ -42,7 +43,9 @@ const groupPaths = (group) =>
 /** The group holding a link to the current page or a page below one of its links, if any. */
 export function currentGroup(groups, pathname) {
   const path = pathname.replace(/\/+$/, "") || "/";
-  return groups.find((group) => groupPaths(group).some((p) => path === p || path.startsWith(`${p}/`)));
+  return groups.find((group) =>
+    groupPaths(group).some((p) => path === p || path.startsWith(`${p}/`)),
+  );
 }
 
 /** An element's offset box measured from `container`. */
@@ -57,7 +60,9 @@ function boxWithin(container, el) {
 }
 
 function setBox(el, name, box) {
-  Object.entries(box).forEach(([key, value]) => el.style.setProperty(`--nav-${name}-${key}`, `${value}px`));
+  Object.entries(box).forEach(([key, value]) =>
+    el.style.setProperty(`--nav-${name}-${key}`, `${value}px`),
+  );
 }
 
 function setupNav(root) {
@@ -87,6 +92,7 @@ function setupNav(root) {
     groups.forEach((group) => {
       group.dataset.open = String(group === target);
       triggerOf(group).setAttribute("aria-expanded", String(group === target));
+      panelOf(group).toggleAttribute("inert", group !== target);
     });
   };
 
@@ -96,9 +102,14 @@ function setupNav(root) {
     const prev = groups.find(isOpen);
     if (isDesktop()) {
       const switching = Boolean(prev) && prev !== target;
-      groups.forEach((group) => group.toggleAttribute("data-nav-leaving", switching && group === prev));
+      groups.forEach((group) =>
+        group.toggleAttribute("data-nav-leaving", switching && group === prev),
+      );
       if (switching) {
-        menu.style.setProperty("--nav-from", groups.indexOf(target) > groups.indexOf(prev) ? "-0.75rem" : "0.75rem");
+        menu.style.setProperty(
+          "--nav-from",
+          groups.indexOf(target) > groups.indexOf(prev) ? "-0.75rem" : "0.75rem",
+        );
         void menu.offsetWidth; // the new items take their starting side before they open
       }
       setBox(menu, "panel", boxWithin(menu, panelOf(target)));
@@ -155,7 +166,10 @@ function setupNav(root) {
       const items = focusables(panelOf(group));
       event.preventDefault();
       const at = items.indexOf(document.activeElement);
-      const next = event.key === "ArrowDown" ? items[at + 1] || items[0] : items[at - 1] || items[items.length - 1];
+      const next =
+        event.key === "ArrowDown"
+          ? items[at + 1] || items[0]
+          : items[at - 1] || items[items.length - 1];
       next?.focus();
     });
   });
@@ -174,16 +188,18 @@ function setupNav(root) {
   let lastFocused = null;
 
   const setMenu = (open) => {
+    const wasOpen = menuOpen();
     root.dataset.navExpanded = String(open);
     document.documentElement.classList.toggle("nav-menu-open", open);
     toggle.setAttribute("aria-expanded", String(open));
     toggle.setAttribute("aria-label", open ? "Close menu" : "Open menu");
+    menu.toggleAttribute("inert", !isDesktop() && !open);
     if (open) {
       lastFocused = root.contains(document.activeElement) ? document.activeElement : toggle;
       setTimeout(() => focusables(menu)[0]?.focus(), 0);
     } else {
       closeGroups();
-      lastFocused?.focus();
+      if (wasOpen) lastFocused?.focus();
     }
   };
 
@@ -209,7 +225,10 @@ function setupNav(root) {
   root.addEventListener("click", (event) => {
     if (!menuOpen()) return;
     const link = closestWithin(root, event.target, "a[href]");
-    if (event.target === root || (link && !link.matches("[data-nav-trigger],[data-nav-menu-toggle]"))) {
+    if (
+      event.target === root ||
+      (link && !link.matches("[data-nav-trigger],[data-nav-menu-toggle]"))
+    ) {
       setMenu(false);
     }
   });
@@ -253,7 +272,7 @@ function setupNav(root) {
   });
 
   window.matchMedia(DESKTOP).addEventListener("change", () => {
-    if (menuOpen()) setMenu(false);
+    setMenu(false);
     closeGroups();
   });
 }

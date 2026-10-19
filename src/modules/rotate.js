@@ -55,8 +55,12 @@ function setupRotate(root) {
       remaining = Math.max(0, remaining - (performance.now() - started));
       timer = undefined;
     }
-    const paused = hovered || root.contains(document.activeElement) ||
-      root.dataset.rotatePaused === "true" || root.dataset.rotateVisible !== "true" || document.hidden;
+    const paused =
+      hovered ||
+      root.contains(document.activeElement) ||
+      root.dataset.rotatePaused === "true" ||
+      root.dataset.rotateVisible !== "true" ||
+      document.hidden;
     root.dataset.rotateStopped = String(paused);
     if (paused) return;
     started = performance.now();
@@ -71,7 +75,10 @@ function setupRotate(root) {
     hovered = window.matchMedia("(hover: hover)").matches;
     updateTimer();
   });
-  root.addEventListener("pointerleave", () => { hovered = false; updateTimer(); });
+  root.addEventListener("pointerleave", () => {
+    hovered = false;
+    updateTimer();
+  });
   root.addEventListener("focusin", updateTimer);
   root.addEventListener("focusout", () => queueMicrotask(updateTimer));
   document.addEventListener("visibilitychange", updateTimer);

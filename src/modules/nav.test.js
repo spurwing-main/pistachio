@@ -3,11 +3,14 @@ import { afterEach, beforeAll, beforeEach, describe, expect, it, vi } from "vite
 /* nav.js asks matchMedia for the desktop width and for a fine pointer. jsdom has no
    matchMedia, so each test sets what the "device" answers. */
 let media = { desktop: true, hover: true };
+let breakpointListeners = [];
 beforeAll(() => {
   vi.stubGlobal("matchMedia", (query) => ({
     matches: query.includes("min-width") ? media.desktop : media.hover,
     media: query,
-    addEventListener() {},
+    addEventListener(type, listener) {
+      if (type === "change" && query.includes("min-width")) breakpointListeners.push(listener);
+    },
     removeEventListener() {},
   }));
   vi.stubGlobal("requestAnimationFrame", (fn) => fn());
@@ -46,6 +49,7 @@ const trigger = (group) => group.querySelector("[data-nav-trigger]");
 beforeEach(() => {
   vi.useFakeTimers();
   media = { desktop: true, hover: true };
+  breakpointListeners = [];
 });
 afterEach(() => {
   vi.useRealTimers();
@@ -155,6 +159,55 @@ describe("desktop dropdowns", () => {
 describe("mobile menu", () => {
   beforeEach(() => {
     media = { desktop: false, hover: false };
+  });
+
+  it("excludes the closed menu and collapsed panels from keyboard focus", () => {
+    const { nav, platform, resources, toggle } = mount();
+    const menu = nav.querySelector("[data-nav-menu]");
+    expect(menu.hasAttribute("inert")).toBe(true);
+    expect(platform.querySelector("[data-nav-panel]").hasAttribute("inert")).toBe(true);
+    toggle.click();
+    expect(menu.hasAttribute("inert")).toBe(false);
+    trigger(platform).click();
+    expect(platform.querySelector("[data-nav-panel]").hasAttribute("inert")).toBe(false);
+    expect(resources.querySelector("[data-nav-panel]").hasAttribute("inert")).toBe(true);
+    document.dispatchEvent(new KeyboardEvent("keydown", { key: "Escape" }));
+    expect(menu.hasAttribute("inert")).toBe(true);
+    expect(platform.querySelector("[data-nav-panel]").hasAttribute("inert")).toBe(true);
+  });
+
+  it("restores desktop links and closes the menu when crossing the breakpoint", () => {
+    const { nav, platform, toggle } = mount();
+    const menu = nav.querySelector("[data-nav-menu]");
+    media.desktop = true;
+    breakpointListeners.forEach((listener) => listener());
+    expect(menu.hasAttribute("inert")).toBe(false);
+    trigger(platform).click();
+    expect(platform.querySelector("[data-nav-panel]").hasAttribute("inert")).toBe(false);
+    media.desktop = false;
+    breakpointListeners.forEach((listener) => listener());
+    expect(menu.hasAttribute("inert")).toBe(true);
+    toggle.click();
+    trigger(platform).click();
+    media.desktop = true;
+    breakpointListeners.forEach((listener) => listener());
+    expect(menu.hasAttribute("inert")).toBe(false);
+    expect(nav.dataset.navExpanded).toBe("false");
+    expect(platform.querySelector("[data-nav-panel]").hasAttribute("inert")).toBe(true);
+  });
+
+  it("keeps focus on the page when resizing an already closed menu", () => {
+    const { toggle } = mount();
+    toggle.focus();
+    toggle.click();
+    toggle.click();
+    const pageLink = document.createElement("a");
+    pageLink.href = "#content";
+    document.body.append(pageLink);
+    pageLink.focus();
+    media.desktop = true;
+    breakpointListeners.forEach((listener) => listener());
+    expect(document.activeElement).toBe(pageLink);
   });
 
   it("opens and closes from the button, labelled for screen readers, and locks the page", () => {

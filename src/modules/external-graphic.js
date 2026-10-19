@@ -29,14 +29,22 @@ let maskSequence = 0;
 
 // Seconds, kept together for visual tuning after the first published review.
 const timing = {
-  main: 0.6, mainHold: 0.2, connector: 0.3,
-  item: 0.4, importantItem: 0.45, itemOverlap: 0.12,
-  lastHold: 0.5, pulse: 0.18,
+  main: 0.6,
+  mainHold: 0.2,
+  connector: 0.3,
+  item: 0.4,
+  importantItem: 0.45,
+  itemOverlap: 0.12,
+  lastHold: 0.5,
+  pulse: 0.18,
 };
 
 function createLineMasks(svg, lines) {
   const defs = document.createElementNS(SVG_NS, "defs");
-  const bounds = (svg.getAttribute("viewBox") || "0 0 1125 818").trim().split(/[\s,]+/).map(Number);
+  const bounds = (svg.getAttribute("viewBox") || "0 0 1125 818")
+    .trim()
+    .split(/[\s,]+/)
+    .map(Number);
   const previousMasks = lines.map((line) => line.getAttribute("mask"));
   const paths = lines.map((line) => {
     const mask = document.createElementNS(SVG_NS, "mask");
@@ -49,9 +57,13 @@ function createLineMasks(svg, lines) {
     mask.setAttribute("height", bounds[3] + 16);
     const path = document.createElementNS(SVG_NS, "path");
     const attributes = {
-      d: line.getAttribute("d"), fill: "none", stroke: "white",
+      d: line.getAttribute("d"),
+      fill: "none",
+      stroke: "white",
       "stroke-width": Number(line.getAttribute("stroke-width")) + 4,
-      "stroke-linecap": "butt", pathLength: 1, "stroke-dasharray": "1 1",
+      "stroke-linecap": "butt",
+      pathLength: 1,
+      "stroke-dasharray": "1 1",
     };
     Object.entries(attributes).forEach(([name, value]) => path.setAttribute(name, value));
     mask.append(path);
@@ -89,27 +101,40 @@ function setupAnimation(root, svg, { fromBreakpoint = false, wasVisible = false 
   const card = svg.querySelector('[id="main"]');
   const linear = svg.dataset.graphicLayout === "linear";
   const items = Array.from({ length: linear ? 4 : 11 }, (_, index) =>
-    svg.querySelector(`[id="item ${String(index + 1).padStart(2, "0")}"]`));
+    svg.querySelector(`[id="item ${String(index + 1).padStart(2, "0")}"]`),
+  );
   const lineNames = [
     "outgoing",
-    ...Array.from({ length: items.length - 1 }, (_, index) => `${String(index + 1).padStart(2, "0")}-${String(index + 2).padStart(2, "0")}`),
+    ...Array.from(
+      { length: items.length - 1 },
+      (_, index) => `${String(index + 1).padStart(2, "0")}-${String(index + 2).padStart(2, "0")}`,
+    ),
     ...(!linear ? ["return"] : []),
   ];
   const lines = lineNames.map((name) => svg.querySelector(`[data-graphic-line="${name}"]`));
   // Leave other/incomplete or outdated SVGs visible and explain the missing targets.
   const missing = [
     ...(!card ? ["main"] : []),
-    ...items.flatMap((item, index) => item ? [] : [`item ${String(index + 1).padStart(2, "0")}`]),
-    ...lines.flatMap((line, index) => line ? [] : [`data-graphic-line="${lineNames[index]}"`]),
+    ...items.flatMap((item, index) => (item ? [] : [`item ${String(index + 1).padStart(2, "0")}`])),
+    ...lines.flatMap((line, index) => (line ? [] : [`data-graphic-line="${lineNames[index]}"`])),
   ];
   if (missing.length) {
-    report(root, "Animation skipped: required SVG groups were not found.", {
-      missing,
-      availableGroupIds: Array.from(svg.querySelectorAll("g[id]"), (group) => group.id),
-    }, "warn");
+    report(
+      root,
+      "Animation skipped: required SVG groups were not found.",
+      {
+        missing,
+        availableGroupIds: Array.from(svg.querySelectorAll("g[id]"), (group) => group.id),
+      },
+      "warn",
+    );
     return;
   }
-  report(root, "Animation targets found.", { layout: linear ? "linear mobile" : "circular desktop", card: card.id, items: items.map((item) => item.id) });
+  report(root, "Animation targets found.", {
+    layout: linear ? "linear mobile" : "circular desktop",
+    card: card.id,
+    items: items.map((item) => item.id),
+  });
 
   let started = false;
   function start() {
@@ -118,16 +143,24 @@ function setupAnimation(root, svg, { fromBreakpoint = false, wasVisible = false 
       return;
     }
     if (!root.isConnected || (root !== svg && !root.contains(svg))) {
-      report(root, "Animation skipped: wrapper detached or SVG replaced.", {
-        connected: root.isConnected, svgStillInWrapper: svg.parentElement === root,
-      }, "warn");
+      report(
+        root,
+        "Animation skipped: wrapper detached or SVG replaced.",
+        {
+          connected: root.isConnected,
+          svgStillInWrapper: svg.parentElement === root,
+        },
+        "warn",
+      );
       return;
     }
     const gsap = window.gsap;
     const ScrollTrigger = window.ScrollTrigger;
     report(root, "Checking Webflow animation globals.", {
-      gsapAvailable: Boolean(gsap), gsapVersion: gsap?.version,
-      scrollTriggerAvailable: Boolean(ScrollTrigger), scrollTriggerVersion: ScrollTrigger?.version,
+      gsapAvailable: Boolean(gsap),
+      gsapVersion: gsap?.version,
+      scrollTriggerAvailable: Boolean(ScrollTrigger),
+      scrollTriggerVersion: ScrollTrigger?.version,
     });
     if (!gsap || !ScrollTrigger) {
       report(root, "Animation waiting: GSAP or ScrollTrigger is unavailable.", {}, "warn");
@@ -147,99 +180,141 @@ function setupAnimation(root, svg, { fromBreakpoint = false, wasVisible = false 
       const viewportQuery = root.dataset.graphicMedia?.trim();
       const motionQuery = `(prefers-reduced-motion: no-preference)${viewportQuery ? ` and ${viewportQuery}` : ""}`;
       let registeringContext = true;
-      media.add(motionQuery, () => {
-        motionEnabled = true;
-        // A breakpoint change may reveal a previously loaded static SVG. Avoid
-        // making visible content disappear to replay its entrance.
-        if ((fromBreakpoint || !registeringContext) && (isVisible(svg) || (registeringContext && wasVisible))) {
-          report(root, "Animation skipped: visible graphic stays static after a breakpoint or motion-preference change.");
-          return;
-        }
-        report(root, "Motion allowed: applying initial states and creating timeline.");
-        const masks = createLineMasks(svg, lines);
-        cleanupLines = masks.cleanup;
-        gsap.set(card, { autoAlpha: 0, scale: 0.97, transformOrigin: "50% 50%" });
-        gsap.set(items, { autoAlpha: 0, scale: 0.94, transformOrigin: "50% 50%" });
-        gsap.set(masks.paths, { attr: { "stroke-dashoffset": 1 } });
-        let lastProgressStep = -1;
-        const timeline = gsap.timeline({
-          defaults: { ease: "power2.out" },
-          onStart: () => report(root, "Timed animation started."),
-          onComplete: () => report(root, "Timed animation completed."),
-          onUpdate: function () {
-            const progress = this.progress();
-            const step = Math.floor(progress * 4);
-            if (step === lastProgressStep) return;
-            lastProgressStep = step;
-            report(root, "Animation progress changed.", { percent: Math.round(progress * 100) });
-          },
-          scrollTrigger: {
-            trigger: root,
-            start: "top 75%",
-            once: true,
-            toggleActions: "play none none none",
-            onRefresh: (trigger) => report(root, "ScrollTrigger measurements refreshed.", {
-              start: trigger.start, end: trigger.end, progress: trigger.progress,
-            }),
-            onToggle: (trigger) => report(root, "ScrollTrigger active state changed.", {
-              active: trigger.isActive, direction: trigger.direction, progress: trigger.progress,
-            }),
-          },
-        });
-        const outgoingAt = timing.main + timing.mainHold;
-        const firstAt = outgoingAt + timing.connector;
-        const draw = (duration) => ({ attr: { "stroke-dashoffset": 0 }, duration, ease: "none" });
-        timeline
-          .to(card, { autoAlpha: 1, scale: 1, duration: timing.main }, 0)
-          .to(masks.paths[0], draw(timing.connector), outgoingAt)
-          .to(items[0], { autoAlpha: 1, scale: 1, duration: timing.importantItem }, firstAt);
+      media.add(
+        motionQuery,
+        () => {
+          motionEnabled = true;
+          // A breakpoint change may reveal a previously loaded static SVG. Avoid
+          // making visible content disappear to replay its entrance.
+          if (
+            (fromBreakpoint || !registeringContext) &&
+            (isVisible(svg) || (registeringContext && wasVisible))
+          ) {
+            report(
+              root,
+              "Animation skipped: visible graphic stays static after a breakpoint or motion-preference change.",
+            );
+            return;
+          }
+          report(root, "Motion allowed: applying initial states and creating timeline.");
+          const masks = createLineMasks(svg, lines);
+          cleanupLines = masks.cleanup;
+          gsap.set(card, { autoAlpha: 0, scale: 0.97, transformOrigin: "50% 50%" });
+          gsap.set(items, { autoAlpha: 0, scale: 0.94, transformOrigin: "50% 50%" });
+          gsap.set(masks.paths, { attr: { "stroke-dashoffset": 1 } });
+          let lastProgressStep = -1;
+          const timeline = gsap.timeline({
+            defaults: { ease: "power2.out" },
+            onStart: () => report(root, "Timed animation started."),
+            onComplete: () => report(root, "Timed animation completed."),
+            onUpdate: function () {
+              const progress = this.progress();
+              const step = Math.floor(progress * 4);
+              if (step === lastProgressStep) return;
+              lastProgressStep = step;
+              report(root, "Animation progress changed.", { percent: Math.round(progress * 100) });
+            },
+            scrollTrigger: {
+              trigger: root,
+              start: "top 75%",
+              once: true,
+              toggleActions: "play none none none",
+              onRefresh: (trigger) =>
+                report(root, "ScrollTrigger measurements refreshed.", {
+                  start: trigger.start,
+                  end: trigger.end,
+                  progress: trigger.progress,
+                }),
+              onToggle: (trigger) =>
+                report(root, "ScrollTrigger active state changed.", {
+                  active: trigger.isActive,
+                  direction: trigger.direction,
+                  progress: trigger.progress,
+                }),
+            },
+          });
+          const outgoingAt = timing.main + timing.mainHold;
+          const firstAt = outgoingAt + timing.connector;
+          const draw = (duration) => ({ attr: { "stroke-dashoffset": 0 }, duration, ease: "none" });
+          timeline
+            .to(card, { autoAlpha: 1, scale: 1, duration: timing.main }, 0)
+            .to(masks.paths[0], draw(timing.connector), outgoingAt)
+            .to(items[0], { autoAlpha: 1, scale: 1, duration: timing.importantItem }, firstAt);
 
-        // Only visible connectors consume timeline time. Item size no longer
-        // creates a delay while a single arc travels behind its background.
-        let nextConnectorAt = firstAt + timing.importantItem;
-        let lastItemEnd = nextConnectorAt;
-        const steps = [];
-        items.slice(1).forEach((item, index) => {
-          const itemAt = nextConnectorAt + timing.connector;
-          const duration = index === items.length - 2 ? timing.importantItem : timing.item;
-          timeline
-            .to(masks.paths[index + 1], draw(timing.connector), nextConnectorAt)
-            .to(item, { autoAlpha: 1, scale: 1, duration }, itemAt);
-          steps.push({ connector: lineNames[index + 1], connectorAt: nextConnectorAt, itemAt });
-          lastItemEnd = itemAt + duration;
-          nextConnectorAt = lastItemEnd - timing.itemOverlap;
-        });
-        const returnAt = linear ? null : lastItemEnd + timing.lastHold;
-        if (!linear) {
-          timeline
-            .to(masks.paths.at(-1), draw(timing.connector), returnAt)
-            .to(card, { scale: 1.025, duration: timing.pulse, repeat: 1, yoyo: true, ease: "power1.inOut" }, returnAt + timing.connector);
-        }
-        report(root, "Connector choreography prepared.", {
-          outgoingAt, firstAt, returnAt, steps,
-        });
-        ScrollTrigger.refresh();
-        const bounds = root.getBoundingClientRect();
-        const style = getComputedStyle(root);
-        report(root, "Animation timeline ready.", {
-          duration: timeline.duration?.(),
-          start: timeline.scrollTrigger?.start, end: timeline.scrollTrigger?.end,
-          progress: timeline.scrollTrigger?.progress,
-          scrollY: window.scrollY, viewportHeight: window.innerHeight,
-          bounds: { top: bounds.top, width: bounds.width, height: bounds.height },
-          display: style.display, visibility: style.visibility, opacity: style.opacity,
-        });
-        if (!bounds.width || !bounds.height) {
-          report(root, "Wrapper has zero width or height; check its layout or hidden ancestors.", {}, "warn");
-        }
-        return () => {
-          cleanupLines();
-          report(root, "Motion context reverted (media preference changed).");
-        };
-      }, root);
+          // Only visible connectors consume timeline time. Item size no longer
+          // creates a delay while a single arc travels behind its background.
+          let nextConnectorAt = firstAt + timing.importantItem;
+          let lastItemEnd = nextConnectorAt;
+          const steps = [];
+          items.slice(1).forEach((item, index) => {
+            const itemAt = nextConnectorAt + timing.connector;
+            const duration = index === items.length - 2 ? timing.importantItem : timing.item;
+            timeline
+              .to(masks.paths[index + 1], draw(timing.connector), nextConnectorAt)
+              .to(item, { autoAlpha: 1, scale: 1, duration }, itemAt);
+            steps.push({ connector: lineNames[index + 1], connectorAt: nextConnectorAt, itemAt });
+            lastItemEnd = itemAt + duration;
+            nextConnectorAt = lastItemEnd - timing.itemOverlap;
+          });
+          const returnAt = linear ? null : lastItemEnd + timing.lastHold;
+          if (!linear) {
+            timeline
+              .to(masks.paths.at(-1), draw(timing.connector), returnAt)
+              .to(
+                card,
+                {
+                  scale: 1.025,
+                  duration: timing.pulse,
+                  repeat: 1,
+                  yoyo: true,
+                  ease: "power1.inOut",
+                },
+                returnAt + timing.connector,
+              );
+          }
+          report(root, "Connector choreography prepared.", {
+            outgoingAt,
+            firstAt,
+            returnAt,
+            steps,
+          });
+          ScrollTrigger.refresh();
+          const bounds = root.getBoundingClientRect();
+          const style = getComputedStyle(root);
+          report(root, "Animation timeline ready.", {
+            duration: timeline.duration?.(),
+            start: timeline.scrollTrigger?.start,
+            end: timeline.scrollTrigger?.end,
+            progress: timeline.scrollTrigger?.progress,
+            scrollY: window.scrollY,
+            viewportHeight: window.innerHeight,
+            bounds: { top: bounds.top, width: bounds.width, height: bounds.height },
+            display: style.display,
+            visibility: style.visibility,
+            opacity: style.opacity,
+          });
+          if (!bounds.width || !bounds.height) {
+            report(
+              root,
+              "Wrapper has zero width or height; check its layout or hidden ancestors.",
+              {},
+              "warn",
+            );
+          }
+          return () => {
+            cleanupLines();
+            report(root, "Motion context reverted (media preference changed).");
+          };
+        },
+        root,
+      );
       registeringContext = false;
       if (!motionEnabled) {
-        report(root, "Animation inactive: viewport or motion-preference query did not match; graphic stays static.", { motionQuery });
+        report(
+          root,
+          "Animation inactive: viewport or motion-preference query did not match; graphic stays static.",
+          { motionQuery },
+        );
       }
     } catch (error) {
       // Animation failure must not turn a successful SVG load into a retry.
@@ -278,22 +353,42 @@ function isVisible(element) {
 }
 
 function prepareImageReplacement(image, graphic) {
-  const viewBox = graphic.getAttribute("viewBox")?.trim().split(/[\s,]+/).map(Number);
+  const viewBox = graphic
+    .getAttribute("viewBox")
+    ?.trim()
+    .split(/[\s,]+/)
+    .map(Number);
   const candidates = [
     [image.naturalWidth, image.naturalHeight],
     [Number(image.getAttribute("width")), Number(image.getAttribute("height"))],
     viewBox?.slice(2),
     [Number(graphic.getAttribute("width")), Number(graphic.getAttribute("height"))],
   ];
-  const dimensions = candidates.find((pair) => pair?.length === 2 && pair.every((n) => Number.isFinite(n) && n > 0));
+  const dimensions = candidates.find(
+    (pair) => pair?.length === 2 && pair.every((n) => Number.isFinite(n) && n > 0),
+  );
   // Keep classes, authored inline sizing, ID, Webflow attributes and ARIA hooks.
-  const imageOnly = new Set(["src", "srcset", "sizes", "alt", "loading", "decoding", "fetchpriority", "crossorigin", "referrerpolicy"]);
+  const imageOnly = new Set([
+    "src",
+    "srcset",
+    "sizes",
+    "alt",
+    "loading",
+    "decoding",
+    "fetchpriority",
+    "crossorigin",
+    "referrerpolicy",
+  ]);
   for (const attribute of image.attributes) {
     if (!imageOnly.has(attribute.name)) graphic.setAttribute(attribute.name, attribute.value);
   }
   if (dimensions) graphic.style.aspectRatio = dimensions.join(" / ");
   graphic.setAttribute("focusable", "false");
-  if (image.getAttribute("alt") === "" && !image.hasAttribute("aria-label") && !image.hasAttribute("aria-labelledby")) {
+  if (
+    image.getAttribute("alt") === "" &&
+    !image.hasAttribute("aria-label") &&
+    !image.hasAttribute("aria-labelledby")
+  ) {
     graphic.setAttribute("aria-hidden", "true");
     graphic.setAttribute("role", "presentation");
   } else {
@@ -307,7 +402,8 @@ function prepareImageReplacement(image, graphic) {
   if (!document.querySelector("style[data-external-graphic-styles]")) {
     const style = document.createElement("style");
     style.setAttribute("data-external-graphic-styles", "");
-    style.textContent = ":where(svg[data-external-graphic-ready]) { max-width: 100%; height: auto; display: inline-block; vertical-align: middle; }";
+    style.textContent =
+      ":where(svg[data-external-graphic-ready]) { max-width: 100%; height: auto; display: inline-block; vertical-align: middle; }";
     document.head.append(style);
   }
 }
@@ -327,8 +423,10 @@ function setupGraphic(root, { fromBreakpoint = false } = {}) {
   const originalImageSrc = image?.getAttribute("src");
   report(root, "Wrapper found.", {
     animationEnabled: root.hasAttribute("data-graphic-animation"),
-    source, imageFallback: Boolean(image),
-    requestedAspectRatio: root.dataset.svgAspectRatio, appliedAspectRatio: image ? "automatic from image/SVG" : ratio || "natural",
+    source,
+    imageFallback: Boolean(image),
+    requestedAspectRatio: root.dataset.svgAspectRatio,
+    appliedAspectRatio: image ? "automatic from image/SVG" : ratio || "natural",
   });
   if (!source) {
     report(root, "Load skipped: no image source or legacy data-svg-src.", {}, "warn");
@@ -345,8 +443,11 @@ function setupGraphic(root, { fromBreakpoint = false } = {}) {
     report(root, "Parsing SVG.", { characters: markup.length });
     const parsed = new DOMParser().parseFromString(markup, "image/svg+xml");
     const svg = parsed.documentElement;
-    if (parsed.querySelector("parsererror") || svg.localName !== "svg" ||
-      svg.namespaceURI !== "http://www.w3.org/2000/svg") {
+    if (
+      parsed.querySelector("parsererror") ||
+      svg.localName !== "svg" ||
+      svg.namespaceURI !== "http://www.w3.org/2000/svg"
+    ) {
       throw new Error("The fetched file is not valid SVG.");
     }
 
@@ -354,7 +455,11 @@ function setupGraphic(root, { fromBreakpoint = false } = {}) {
     let target = root;
     let wasVisible = false;
     if (image) {
-      if (!image.isConnected || image.getAttribute("src") !== originalImageSrc || imageSource(image) !== source) {
+      if (
+        !image.isConnected ||
+        image.getAttribute("src") !== originalImageSrc ||
+        imageSource(image) !== source
+      ) {
         loads.delete(root);
         loads.delete(image);
         report(root, "Conversion cancelled: image was removed or its source changed.");
@@ -374,7 +479,10 @@ function setupGraphic(root, { fromBreakpoint = false } = {}) {
     }
     target.dataset.externalGraphicReady = "true";
     target.dataset.svgSrc = source;
-    report(target, "SVG inserted; checking animation setup.", { viewBox: graphic.getAttribute("viewBox"), aspectRatio: graphic.style.aspectRatio });
+    report(target, "SVG inserted; checking animation setup.", {
+      viewBox: graphic.getAttribute("viewBox"),
+      aspectRatio: graphic.style.aspectRatio,
+    });
     setupAnimation(target, graphic, { fromBreakpoint, wasVisible });
     target.dispatchEvent(new CustomEvent("external-graphic:loaded", { bubbles: true }));
   })().catch((error) => {
@@ -392,7 +500,10 @@ function setupGraphic(root, { fromBreakpoint = false } = {}) {
 export function initExternalGraphic(root = document) {
   const wrappers = qsa(root, "[data-external-graphic]");
   if (root.matches?.("[data-external-graphic]")) wrappers.unshift(root);
-  console.log("[external-graphic] Module initialising.", { wrappers: wrappers.length, scope: root });
+  console.log("[external-graphic] Module initialising.", {
+    wrappers: wrappers.length,
+    scope: root,
+  });
   return Promise.all(wrappers.map(setupResponsiveGraphic));
 }
 
@@ -413,7 +524,10 @@ function setupResponsiveGraphic(root) {
     mediaWatches.delete(root);
   };
   const onChange = () => {
-    if (!root.isConnected) { stop(); return; }
+    if (!root.isConnected) {
+      stop();
+      return;
+    }
     if (!media.matches) return;
     stop();
     setupGraphic(root, { fromBreakpoint: true });

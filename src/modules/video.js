@@ -35,7 +35,8 @@ export function embedUrl(href) {
   if (host === "vimeo.com" || host === "player.vimeo.com") {
     const at = path.findIndex((part) => /^\d+$/.test(part));
     if (at === -1) return null;
-    const hash = url.searchParams.get("h") || (/^[0-9a-f]+$/.test(path[at + 1] || "") ? path[at + 1] : null);
+    const hash =
+      url.searchParams.get("h") || (/^[0-9a-f]+$/.test(path[at + 1] || "") ? path[at + 1] : null);
     return `https://player.vimeo.com/video/${path[at]}?autoplay=1&dnt=1${hash ? `&h=${hash}` : ""}`;
   }
   return null;
@@ -57,7 +58,9 @@ function prepare(dialog) {
   dialog.addEventListener("click", (event) => {
     if (event.target === dialog) dialog.close();
   });
-  dialog.addEventListener("close", () => dialog.querySelector("[data-video-frame]").replaceChildren());
+  dialog.addEventListener("close", () =>
+    dialog.querySelector("[data-video-frame]").replaceChildren(),
+  );
 }
 
 function play(dialog, src, label) {
@@ -84,7 +87,8 @@ function onClick(event) {
 
 export function initVideo() {
   document.querySelectorAll("a[data-video]").forEach((link) => {
-    if (embedUrl(link.getAttribute("href") || "") && dialogFor(link)) link.setAttribute("aria-haspopup", "dialog");
+    if (embedUrl(link.getAttribute("href") || "") && dialogFor(link))
+      link.setAttribute("aria-haspopup", "dialog");
   });
   document.addEventListener("click", onClick);
 }

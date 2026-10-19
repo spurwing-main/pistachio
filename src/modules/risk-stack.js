@@ -11,46 +11,76 @@ export function initRiskStack(scope = document) {
   for (const root of roots) {
     if (processed.has(root)) continue;
     processed.add(root);
-    const panels = [...root.querySelectorAll(".risk-panel")].filter(p => p.closest(".risk-stack") === root);
-    const surfaces = panels.map(p => p.querySelector(".risk-panel_surface"));
-    const original = surfaces.map(s => s?.style.transform || "");
-    const indices = panels.map(p => p.style.getPropertyValue("--risk-stack-index"));
+    const panels = [...root.querySelectorAll(".risk-panel")].filter(
+      (p) => p.closest(".risk-stack") === root,
+    );
+    const surfaces = panels.map((p) => p.querySelector(".risk-panel_surface"));
+    const original = surfaces.map((s) => s?.style.transform || "");
+    const indices = panels.map((p) => p.style.getPropertyValue("--risk-stack-index"));
     panels.forEach((p, i) => p.style.setProperty("--risk-stack-index", i));
-    const media = window.matchMedia("(min-width: 768px) and (prefers-reduced-motion: no-preference)");
-    let active = false, keyboard = false, frame = 0, top = 112, destroyed = false, needsMeasure = false;
-    const restore = () => surfaces.forEach((s, i) => { if (s) s.style.transform = original[i]; });
+    const media = window.matchMedia(
+      "(min-width: 768px) and (prefers-reduced-motion: no-preference)",
+    );
+    let active = false,
+      keyboard = false,
+      frame = 0,
+      top = 112,
+      destroyed = false,
+      needsMeasure = false;
+    const restore = () =>
+      surfaces.forEach((s, i) => {
+        if (s) s.style.transform = original[i];
+      });
     const paint = () => {
       if (!active) return;
       // Read all positions before writing transforms. Sticky wrappers never scale.
-      const positions = panels.map(p => p.getBoundingClientRect());
+      const positions = panels.map((p) => p.getBoundingClientRect());
       surfaces.forEach((surface, i) => {
         if (!surface || i === panels.length - 1) return;
-        const progress = Math.max(0, Math.min(1, 1 - (positions[i + 1].top - top - (i + 1) * 16) / positions[i].height));
-        surface.style.transform = `scale(${1 - .06 * progress})`;
+        const progress = Math.max(
+          0,
+          Math.min(1, 1 - (positions[i + 1].top - top - (i + 1) * 16) / positions[i].height),
+        );
+        surface.style.transform = `scale(${1 - 0.06 * progress})`;
       });
     };
     const measure = () => {
       if (destroyed) return;
       const style = getComputedStyle(root);
       top = parseFloat(style.getPropertyValue("--risk-stack-top")) || 112;
-      active = media.matches && !keyboard && panels.length > 1
-        && style.getPropertyValue("--risk-stack-ready").trim() === "1"
-        && panels.every((p, i) => p.getClientRects().length && p.offsetHeight > 0 && p.offsetHeight + top + i * 16 + 32 <= window.innerHeight);
+      active =
+        media.matches &&
+        !keyboard &&
+        panels.length > 1 &&
+        style.getPropertyValue("--risk-stack-ready").trim() === "1" &&
+        panels.every(
+          (p, i) =>
+            p.getClientRects().length &&
+            p.offsetHeight > 0 &&
+            p.offsetHeight + top + i * 16 + 32 <= window.innerHeight,
+        );
       root.classList.toggle("is-risk-stack-active", active);
-      if (active) paint(); else restore();
+      if (active) paint();
+      else restore();
     };
     const queue = () => {
       if (frame || destroyed) return;
       frame = requestAnimationFrame(() => {
         frame = 0;
-        if (needsMeasure) { needsMeasure = false; measure(); } else paint();
+        if (needsMeasure) {
+          needsMeasure = false;
+          measure();
+        } else paint();
       });
     };
-    const schedule = () => { needsMeasure = true; queue(); };
+    const schedule = () => {
+      needsMeasure = true;
+      queue();
+    };
     const onScroll = () => {
       if (active) queue();
     };
-    const focus = event => {
+    const focus = (event) => {
       // Pointer focus must not move a button between mousedown and click.
       if (!event.target.matches(":focus-visible")) return;
       keyboard = true;
@@ -59,7 +89,7 @@ export function initRiskStack(scope = document) {
       root.ownerDocument.activeElement?.scrollIntoView?.({ block: "nearest", behavior: "instant" });
     };
     const observer = typeof ResizeObserver === "function" ? new ResizeObserver(schedule) : null;
-    panels.forEach(p => observer?.observe(p));
+    panels.forEach((p) => observer?.observe(p));
     window.addEventListener("scroll", onScroll, { passive: true });
     window.addEventListener("resize", schedule);
     media.addEventListener("change", measure);
@@ -82,7 +112,7 @@ export function initRiskStack(scope = document) {
       processed.delete(root);
     });
   }
-  return () => cleanups.forEach(cleanup => cleanup());
+  return () => cleanups.forEach((cleanup) => cleanup());
 }
 
 export default { name: "risk-stack", init: initRiskStack };

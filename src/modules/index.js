@@ -1,4 +1,4 @@
-// Import each module here. Keep the start order explicit.
+// Keep registration order explicit. bootModules starts the modules concurrently.
 import aboutTeam from "./about-team.js";
 import marquee from "./marquee.js";
 import nav from "./nav.js";
@@ -12,4 +12,17 @@ import sectionNav from "./section-nav.js";
 import articleContents from "./article-contents.js";
 import riskStack from "./risk-stack.js";
 
-export const modules = [nav, marquee, aboutTeam, rotate, video, reveal, accordions, externalGraphic, statProgress, riskStack, sectionNav, articleContents];
+export const modules = [
+  nav,
+  marquee,
+  aboutTeam,
+  rotate,
+  video,
+  reveal,
+  accordions,
+  externalGraphic,
+  statProgress,
+  riskStack,
+  sectionNav,
+  articleContents,
+];

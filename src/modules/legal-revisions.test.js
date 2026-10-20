@@ -84,6 +84,31 @@ it("switches body, date and revision together, preserving tables and links", () 
   expect(location.search).toBe("?utm_source=test");
 });
 
+it("preserves the current layout, TOC, metadata and Rich Text elements across revisions", () => {
+  const current = q("[data-legal-current]");
+  const body = current.querySelector("[data-legal-body]");
+  body.className = "text-rich-text is-article";
+  body.setAttribute("fs-toc-element", "contents");
+  const shell = document.createElement("div");
+  shell.className = "legal_layout-inner";
+  current.append(shell);
+  const toc = document.createElement("nav");
+  toc.className = "page-contents";
+  shell.append(toc, body);
+  const revision = current.querySelector("[data-legal-revision]");
+  cleanup = initLegalRevisions();
+  choose("1.8");
+  expect(current.querySelector(".legal_layout-inner")).toBe(shell);
+  expect(current.querySelector(".page-contents")).toBe(toc);
+  expect(current.querySelector("[data-legal-body]")).toBe(body);
+  expect(current.querySelector("[data-legal-revision]")).toBe(revision);
+  expect(body.getAttribute("fs-toc-element")).toBe("contents");
+  expect(body.querySelector("h2").textContent).toBe("Earlier 1.8");
+  choose("1.9");
+  expect(current.querySelector(".page-contents")).toBe(toc);
+  expect(body.querySelector("h2").textContent).toBe("Current wording");
+});
+
 it("restores deep links and responds to browser history without extra entries", () => {
   history.replaceState(null, "", "?revision=1.8#intro");
   cleanup = initLegalRevisions();

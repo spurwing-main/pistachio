@@ -1,3 +1,5 @@
+import { cloneLegalBody } from "../utils/legal-content.js";
+
 const instances = new WeakMap();
 const text = (element, selector) => element.querySelector(selector)?.textContent.trim() || "";
 
@@ -22,6 +24,15 @@ function mount(root) {
   const initial = readContent(current);
   if (!key || !initial || !source || !select || !status ||
       current.contains(source) || current.contains(controls)) return null;
+  const targets = Object.fromEntries(["revision", "date", "body"].map(
+    key => [key, current.querySelector(`[data-legal-${key}]`)],
+  ));
+  // Keep field elements and the layout shell stable; Finsweet owns the TOC
+  // beside the body. Snapshot before it can mutate the current headings.
+  const originalFields = Object.fromEntries(Object.entries(targets).map(
+    ([key, element]) => [key, [...element.childNodes]],
+  ));
+  const currentBody = cloneLegalBody(targets.body, root);
 
   const versions = new Map([[initial.revision, initial]]);
   const ambiguous = new Set();
@@ -38,7 +49,6 @@ function mount(root) {
   // footnote IDs must not collide with those in the visible revision.
   const sourceNodes = [...source.childNodes];
   source.replaceChildren();
-  const originalNodes = [...current.childNodes];
   const originalOptions = [...select.childNodes];
   const originalStatus = status.textContent;
   const originalHidden = controls.hidden;
@@ -57,9 +67,12 @@ function mount(root) {
     const revision = unavailable || requested === null ? initial.revision : requested;
     const entry = versions.get(revision);
     if (revision !== active) {
-      current.replaceChildren(...(revision === initial.revision
-        ? originalNodes
-        : [...entry.element.childNodes].map(node => node.cloneNode(true))));
+      root.dispatchEvent(new view.CustomEvent("legal:beforerevisionchange", { bubbles: true }));
+      targets.revision.textContent = entry.revision;
+      targets.date.textContent = entry.date;
+      const body = revision === initial.revision
+        ? currentBody : entry.element.querySelector("[data-legal-body]");
+      targets.body.replaceChildren(...[...body.childNodes].map(node => node.cloneNode(true)));
       active = revision;
       root.dispatchEvent(new view.CustomEvent("legal:revisionchange", {
         bubbles: true, detail: { revision, current: revision === initial.revision },
@@ -93,7 +106,7 @@ function mount(root) {
     destroyed = true;
     select.removeEventListener("change", onChange);
     view.removeEventListener("popstate", fromUrl);
-    current.replaceChildren(...originalNodes);
+    for (const [key, element] of Object.entries(targets)) element.replaceChildren(...originalFields[key]);
     source.replaceChildren(...sourceNodes);
     select.replaceChildren(...originalOptions);
     controls.hidden = originalHidden;

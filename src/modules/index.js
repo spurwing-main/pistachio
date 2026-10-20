@@ -12,6 +12,7 @@ import sectionNav from "./section-nav.js";
 import articleContents from "./article-contents.js";
 import riskStack from "./risk-stack.js";
 import legalRevisions from "./legal-revisions.js";
+import legalToc from "./legal-toc.js";
 
 export const modules = [
   nav,
@@ -27,4 +28,5 @@ export const modules = [
   sectionNav,
   articleContents,
   legalRevisions,
+  legalToc,
 ];

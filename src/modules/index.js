@@ -11,6 +11,7 @@ import statProgress from "./stat-progress.js";
 import sectionNav from "./section-nav.js";
 import articleContents from "./article-contents.js";
 import riskStack from "./risk-stack.js";
+import legalRevisions from "./legal-revisions.js";
 
 export const modules = [
   nav,
@@ -25,4 +26,5 @@ export const modules = [
   riskStack,
   sectionNav,
   articleContents,
+  legalRevisions,
 ];

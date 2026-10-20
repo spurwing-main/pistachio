@@ -14,6 +14,14 @@ tag.mjs           commit-pinned script tag
 
 ## Current JavaScript release
 
+20 October 2026: added the Legal revisions module and matching generated bundle.
+All 222 tests across 16 files pass. It supports sibling document/history CMS
+lists, revision/date/body switching, dotted revision URLs and browser history.
+The native CMS setup and page acceptance checks remain in the private Legal
+page records. This source release alone does not publish Webflow.
+
+### Previous release
+
 The JavaScript source, tests and matching bundle were committed and pushed as
 3379ecc1e2a109a3ed31025f1c4a57e99bdc8b58 on 19 October 2026. This includes
 Article Device Share/LinkedIn and footnote focus, hidden-menu focus handling,
@@ -65,6 +73,7 @@ The panel reports the selected source, including fallback to the CDN.
 | Risk stack | Stack eligibility, scaling and keyboard opt-out |
 | Section navigation | Opted-in section links and current location |
 | Article contents | Article contents and footnote reference/return behaviour, using section navigation |
+| Legal revisions | Opted-in CMS revision selector, body/date switching and revision URL history |
 | Accordions | Shared FAQ open/close and question interactions |
 
 CSS owns appearance and transitions; modules own the required state and interactions. Keep page-specific code out of another feature’s module. Existing native Webflow/Finsweet features retain their own behaviour; do not add a second handler for them.

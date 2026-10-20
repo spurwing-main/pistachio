@@ -1,5 +1,13 @@
 # Webflow CSS
 
+20 October local update: `rich-text.css` replaces the obsolete legal-body table
+selector with the Legal body attribute. It adds modest padding, a shared minimum cell
+width and scroll-area presentation, paired with `src/modules/legal-tables.js`.
+The updated CSS has not been saved to Webflow; the earlier saved-source match
+does not apply to this local change. Use the existing rich-text custom-code field
+when releasing it, and deliver the matching JS bundle. The CSS-only fallback keeps
+wide tables scrollable, while the module supplies the keyboard region. Sam will apply the CSS to Webflow.
+
 Readable CSS source for selectors/behaviour the Designer cannot express.
 Ordinary editable layout, typography, colours and component controls remain in
 Webflow. Native scoped Rich Text styling is supported; existing custom styles

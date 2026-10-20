@@ -129,9 +129,43 @@
   margin-top: 0.25em;
 }
 
-/* Legal tables retain their cells in a horizontal scroll area on narrow screens. */
-.legal_body table {
+/* Keep legal tables readable without changing article prose wrapping. */
+[data-legal-body] table,
+[data-legal-body] table :is(th, td, a) {
+  overflow-wrap: normal;
+  word-break: normal;
+  white-space: normal;
+}
+
+/* Scrollable fallback before JavaScript adds the focusable wrapper. */
+[data-legal-body] table {
   display: block;
   max-width: 100%;
   overflow-x: auto;
+  border-collapse: collapse;
+}
+
+[data-legal-body] :is(th, td) {
+  min-width: 12rem;
+  padding: 0.5rem 0.75rem;
+  vertical-align: top;
+  text-align: left;
+}
+
+[data-legal-body] .legal-table-scroll {
+  min-width: 0;
+  max-width: 100%;
+  overflow-x: auto;
+}
+
+[data-legal-body] .legal-table-scroll > table {
+  display: table;
+  width: 100%;
+  max-width: none;
+  overflow: visible;
+}
+
+[data-legal-body] .legal-table-scroll:focus-visible {
+  outline: 2px solid currentColor;
+  outline-offset: 3px;
 }

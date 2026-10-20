@@ -3,6 +3,13 @@
 // those wrappers in place. Only unwrap divs identified by actual TOC links.
 export function cloneLegalBody(body, root) {
   const copy = body.cloneNode(true);
+  // Runtime table controls must not enter revision/TOC content snapshots.
+  for (const wrapper of copy.querySelectorAll(".legal-table-scroll")) {
+    const table = wrapper.querySelector("table");
+    if (table) {
+      wrapper.replaceWith(table);
+    }
+  }
   const ids = new Set();
   for (const link of root.querySelectorAll('.page-contents a[href^="#"]')) {
     try { ids.add(decodeURIComponent(link.hash.slice(1))); } catch { /* Invalid anchor. */ }

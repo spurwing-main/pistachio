@@ -13,6 +13,7 @@ import articleContents from "./article-contents.js";
 import riskStack from "./risk-stack.js";
 import legalRevisions from "./legal-revisions.js";
 import legalToc from "./legal-toc.js";
+import legalTables from "./legal-tables.js";
 
 export const modules = [
   nav,
@@ -29,4 +30,5 @@ export const modules = [
   articleContents,
   legalRevisions,
   legalToc,
+  legalTables,
 ];

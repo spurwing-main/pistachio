@@ -73,7 +73,8 @@ The panel reports the selected source, including fallback to the CDN.
 | Risk stack | Stack eligibility, scaling and keyboard opt-out |
 | Section navigation | Opted-in section links and current location |
 | Article contents | Article contents and footnote reference/return behaviour, using section navigation |
-| Legal revisions | Opted-in CMS revision selector, body/date switching and revision URL history |
+| Legal revisions | Opted-in CMS revision selector, targeted body/date switching and revision URL history |
+| Legal TOC | Finsweet rebuilds after revision switching; manager readiness attribute for layout styling |
 | Accordions | Shared FAQ open/close and question interactions |
 
 CSS owns appearance and transitions; modules own the required state and interactions. Keep page-specific code out of another feature’s module. Existing native Webflow/Finsweet features retain their own behaviour; do not add a second handler for them.
@@ -91,3 +92,5 @@ class is not proof all modules succeeded; check the page and its controls.
 Compare custom CSS with the actual saved code before an approved change, then
 check the served version. Keep planning in sibling private/ and raw work in sibling local/, outside
 both Git repos.
+
+Local unreleased update, 20 October: Legal TOC restores its template/body before Finsweet restarts and sets `data-legal-toc-ready="true"` on the manager after valid links exist. Revision switching preserves the surrounding layout. The previously released loader pin does not include this update.

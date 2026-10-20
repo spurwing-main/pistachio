@@ -1,50 +1,67 @@
-
-  /* Form states the Designer can't hold: the checkbox tick and the field states.
+/* Form states the Designer can't hold: the checkbox tick and the field states.
      Sizes, borders and transitions live on the form_* classes. */
-  /* Webflow adds a clearfix to checkbox labels; in a flex row it becomes an item and takes a gap. */
-  .form_check::before,
-  .form_check::after {
-    content: none;
-  }
+/* Webflow adds a clearfix to checkbox labels; in a flex row it becomes an item and takes a gap. */
+.form_check::before,
+.form_check::after {
+  content: none;
+}
 
-  /* The tick is Figma's (12 × 9), drawn as a mask so it takes the text colour. */
-  .form_checkbox::before {
-    content: "";
-    width: 12px;
-    height: 9px;
-    background-color: var(--_color---black--100);
-    -webkit-mask: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 48 36'%3E%3Cpath d='M15 28.25 42.32.93C42.95.31 43.74 0 44.7 0s1.74.31 2.37.93c.62.62.93 1.41.93 2.37s-.31 1.74-.93 2.36L17.85 34.78C17.04 35.6 16.09 36 15 36s-2.03-.4-2.85-1.22L.93 23.63C.31 23 0 22.22 0 21.26s.31-1.74.93-2.37c.63-.62 1.42-.93 2.38-.93s1.74.31 2.37.93L15 28.25Z'/%3E%3C/svg%3E") center / contain no-repeat;
-    mask: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 48 36'%3E%3Cpath d='M15 28.25 42.32.93C42.95.31 43.74 0 44.7 0s1.74.31 2.37.93c.62.62.93 1.41.93 2.37s-.31 1.74-.93 2.36L17.85 34.78C17.04 35.6 16.09 36 15 36s-2.03-.4-2.85-1.22L.93 23.63C.31 23 0 22.22 0 21.26s.31-1.74.93-2.37c.63-.62 1.42-.93 2.38-.93s1.74.31 2.37.93L15 28.25Z'/%3E%3C/svg%3E") center / contain no-repeat;
-    transform: scale(0);
-    transition: transform var(--motion-fast) var(--ease-out);
-  }
+/* The tick is Figma's (12 × 9), drawn as a mask so it takes the text colour. */
+.form_checkbox::before {
+  content: "";
+  width: 12px;
+  height: 9px;
+  background-color: var(--_color---black--100);
+  -webkit-mask: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 48 36'%3E%3Cpath d='M15 28.25 42.32.93C42.95.31 43.74 0 44.7 0s1.74.31 2.37.93c.62.62.93 1.41.93 2.37s-.31 1.74-.93 2.36L17.85 34.78C17.04 35.6 16.09 36 15 36s-2.03-.4-2.85-1.22L.93 23.63C.31 23 0 22.22 0 21.26s.31-1.74.93-2.37c.63-.62 1.42-.93 2.38-.93s1.74.31 2.37.93L15 28.25Z'/%3E%3C/svg%3E")
+    center / contain no-repeat;
+  mask: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 48 36'%3E%3Cpath d='M15 28.25 42.32.93C42.95.31 43.74 0 44.7 0s1.74.31 2.37.93c.62.62.93 1.41.93 2.37s-.31 1.74-.93 2.36L17.85 34.78C17.04 35.6 16.09 36 15 36s-2.03-.4-2.85-1.22L.93 23.63C.31 23 0 22.22 0 21.26s.31-1.74.93-2.37c.63-.62 1.42-.93 2.38-.93s1.74.31 2.37.93L15 28.25Z'/%3E%3C/svg%3E")
+    center / contain no-repeat;
+  transform: scale(0);
+  transition: transform var(--motion-fast) var(--ease-out);
+}
 
-  .form_checkbox:checked {
-    border-color: var(--_color---violet--400);
-    background-color: var(--_color---violet--200);
-  }
+.form_checkbox:checked {
+  border-color: var(--_color---violet--400);
+  background-color: var(--_color---violet--200);
+}
 
-  .form_checkbox:checked::before {
-    transform: scale(1);
-  }
+.form_checkbox:checked::before {
+  transform: scale(1);
+}
 
-  .form_checkbox:focus-visible {
-    outline: 2px solid var(--_color---violet--600);
-    outline-offset: 2px;
-  }
+.form_checkbox:focus-visible {
+  outline: 2px solid var(--_color---violet--600);
+  outline-offset: 2px;
+}
 
-  /* The whole option responds, including keyboard focus on its checkbox. */
-  .form_check:has(.form_checkbox:checked) .form_check-label {
-    color: var(--_color---violet--1000);
-  }
+/* The whole option responds, including keyboard focus on its checkbox. */
+.form_check:has(.form_checkbox:checked) .form_check-label {
+  color: var(--_color---violet--1000);
+}
 
-  /* Show a filled, invalid field after leaving it; keep an untouched form quiet. */
-  .form_input:invalid:not(:placeholder-shown):not(:focus) {
-    border-color: var(--_color---rose--900);
-    background-color: var(--_color---rose--000);
-  }
+/* Show a filled, invalid field after leaving it; keep an untouched form quiet. */
+.form_input:invalid:not(:placeholder-shown):not(:focus) {
+  border-color: var(--_color---rose--900);
+  background-color: var(--_color---rose--000);
+}
 
-  .form_input:focus-visible {
-    outline: 2px solid var(--_color---violet--600);
-    outline-offset: 3px;
-  }
+.form_input:focus-visible {
+  outline: 2px solid var(--_color---violet--600);
+  outline-offset: 3px;
+}
+
+/* Webflow's bot check adds an empty box after the submit button; keep it out of the form's gap. */
+.w-form form > div:empty:last-child {
+  position: absolute;
+}
+
+/* The separated enquiry uses native Button/Arrow variants for its rest styles. */
+.email-enquiry[data-wf--forms-email-enquiry--variant="inline-separate"] .arrow {
+  --arrow-hover-bg: var(--_color---black--100);
+  --arrow-hover-fg: var(--_color---white--100);
+}
+.email-enquiry[data-wf--forms-email-enquiry--variant="inline-separate"]
+  .button:has(> .button_clickable:focus-visible) {
+  outline: 2px solid var(--_color---white--100);
+  outline-offset: 3px;
+}

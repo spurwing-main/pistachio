@@ -1,0 +1,15 @@
+{
+  "@context": "https://schema.org",
+  "@type": "WebPage",
+  "@id": "https://pistachioapp.com/terms-of-service#webpage",
+  "url": "https://pistachioapp.com/terms-of-service",
+  "name": "Terms of Service | Pistachio",
+  "description": "Read the terms of service for using Pistachio.",
+  "isPartOf": {
+    "@id": "https://pistachioapp.com/#website"
+  },
+  "about": {
+    "@id": "https://pistachioapp.com/#organization"
+  },
+  "inLanguage": "en"
+}

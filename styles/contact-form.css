@@ -11,3 +11,18 @@
   field-sizing: content;
   resize: vertical;
 }
+
+/* Contact owns these relationships; shared Eyebrow and Button defaults stay unchanged. */
+.contact-form_reasons > .text-eyebrow {
+  color: var(--_color---neutral--500);
+}
+.contact-form_fields > .button {
+  margin-top: 0;
+}
+@media (hover: hover) and (pointer: fine) {
+  .contact-form_choice:hover > input:not(:checked) + .contact-form_choice-label {
+    background-color: var(--_color---violet--000);
+    border-color: var(--_color---violet--400);
+    color: var(--_color---violet--700);
+  }
+}

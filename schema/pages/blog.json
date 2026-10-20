@@ -1,0 +1,15 @@
+{
+  "@context": "https://schema.org",
+  "@type": "CollectionPage",
+  "@id": "https://pistachioapp.com/blog#webpage",
+  "url": "https://pistachioapp.com/blog",
+  "name": "Cybersecurity Insights | Pistachio",
+  "description": "Explore Pistachio insights on cybersecurity, security awareness training and insider threat detection.",
+  "isPartOf": {
+    "@id": "https://pistachioapp.com/#website"
+  },
+  "about": {
+    "@id": "https://pistachioapp.com/#organization"
+  },
+  "inLanguage": "en"
+}

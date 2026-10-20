@@ -1,0 +1,12 @@
+/* Pricing owns this cross-slot state relationship. Native controls own layout.
+   Show pricing is a native section boolean; card Show price remains independent. */
+.section_pricing[data-show-pricing="false" i] .pricing-card_price-group,
+.section_pricing[data-show-pricing="false" i] .pricing-card_basis {
+  display: none !important;
+}
+
+/* List markers keep the card text colour independent. */
+.pricing-card_list li::marker,
+.pricing-card_basis li::marker {
+  color: var(--_color---violet--700);
+}

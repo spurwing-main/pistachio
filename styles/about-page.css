@@ -1,5 +1,0 @@
-/* About supplies a warm CV background and closes the shared desktop panels between choices. */
-#about-positions .cta_text { color: var(--_color---violet--1000); }
-@media (min-width: 992px) {
-  #about-page .nav[data-nav-ready] .nav_group:not([data-open="true"]) .nav_panel { display: none; }
-}

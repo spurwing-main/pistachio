@@ -1,3 +1,0 @@
-/* Hero: structural selectors only. Media switching lives in Blocks / Hero media
-   (native conditions); layout, typography, colour and spacing stay in Designer. */
-.hero_heading { text-wrap: balance; }

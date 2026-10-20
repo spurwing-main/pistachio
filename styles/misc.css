@@ -1,35 +1,34 @@
+/* Match the browser background to a dark hero, without changing section themes. */
+html:has(body[data-page-background="dark"]),
+body[data-page-background="dark"] {
+  background-color: var(--_color---violet--1000);
+}
 
-  /* Match the browser background to a dark hero, without changing section themes. */
-  html:has(body[data-page-background="dark"]),
-  body[data-page-background="dark"] {
-    background-color: var(--_color---violet--1000);
-  }
+body {
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  text-rendering: optimizeLegibility;
+}
 
-  body {
-    -webkit-font-smoothing: antialiased;
-    -moz-osx-font-smoothing: grayscale;
-    text-rendering: optimizeLegibility;
-  }
+::selection {
+  background-color: var(--_color---violet--200);
+  color: var(--_color---black--100);
+}
 
-  ::selection {
-    background-color: var(--_color---violet--200);
-    color: var(--_color---black--100);
-  }
+a:focus-visible,
+button:focus-visible,
+input:focus-visible,
+textarea:focus-visible,
+select:focus-visible,
+summary:focus-visible {
+  /* The theme's heading colour: dark purple on light sections, white on purple and slate. */
+  outline: 2px solid var(--_theme---section--heading);
+  outline-offset: 2px;
+}
 
-  a:focus-visible,
-  button:focus-visible,
-  input:focus-visible,
-  textarea:focus-visible,
-  select:focus-visible,
-  summary:focus-visible {
-    /* The theme's heading colour: dark purple on light sections, white on purple and slate. */
-    outline: 2px solid var(--_theme---section--heading);
-    outline-offset: 2px;
-  }
-
-  button,
-  [type='button'],
-  [type='submit'],
-  [type='reset'] {
-    touch-action: manipulation;
-  }
+button,
+[type="button"],
+[type="submit"],
+[type="reset"] {
+  touch-action: manipulation;
+}

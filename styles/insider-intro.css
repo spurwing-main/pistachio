@@ -12,3 +12,24 @@
 .insider-intro_layout:has(.stat-card) {
   row-gap: 2.5rem;
 }
+
+/* Wide keeps this heading and facts aligned to the full section container. */
+.insider-intro:where([class~="w-variant-3c610fc3-0187-48d7-da5f-bbc3e794f1a9" i])
+  .insider-intro_heading
+  .section-heading_title {
+  max-width: 48rem;
+}
+
+@media (min-width: 992px) {
+  .insider-intro:where([class~="w-variant-3c610fc3-0187-48d7-da5f-bbc3e794f1a9" i])
+    .insider-intro_heading
+    .section-heading_title {
+    line-height: 1.05;
+  }
+  .insider-intro:where([class~="w-variant-3c610fc3-0187-48d7-da5f-bbc3e794f1a9" i])
+    .insider-intro_heading
+    .section-heading_title
+    h2 {
+    text-wrap: wrap;
+  }
+}

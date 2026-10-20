@@ -1,0 +1,15 @@
+{
+  "@context": "https://schema.org",
+  "@type": "CollectionPage",
+  "@id": "https://pistachioapp.com/customer-stories#webpage",
+  "url": "https://pistachioapp.com/customer-stories",
+  "name": "Customer Stories | Pistachio",
+  "description": "Read how IT teams and MSPs use Pistachio to manage human risk and reduce their manual workload.",
+  "isPartOf": {
+    "@id": "https://pistachioapp.com/#website"
+  },
+  "about": {
+    "@id": "https://pistachioapp.com/#organization"
+  },
+  "inLanguage": "en"
+}

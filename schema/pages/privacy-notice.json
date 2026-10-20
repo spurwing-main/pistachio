@@ -1,0 +1,15 @@
+{
+  "@context": "https://schema.org",
+  "@type": "WebPage",
+  "@id": "https://pistachioapp.com/privacy-notice#webpage",
+  "url": "https://pistachioapp.com/privacy-notice",
+  "name": "Privacy Notice | Pistachio",
+  "description": "Read how Pistachio handles personal data and how to contact us about your privacy.",
+  "isPartOf": {
+    "@id": "https://pistachioapp.com/#website"
+  },
+  "about": {
+    "@id": "https://pistachioapp.com/#organization"
+  },
+  "inLanguage": "en"
+}

@@ -1,0 +1,25 @@
+{
+  "@context": "https://schema.org",
+  "@graph": [
+    {
+      "@type": "Organization",
+      "@id": "https://pistachioapp.com/#organization",
+      "name": "Pistachio",
+      "url": "https://pistachioapp.com/",
+      "logo": "https://cdn.prod.website-files.com/6ac37057a89d003db6effd5c/6ac379f6c74b8c9ded305908_webclip-256.png",
+      "sameAs": [
+        "https://www.linkedin.com/company/pistachioapp",
+        "https://www.g2.com/products/pistachio/reviews"
+      ]
+    },
+    {
+      "@type": "WebSite",
+      "@id": "https://pistachioapp.com/#website",
+      "name": "Pistachio",
+      "url": "https://pistachioapp.com/",
+      "publisher": {
+        "@id": "https://pistachioapp.com/#organization"
+      }
+    }
+  ]
+}

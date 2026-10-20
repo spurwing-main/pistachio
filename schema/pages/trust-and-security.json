@@ -1,0 +1,15 @@
+{
+  "@context": "https://schema.org",
+  "@type": "WebPage",
+  "@id": "https://pistachioapp.com/trust-and-security#webpage",
+  "url": "https://pistachioapp.com/trust-and-security",
+  "name": "Trust and Security | Pistachio",
+  "description": "Learn about Pistachio’s approach to trust and security, including ISO 27001 certification and independent audits.",
+  "isPartOf": {
+    "@id": "https://pistachioapp.com/#website"
+  },
+  "about": {
+    "@id": "https://pistachioapp.com/#organization"
+  },
+  "inLanguage": "en"
+}

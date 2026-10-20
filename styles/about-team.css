@@ -1,25 +1,50 @@
 /* About rows use their own measured distance, including each item's trailing space. */
-[data-about-team-ready] { overflow-x: hidden; }
+[data-about-team-ready] {
+  overflow-x: hidden;
+}
 [data-about-team-ready] [data-about-team-track] {
   animation: about-team-loop var(--about-team-duration) linear infinite;
 }
-[data-about-team-direction="reverse"] [data-about-team-track] { animation-direction: reverse; }
+[data-about-team-direction="reverse"] [data-about-team-track] {
+  animation-direction: reverse;
+}
 [data-about-team-row]:focus-within [data-about-team-track],
-[data-about-team-paused="true"] [data-about-team-track],
-[data-about-team-visible="false"] [data-about-team-track] { animation-play-state: paused; }
-[data-about-team-row]:has(:focus-visible) { overflow-x: auto; }
-[data-about-team-row]:has(:focus-visible) [data-about-team-track] { animation: none; transform: none; }
-[data-about-team-row]:has(:focus-visible) [data-about-team-clone] { display: none; }
-#about-team [data-about-team-empty="true"] { display: none; }
-[data-about-team-pause]:not([aria-pressed]) { display: none; }
-[data-about-team-duplicate] .about-team-card_details,
-[data-about-team-duplicate] .about-team-card_spotlight { display: none; }
-@keyframes about-team-loop { to { transform: translateX(calc(-1 * var(--about-team-distance))); } }
+[data-about-team-visible="false"] [data-about-team-track] {
+  animation-play-state: paused;
+}
+[data-about-team-row]:has(:focus-visible) {
+  overflow-x: auto;
+}
+[data-about-team-row]:has(:focus-visible) [data-about-team-track] {
+  animation: none;
+  transform: none;
+}
+[data-about-team-row]:has(:focus-visible) [data-about-team-clone] {
+  display: none;
+}
+.about-team [data-about-team-empty="true"] {
+  display: none;
+}
+@keyframes about-team-loop {
+  to {
+    transform: translateX(calc(-1 * var(--about-team-distance)));
+  }
+}
 @media (prefers-reduced-motion: reduce) {
-  [data-about-team-ready] { overflow-x: auto; }
-  [data-about-team-row] [data-about-team-track] { animation: none; transform: none; }
-  [data-about-team-clone], #about-team [data-about-team-duplicate], [data-about-team-pause] { display: none; }
+  [data-about-team-ready] {
+    overflow-x: auto;
+  }
+  [data-about-team-row] [data-about-team-track] {
+    animation: none;
+    transform: none;
+  }
+  [data-about-team-clone],
+  .about-team [data-about-team-duplicate] {
+    display: none;
+  }
 }
 @media (hover: hover) and (pointer: fine) {
-  [data-about-team-row]:hover [data-about-team-track] { animation-play-state: paused; }
+  [data-about-team-row]:hover [data-about-team-track] {
+    animation-play-state: paused;
+  }
 }

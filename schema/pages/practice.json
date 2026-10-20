@@ -1,0 +1,15 @@
+{
+  "@context": "https://schema.org",
+  "@type": "WebPage",
+  "@id": "https://pistachioapp.com/practice#webpage",
+  "url": "https://pistachioapp.com/practice",
+  "name": "Security Awareness Training | Pistachio",
+  "description": "Personalised, automated security awareness training that changes employee behaviour and makes your people harder to exploit.",
+  "isPartOf": {
+    "@id": "https://pistachioapp.com/#website"
+  },
+  "about": {
+    "@id": "https://pistachioapp.com/#organization"
+  },
+  "inLanguage": "en"
+}

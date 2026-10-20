@@ -1,60 +1,74 @@
+/* Motion tokens: the only place a duration or easing is defined. */
+:root {
+  --motion-fast: 160ms;
+  --motion-base: 240ms;
+  --motion-slow: 500ms;
+  --motion-rise: 0.75rem;
+  --motion-step: 80ms;
+  --motion-reveal: 900ms;
+  --motion-reveal-rise: 1.5rem;
+  /* Pistachio's own curve, from the current site's buttons. */
+  --ease-out: cubic-bezier(0, 0.6, 0.5, 1);
+  --ease-out-expo: cubic-bezier(0.16, 1, 0.3, 1);
+  --ease-in-out: cubic-bezier(0.65, 0, 0.35, 1);
+}
 
-  /* Motion tokens: the only place a duration or easing is defined. */
-  :root {
-    --motion-fast: 160ms;
-    --motion-base: 240ms;
-    --motion-slow: 500ms;
-    --motion-rise: 0.75rem;
-    --motion-step: 80ms;
-    --motion-reveal: 900ms;
-    --motion-reveal-rise: 1.5rem;
-    /* Pistachio's own curve, from the current site's buttons. */
-    --ease-out: cubic-bezier(0, 0.6, 0.5, 1);
-    --ease-out-expo: cubic-bezier(0.16, 1, 0.3, 1);
-    --ease-in-out: cubic-bezier(0.65, 0, 0.35, 1);
-  }
-
-  /* Entrances: one effect everywhere, a short rise and fade on a long soft ease.
+/* Entrances: one effect everywhere, a short rise and fade on a long soft ease.
      Blocks below the fold play as they scroll in (the reveal module reads these values). */
-  [data-reveal] {
-    --reveal-duration: var(--motion-reveal);
-    --reveal-from: translateY(var(--motion-reveal-rise));
-    --reveal-ease: var(--ease-out-expo);
-  }
+[data-reveal] {
+  --reveal-duration: var(--motion-reveal);
+  --reveal-from: translateY(var(--motion-reveal-rise));
+  --reveal-ease: var(--ease-out-expo);
+}
 
-  /* The hero plays on first paint with CSS alone, so it never flashes:
+/* The hero plays on first paint with CSS alone, so it never flashes:
      heading, copy, buttons, then the video. */
-  @keyframes reveal-in {
-    from {
-      opacity: 0;
-      transform: translateY(var(--motion-reveal-rise));
-    }
+@keyframes reveal-in {
+  from {
+    opacity: 0;
+    transform: translateY(var(--motion-reveal-rise));
   }
+}
 
-  @media (prefers-reduced-motion: no-preference) {
-    [data-reveal="hero"] [data-reveal-step] {
-      animation: reveal-in var(--motion-reveal) var(--ease-out-expo) both;
-    }
-    [data-reveal="hero"] [data-reveal-step]:nth-child(2) { animation-delay: calc(var(--motion-step) * 1); }
-    [data-reveal="hero"] [data-reveal-step]:nth-child(3) { animation-delay: calc(var(--motion-step) * 2); }
-    [data-reveal="hero"] [data-reveal-step="media"] { animation-delay: calc(var(--motion-step) * 1.5); }
+@media (prefers-reduced-motion: no-preference) {
+  [data-reveal="hero"] [data-reveal-step] {
+    animation: reveal-in var(--motion-reveal) var(--ease-out-expo) both;
   }
+  [data-reveal="hero"] [data-reveal-step]:nth-child(2) {
+    animation-delay: calc(var(--motion-step) * 1);
+  }
+  [data-reveal="hero"] [data-reveal-step]:nth-child(3) {
+    animation-delay: calc(var(--motion-step) * 2);
+  }
+  [data-reveal="hero"] [data-reveal-step="media"] {
+    animation-delay: calc(var(--motion-step) * 1.5);
+  }
+}
 
-  /* A card responds as one: the photograph and link arrow move together
+/* A card responds as one: the photograph and link arrow move together
      (the photograph's transition is on product-card_image in the Designer). */
-  @media (hover: hover) and (pointer: fine) {
-    .product-card:hover .product-card_image { transform: scale(1.035); }
-    .product-card:hover .arrow { background-color: var(--arrow-hover-bg); color: var(--arrow-hover-fg); }
-    .product-card:hover .arrow_icon { transform: translateX(100%); }
+@media (hover: hover) and (pointer: fine) {
+  .product-card:hover .product-card_image {
+    transform: scale(1.035);
   }
-
-  .product-card:focus-within .product-card_image { transform: scale(1.035); }
-
-  @media (prefers-reduced-motion: reduce) {
-    *,
-    *::before,
-    *::after {
-      transition-duration: 0.01ms !important;
-      animation-duration: 0.01ms !important;
-    }
+  .product-card:hover .arrow {
+    background-color: var(--arrow-hover-bg);
+    color: var(--arrow-hover-fg);
   }
+  .product-card:hover .arrow_icon {
+    transform: translateX(100%);
+  }
+}
+
+.product-card:focus-within .product-card_image {
+  transform: scale(1.035);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    transition-duration: 0.01ms !important;
+    animation-duration: 0.01ms !important;
+  }
+}

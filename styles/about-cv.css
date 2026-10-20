@@ -1,0 +1,4 @@
+/* About supplies a warm CV background. Shared navigation owns its panels. */
+.about-cv .cta_text {
+  color: var(--_color---violet--1000);
+}

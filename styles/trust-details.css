@@ -12,3 +12,45 @@
   border-radius: 50%;
   background-color: currentColor;
 }
+
+
+/* Bound Rich Text links render outside the native nested-tag editing context. */
+.trust-card_footer .trust-card_text a[href^="mailto:"] {
+  color: var(--_color---violet--800);
+  font-weight: 500;
+}
+
+/* The fixed-colour shield asset follows its parent pill state. */
+@media (hover: hover) and (pointer: fine) {
+  .trust-tag[data-wf--items-document-link--variant="compact-links"]:hover
+    .trust-tag_icon {
+    filter: brightness(0) invert(1);
+  }
+}
+.trust-tag[data-wf--items-document-link--variant="compact-links"]:focus-visible
+  .trust-tag_icon {
+  filter: brightness(0) invert(1);
+}
+
+/* The documentation request keeps its small arrow colours while the arrow slides. */
+.trust-card_footer.is-request .arrow {
+  --arrow-hover-bg: var(--_color---white--100);
+  --arrow-hover-fg: var(--_color---violet--600);
+}
+
+/* Numbered box bodies use one Rich Text field in both existing layouts. */
+.trust-card_box:has(> .trust-card_num) > .trust-card_text.w-richtext > :first-child {
+  margin-top: 0;
+}
+.trust-card_box:has(> .trust-card_num) > .trust-card_text.w-richtext > :last-child {
+  margin-bottom: 0;
+}
+.trust-card_box:has(> .trust-card_num) > .trust-card_text.w-richtext strong {
+  color: var(--_color---black--100);
+  font-weight: 400;
+}
+@media (min-width: 768px) {
+  .trust-card_box:has(> .trust-card_num) > .trust-card_text.w-richtext:has(strong) {
+    color: rgba(26, 18, 34, 0.4);
+  }
+}

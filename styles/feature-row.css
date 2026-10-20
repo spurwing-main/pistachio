@@ -4,6 +4,41 @@
   --_theme---section--tile-bg: var(--_color---violet--000);
 }
 
+/* Bound Rich Text children do not receive native variant classes.
+   Keep Inline mobile and Muted leads dark and regular; native styles own the body. */
+.feature-row:is(
+  [data-wf--items-feature-row--variant="inline-mobile" i],
+  [data-wf--items-feature-row--variant="muted" i]
+) .feature-row_text strong {
+  color: var(--_color---black--100);
+  font-weight: 400;
+}
+
+/* Security rows keep the lead readable above their muted description.
+   The source SVGs provide their own icon dimensions inside the shared tile. */
+@media screen and (min-width: 992px) {
+  .feature-row[data-wf--items-feature-row--variant="security" i] .feature-row_text strong {
+    color: var(--_color---black--100);
+    font-weight: 400;
+  }
+  .feature-row[data-wf--items-feature-row--variant="security" i] .icon-tile_icon {
+    width: auto;
+    height: auto;
+    max-width: 2.75rem;
+    max-height: 2.75rem;
+  }
+}
+
+/* Keep the source glyphs readable in the existing smaller mobile tiles. */
+@media screen and (max-width: 991px) {
+  .feature-row[data-wf--items-feature-row--variant="security" i] .icon-tile_icon {
+    width: auto;
+    height: auto;
+    max-width: 80%;
+    max-height: 80%;
+  }
+}
+
 /* Mobile Feature rows use a compact icon tile without changing other uses. */
 @media screen and (max-width: 767px) {
   .feature-row {

@@ -16,3 +16,28 @@
     width: 100%;
   }
 }
+/* Keep the quote's native attribution conditions while changing this section's
+   desktop type. Other quote placements and mobile type keep their defaults. */
+@media screen and (min-width: 992px) {
+  .case-study[data-wf--sections-case-study--variant="compact-quote" i]
+    .testimonial-card[data-wf--items-testimonial-card--variant="centred-dark" i]
+    .testimonial-card_quote {
+    max-width: 56.25rem;
+    font-size: var(--_type---title--xs);
+    line-height: var(--_type---lh--relaxed);
+  }
+  .case-study[data-wf--sections-case-study--variant="compact-quote" i]
+    .testimonial-card[data-wf--items-testimonial-card--variant="centred-dark" i]
+    .testimonial-card_name {
+    font-size: var(--_type---body--m);
+    line-height: 1.375;
+    color: var(--_color---warm--000);
+  }
+  .case-study[data-wf--sections-case-study--variant="compact-quote" i]
+    .testimonial-card[data-wf--items-testimonial-card--variant="centred-dark" i]
+    :is(.testimonial-card_role, .testimonial-card_details) {
+    font-size: var(--_type---body--s);
+    line-height: var(--_type---lh--snug);
+    color: var(--_color---neutral--300);
+  }
+}

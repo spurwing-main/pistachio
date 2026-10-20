@@ -1,0 +1,15 @@
+{
+  "@context": "https://schema.org",
+  "@type": "AboutPage",
+  "@id": "https://pistachioapp.com/about#webpage",
+  "url": "https://pistachioapp.com/about",
+  "name": "About Pistachio | Pistachio",
+  "description": "Learn about Pistachio and our approach to human risk management, security awareness training and insider threat detection.",
+  "isPartOf": {
+    "@id": "https://pistachioapp.com/#website"
+  },
+  "about": {
+    "@id": "https://pistachioapp.com/#organization"
+  },
+  "inLanguage": "en"
+}

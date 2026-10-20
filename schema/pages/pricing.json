@@ -1,0 +1,15 @@
+{
+  "@context": "https://schema.org",
+  "@type": "WebPage",
+  "@id": "https://pistachioapp.com/pricing#webpage",
+  "url": "https://pistachioapp.com/pricing",
+  "name": "Pricing | Pistachio",
+  "description": "Explore Pistachio pricing for security awareness training and insider threat detection. Contact our team to discuss your organisation.",
+  "isPartOf": {
+    "@id": "https://pistachioapp.com/#website"
+  },
+  "about": {
+    "@id": "https://pistachioapp.com/#organization"
+  },
+  "inLanguage": "en"
+}

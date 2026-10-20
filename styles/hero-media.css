@@ -16,14 +16,21 @@
   /* The attribute confirms that a mobile image is available.
      DOM presence alone is insufficient in Designer, where
      conditionally hidden elements may still exist. */
-  .hero-media_visual[data-has-img-mbl='true'] > .hero-media_image-mobile {
+  .hero-media_visual[data-has-img-mbl="true"] > .hero-media_image-mobile {
     display: block;
   }
 
   /* Hide the desktop image only when the attribute is true
      and the mobile image element exists; otherwise retain it
      as the fallback. */
-  .hero-media_visual[data-has-img-mbl='true']:has(> .hero-media_image-mobile) > .hero-media_image {
+  .hero-media_visual[data-has-img-mbl="true"]:has(> .hero-media_image-mobile) > .hero-media_image {
     display: none;
   }
+}
+
+/* Empty forwarded highlight slots must not leave a mobile margin and gaps. */
+.hero-media_highlights:has(.hero_highlight-content):not(
+    :has(.hero_highlight-content:not(:empty))
+  ) {
+  display: none;
 }

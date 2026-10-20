@@ -1,23 +1,54 @@
 /* Blog filters: states belong to these controls, not shared component defaults. */
-#blog-page .resource-filter { cursor: pointer; text-decoration: none; }
-#blog-page .resource-filter:focus-within {
+.page-wrap.is-blog-page .resource-filter {
+  cursor: pointer;
+  text-decoration: none;
+}
+.page-wrap.is-blog-page .resource-filter:focus-within {
   outline: 2px solid var(--_color---violet--700);
   outline-offset: 3px;
   border-radius: 8px;
 }
-#blog-page .resource-filter:is(.is-list-active, :has(input:checked)) > .resource-category,
-#blog-page .resources-category_row:not(:has(input:checked)) > .resource-filter:first-child > .resource-category {
+.page-wrap.is-blog-page
+  .resource-filter:is(.is-list-active, :has(input:checked))
+  > .resource-category,
+.page-wrap.is-blog-page
+  .resources-category_row:not(:has(input:checked))
+  > .resource-filter:first-child
+  > .resource-category {
   background: var(--_color---violet--900);
   border-color: var(--_color---violet--900);
   color: var(--_color---white--100);
 }
-#blog-page .resource-filter:is(.is-list-active, :has(input:checked)) > .resource-category :is(.resource-category_title, .resource-category_text, p),
-#blog-page .resources-category_row:not(:has(input:checked)) > .resource-filter:first-child > .resource-category :is(.resource-category_title, .resource-category_text, p) { color: inherit; }
-#blog-page .resource-filter:is(.is-list-active, :has(input:checked)) > .tag,
-#blog-page .resources-topics:not(:has(input[fs-list-field="topics"]:checked)) [fs-list-element="clear"][fs-list-field="topics"] > .tag {
+.page-wrap.is-blog-page
+  .resource-filter:is(.is-list-active, :has(input:checked))
+  > .resource-category
+  :is(.resource-category_title, .resource-category_text, p),
+.page-wrap.is-blog-page
+  .resources-category_row:not(:has(input:checked))
+  > .resource-filter:first-child
+  > .resource-category
+  :is(.resource-category_title, .resource-category_text, p) {
+  color: inherit;
+}
+.page-wrap.is-blog-page .resource-filter:is(.is-list-active, :has(input:checked)) > .tag,
+.page-wrap.is-blog-page
+  .resources-topics:not(:has(input[fs-list-field="topics"]:checked))
+  [fs-list-element="clear"][fs-list-field="topics"]
+  > .tag {
   background: var(--_color---violet--900);
   color: var(--_color---white--100);
 }
-#blog-page .resources-topic_options > .w-dyn-item:nth-child(n + 9):not(:has(input:checked)) { display: none; }
-#blog-page .resources-topics:has([data-show-topics] input:checked) .resources-topic_options > .w-dyn-item { display: block; }
-#blog-page .button.is-resource-load > .button_icon svg { transform: rotate(90deg); }
+.page-wrap.is-blog-page
+  .resources-topic_options
+  > .w-dyn-item:nth-child(n + 9):not(:has(input:checked)) {
+  display: none;
+}
+.page-wrap.is-blog-page
+  .resources-topics:has([data-show-topics] input:checked)
+  .resources-topic_options
+  > .w-dyn-item {
+  display: block;
+}
+.page-wrap.is-blog-page .button.is-resource-load > .button_icon svg {
+  transform: rotate(90deg);
+}

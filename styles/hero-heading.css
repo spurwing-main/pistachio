@@ -1,7 +1,31 @@
 /* Shared heading is opt-in; existing Hero defaults keep their original fields. */
-.section_hero[data-shared-heading="True"] .hero_content > :is(.hero_eyebrow,.hero_heading,.hero_intro) { display: none; }
-.section_hero[data-shared-heading="True"] .hero_heading-group { display: block; }
-.hero_heading-group .section-heading_title { text-wrap: balance; }
-.hero_heading-group .section-heading_title :is(h1,h2,h3,h4,h5,h6,p),
-.hero_heading-group .section-heading_text p { font: inherit; letter-spacing: inherit; margin: 0; }
-.section_hero > .w-embed { display: none; }
+.section_hero[data-shared-heading="True"]
+  .hero_content
+  > :is(.hero_eyebrow, .hero_heading, .hero_intro) {
+  display: none;
+}
+.section_hero[data-shared-heading="True"] .hero_heading-group {
+  display: block;
+}
+.hero_heading-group .section-heading_title {
+  text-wrap: balance;
+}
+.hero_heading-group .section-heading_title :is(h1, h2, h3, h4, h5, h6, p),
+.hero_heading-group .section-heading_text p {
+  font: inherit;
+  letter-spacing: inherit;
+  margin: 0;
+}
+
+/* The two Trust intro paragraphs keep the source blank line.
+   The panel cannot target only the paragraph following another paragraph. */
+.section-heading[data-wf--items-section-heading--variant="hero-trust"]
+  .section-heading_text > p + p {
+  margin-top: 1.375rem;
+}
+
+/* Trust follows the source line breaks rather than the shared balanced title. */
+.section-heading[data-wf--items-section-heading--variant="hero-trust"]
+  .section-heading_title > :is(h1, h2, h3, h4, h5, h6, p) {
+  text-wrap: wrap;
+}

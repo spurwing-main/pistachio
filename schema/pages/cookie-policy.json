@@ -1,0 +1,15 @@
+{
+  "@context": "https://schema.org",
+  "@type": "WebPage",
+  "@id": "https://pistachioapp.com/cookie-policy#webpage",
+  "url": "https://pistachioapp.com/cookie-policy",
+  "name": "Cookie Policy | Pistachio",
+  "description": "Learn how Pistachio uses cookies and how to manage your preferences.",
+  "isPartOf": {
+    "@id": "https://pistachioapp.com/#website"
+  },
+  "about": {
+    "@id": "https://pistachioapp.com/#organization"
+  },
+  "inLanguage": "en"
+}

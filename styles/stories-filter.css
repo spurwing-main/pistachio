@@ -1,0 +1,17 @@
+/* Native radio state relationships for the Customer Stories CMS filters. */
+.stories-filter_option:has(.stories-filter_input:checked) > .tag {
+  background-color: var(--_color---violet--900);
+  border-color: var(--_color---violet--900);
+  color: var(--_color---white--100);
+}
+.stories-filter_option:has(.stories-filter_input:focus-visible) {
+  outline: 2px solid var(--_color---violet--600);
+  outline-offset: 3px;
+}
+.stories-filter_option:hover > .tag {
+  border-color: var(--_color---violet--900);
+}
+/* The controller removes unmatched items; expose the existing native message. */
+.stories-feedback_grid:not(:has(> .w-dyn-item)) + .w-dyn-empty {
+  display: block !important;
+}

@@ -128,3 +128,10 @@
 .w-richtext:not(.text-rich-text) li + li {
   margin-top: 0.25em;
 }
+
+/* Legal tables retain their cells in a horizontal scroll area on narrow screens. */
+.legal_body table {
+  display: block;
+  max-width: 100%;
+  overflow-x: auto;
+}

@@ -1,0 +1,15 @@
+{
+  "@context": "https://schema.org",
+  "@type": "WebPage",
+  "@id": "https://pistachioapp.com/it-teams#webpage",
+  "url": "https://pistachioapp.com/it-teams",
+  "name": "Human Risk Management for IT Teams | Pistachio",
+  "description": "Reduce your human risk and manual workload with automated security awareness training and insider threat detection for IT teams.",
+  "isPartOf": {
+    "@id": "https://pistachioapp.com/#website"
+  },
+  "about": {
+    "@id": "https://pistachioapp.com/#organization"
+  },
+  "inLanguage": "en"
+}

@@ -1,0 +1,15 @@
+{
+  "@context": "https://schema.org",
+  "@type": "WebPage",
+  "@id": "https://pistachioapp.com/human-risk-management#webpage",
+  "url": "https://pistachioapp.com/human-risk-management",
+  "name": "Human Risk Management | Pistachio",
+  "description": "Automated security awareness training and insider threat detection, built for lean IT teams and MSPs.",
+  "isPartOf": {
+    "@id": "https://pistachioapp.com/#website"
+  },
+  "about": {
+    "@id": "https://pistachioapp.com/#organization"
+  },
+  "inLanguage": "en"
+}

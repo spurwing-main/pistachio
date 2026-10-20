@@ -1,0 +1,15 @@
+{
+  "@context": "https://schema.org",
+  "@type": "WebPage",
+  "@id": "https://pistachioapp.com/#webpage",
+  "url": "https://pistachioapp.com/",
+  "name": "Pistachio - Cybersecurity Protection",
+  "description": "Pistachio combines insider threat detection with security awareness training to seamlessly protect your organization.",
+  "isPartOf": {
+    "@id": "https://pistachioapp.com/#website"
+  },
+  "about": {
+    "@id": "https://pistachioapp.com/#organization"
+  },
+  "inLanguage": "en"
+}

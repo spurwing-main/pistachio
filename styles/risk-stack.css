@@ -4,15 +4,21 @@
   --risk-stack-ready: 1;
   --risk-stack-top: 112px;
 }
-.risk-panel_surface { transform-origin: center top; }
-.risk-panel :is(a, button, input, select, textarea) { scroll-margin-top: 128px; }
+
+.risk-panel :is(a, button, input, select, textarea) {
+  scroll-margin-top: 128px;
+}
 @media (min-width: 768px) and (prefers-reduced-motion: no-preference) {
-  .risk-stack.is-risk-stack-active .risk-stack_panels { isolation: isolate; }
+  .risk-stack.is-risk-stack-active .risk-stack_panels {
+    isolation: isolate;
+  }
   .risk-stack.is-risk-stack-active .risk-panel {
     position: sticky;
     top: calc(var(--risk-stack-top) + var(--risk-stack-index, 0) * 16px);
   }
 }
 @media (prefers-reduced-motion: reduce) {
-  .risk-stack .risk-panel_surface { transform: none !important; }
+  .risk-stack .risk-panel_surface {
+    transform: none !important;
+  }
 }

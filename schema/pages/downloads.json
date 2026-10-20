@@ -1,0 +1,15 @@
+{
+  "@context": "https://schema.org",
+  "@type": "CollectionPage",
+  "@id": "https://pistachioapp.com/downloads#webpage",
+  "url": "https://pistachioapp.com/downloads",
+  "name": "Reports and Downloads | Pistachio",
+  "description": "Explore Pistachio reports and resources on human risk, phishing behaviour and cybersecurity.",
+  "isPartOf": {
+    "@id": "https://pistachioapp.com/#website"
+  },
+  "about": {
+    "@id": "https://pistachioapp.com/#organization"
+  },
+  "inLanguage": "en"
+}

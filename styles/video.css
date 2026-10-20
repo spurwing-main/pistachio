@@ -1,38 +1,40 @@
-
-  /* Video pop-up: a dialog inside the Video card (Designer), sized and coloured on the
+/* Video pop-up: a dialog inside the Video card (Designer), sized and coloured on the
      video-dialog classes. Only its open and close motion and its backdrop live here.
      A Video card with no video set isn't clickable. */
-  .video-card_play[href="#"] {
-    pointer-events: none;
-  }
+.video-card_play[href="#"] {
+  pointer-events: none;
+}
 
-  .video-dialog {
+.video-dialog {
+  opacity: 0;
+  scale: 0.97;
+  transition:
+    opacity var(--motion-base) var(--ease-out),
+    scale var(--motion-base) var(--ease-out),
+    overlay var(--motion-base) allow-discrete,
+    display var(--motion-base) allow-discrete;
+}
+
+.video-dialog[open] {
+  opacity: 1;
+  scale: 1;
+}
+
+@starting-style {
+  .video-dialog[open] {
     opacity: 0;
     scale: 0.97;
-    transition: opacity var(--motion-base) var(--ease-out), scale var(--motion-base) var(--ease-out),
-      overlay var(--motion-base) allow-discrete, display var(--motion-base) allow-discrete;
   }
+}
 
-  .video-dialog[open] {
-    opacity: 1;
-    scale: 1;
-  }
+.video-dialog::backdrop {
+  background: rgb(0 0 0 / 0.8);
+}
 
-  @starting-style {
-    .video-dialog[open] {
-      opacity: 0;
-      scale: 0.97;
-    }
-  }
-
-  .video-dialog::backdrop {
-    background: rgb(0 0 0 / 0.8);
-  }
-
-  /* The player is made by the script, so it has no class to style in the Designer. */
-  .video-dialog_frame iframe {
-    display: block;
-    width: 100%;
-    height: 100%;
-    border: 0;
-  }
+/* The player is made by the script, so it has no class to style in the Designer. */
+.video-dialog_frame iframe {
+  display: block;
+  width: 100%;
+  height: 100%;
+  border: 0;
+}

@@ -1,9 +1,52 @@
-.resource-card>.w-embed{display:none}
-.resource-card:focus-within .resource-card_heading{text-decoration:underline;text-underline-offset:.15em}
-.resource-card:focus-within .resource-card_read-more .arrow{background:var(--_color---violet--700);color:var(--_color---white--100)}
-.resource-card_read-more .button[data-wf--core-button--variant="text" i]{position:static}
-.resource-card:focus-within{outline:2px solid var(--_color---violet--1000);outline-offset:4px}
+.resource-card:focus-within .resource-card_read-more .arrow {
+  background: var(--_color---violet--700);
+  color: var(--_color---white--100);
+}
+/* The existing action link stretches to the card; transformed Button wrappers must not contain it. */
+.resource-card :is(.resource-card_read-more, .resource-card_featured-actions) > .button {
+  position: static;
+  transform: none;
+}
+.resource-card
+  :is(.resource-card_read-more, .resource-card_featured-actions)
+  > .button
+  > a.button_clickable {
+  inset: 0;
+  z-index: 1;
+}
+.resource-card:focus-within {
+  outline: 2px solid var(--_color---violet--1000);
+  outline-offset: 4px;
+}
+/* The existing card state also drives its action arrow, without adding a second link. */
+.resource-card:has(:focus-visible) .resource-card_read-more .arrow_icon {
+  transform: translateX(100%);
+}
+@media (hover: hover) and (pointer: fine) {
+  .resource-card:hover .resource-card_read-more .arrow_icon {
+    transform: translateX(100%);
+  }
+  .resource-card:hover .resource-card_read-more .arrow_icon:last-child {
+    filter: blur(2px);
+  }
+}
 
-.resource-card_title-rich :is(h1,h2,h3,h4,h5,h6,p){font:inherit;letter-spacing:inherit;margin:0}
-.resource-card:focus-within .resource-card_title-rich{text-decoration:underline;text-underline-offset:.15em}
-@media (hover: hover) and (pointer: fine){.resource-card:hover .resource-card_heading,.resource-card:hover .resource-card_title-rich{text-decoration:underline;text-underline-offset:.15em}.resource-card:hover .resource-card_read-more .arrow{background:var(--_color---violet--700);color:var(--_color---white--100)}}
+.resource-card_title-rich :is(h1, h2, h3, h4, h5, h6, p) {
+  font: inherit;
+  letter-spacing: inherit;
+  margin: 0;
+}
+.resource-card:focus-within .resource-card_title-rich {
+  text-decoration: underline;
+  text-underline-offset: 0.15em;
+}
+@media (hover: hover) and (pointer: fine) {
+  .resource-card:hover .resource-card_title-rich {
+    text-decoration: underline;
+    text-underline-offset: 0.15em;
+  }
+  .resource-card:hover .resource-card_read-more .arrow {
+    background: var(--_color---violet--700);
+    color: var(--_color---white--100);
+  }
+}

@@ -1,0 +1,15 @@
+{
+  "@context": "https://schema.org",
+  "@type": "ContactPage",
+  "@id": "https://pistachioapp.com/contact#webpage",
+  "url": "https://pistachioapp.com/contact",
+  "name": "Contact Pistachio | Pistachio",
+  "description": "Contact Pistachio to book a demo or discuss security awareness training and insider threat detection.",
+  "isPartOf": {
+    "@id": "https://pistachioapp.com/#website"
+  },
+  "about": {
+    "@id": "https://pistachioapp.com/#organization"
+  },
+  "inLanguage": "en"
+}

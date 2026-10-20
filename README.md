@@ -12,6 +12,26 @@ dev.mjs           local bundle server
 tag.mjs           commit-pinned script tag
 ```
 
+## Current JavaScript release
+
+The JavaScript source, tests and matching bundle were committed and pushed as
+3379ecc1e2a109a3ed31025f1c4a57e99bdc8b58 on 19 October 2026. This includes
+Article Device Share/LinkedIn and footnote focus, hidden-menu focus handling,
+and About Team’s automatic rows without a manual control. All 212 tests across
+15 files passed and the bundle built before the push. The commit-pinned CDN
+loader and bundle returned 200 and matched the local files byte for byte.
+
+The saved Webflow loader was changed from 57dce345 to 3379ecc and read back after
+a settings reload. A separate staging publication was observed during that work;
+the staging HTML now references 3379ecc. No Publish action was run as part of
+this release. Runtime/page acceptance remains separate from source/CDN proof.
+
+Custom CSS, schema and other local changes were not included in this commit.
+
+Ordinary layout, type and supported Current/focus styles stay native; necessary scoped state/relationship exceptions keep their existing CSS owner. The dated saved-source comparison is recorded in [styles/README.md](styles/README.md), including Article relationships, Legal table containment, Pricing visibility across slots/markers and Stories filter states. Pricing Current colours are native. Page plans, QA and client decisions stay in sibling private/.
+
+Commit/push, loader selection and Webflow publication need separate approval. After release, check the actual bundle, global CSS and affected controls. Local tests and saved page checks do not prove published delivery.
+
 ## Work locally
 
 Run npm install, then npm run dev. Copy the site’s real module hooks and preserve
@@ -27,6 +47,27 @@ the CDN without probing the visitor’s local network. A tunnel
 must be configured through loader.js DEFAULTS.localBase or data-local-base on
 the trusted loader tag; URL parameters cannot select an arbitrary outside host.
 The panel reports the selected source, including fallback to the CDN.
+
+## JavaScript owners
+
+`src/index.js` starts the site. `src/boot.js` starts registered modules concurrently and reports failures without hiding the page. `src/modules/index.js` owns registration; it is not a sequence of dependent startup steps. Each feature stays in its own module, with its tests beside it. Shared DOM helpers stay in `src/utils/`.
+
+| Module | Owns |
+|---|---|
+| Nav | Header scroll state, dropdowns, mobile menu and focus |
+| Marquee | Repeated logo/testimonial rows and their motion state |
+| About Team | About’s measured moving team rows |
+| Rotate | Demo quote timing and progress |
+| Video | Video dialog and playback journey |
+| Reveal | Opted-in entrance motion |
+| External graphic | Trusted SVG loading and its animation setup |
+| Stat progress | Independent decorative progress bars |
+| Risk stack | Stack eligibility, scaling and keyboard opt-out |
+| Section navigation | Opted-in section links and current location |
+| Article contents | Article contents and footnote reference/return behaviour, using section navigation |
+| Accordions | Shared FAQ open/close and question interactions |
+
+CSS owns appearance and transitions; modules own the required state and interactions. Keep page-specific code out of another feature’s module. Existing native Webflow/Finsweet features retain their own behaviour; do not add a second handler for them.
 
 ## Check and release
 

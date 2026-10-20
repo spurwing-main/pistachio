@@ -4,3 +4,7 @@
   height: auto;
   overflow: visible !important;
 }
+/* Practice quote: preserve the shared Presence Base treatment. */
+.sat[data-wf--sections-sat--variant="practice-quote"] .testimonial-card {
+  border-color: var(--_color---violet--800);
+}

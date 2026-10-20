@@ -1,57 +1,48 @@
+/* u-visually-hidden lives in the Designer (Style panel). */
 
-  /* u-visually-hidden lives in the Designer (Style panel). */
+/* Hide or show at Webflow's breakpoints (991 / 767 / 478); showing never forces a display value. */
+@media (min-width: 992px) {
+  .u-hidden-dsk,
+  .u-visible-tbl {
+    display: none !important;
+  }
+}
+@media (max-width: 991px) {
+  .u-hidden-tbl {
+    display: none !important;
+  }
+}
+@media (min-width: 768px) {
+  .u-visible-mbl {
+    display: none !important;
+  }
+}
+@media (max-width: 767px) {
+  .u-hidden-mbl {
+    display: none !important;
+  }
+}
+@media (min-width: 479px) {
+  .u-visible-mbp {
+    display: none !important;
+  }
+}
+@media (max-width: 478px) {
+  .u-hidden-mbp {
+    display: none !important;
+  }
+}
 
-  /* Hide or show at Webflow's breakpoints (991 / 767 / 478); showing never forces a display value. */
-  @media (min-width: 992px) {
-    .u-hidden-dsk,
-    .u-visible-tbl {
-      display: none !important;
-    }
-  }
-  @media (max-width: 991px) {
-    .u-hidden-tbl {
-      display: none !important;
-    }
-  }
-  @media (min-width: 768px) {
-    .u-visible-mbl {
-      display: none !important;
-    }
-  }
-  @media (max-width: 767px) {
-    .u-hidden-mbl {
-      display: none !important;
-    }
-  }
-  @media (min-width: 479px) {
-    .u-visible-mbp {
-      display: none !important;
-    }
-  }
-  @media (max-width: 478px) {
-    .u-hidden-mbp {
-      display: none !important;
-    }
-  }
+.u-opacity-050 {
+  opacity: 0.5 !important;
+}
+.u-opacity-070 {
+  opacity: 0.7 !important;
+}
+.u-opacity-080 {
+  opacity: 0.8 !important;
+}
 
-  .u-opacity-050 {
-    opacity: 0.5 !important;
-  }
-  .u-opacity-070 {
-    opacity: 0.7 !important;
-  }
-  .u-opacity-080 {
-    opacity: 0.8 !important;
-  }
-
-  .u-grabbable {
-    cursor: grab;
-  }
-
-  .u-grabbable:active {
-    cursor: grabbing;
-  }
-
-  a.u-cover {
-    cursor: pointer;
-  }
+a.u-cover {
+  cursor: pointer;
+}

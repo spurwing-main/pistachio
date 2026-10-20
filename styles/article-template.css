@@ -1,10 +1,32 @@
 /* Article template: omit empty article sections and fields. */
-#resource-article .article-read_time:has(> :first-child:empty),
-#resource-article .article-metadata > .tag:has(.tag_text.w-dyn-bind-empty),
-#resource-article .article-metadata > .tag:has(.tag_text:empty),
-#resource-article .article-image.w-dyn-bind-empty,
-#resource-article .page-contents:not(:has(.page-contents_rows a)),
-#resource-article .article-prose:has(> .w-richtext:empty) > .article-share,
-#resource-article .article-related:not(:has(.w-dyn-item)) {
+.article-shell .article-read_time:has(> :first-child:empty),
+.article-shell .article-metadata > .tag:has(.tag_text.w-dyn-bind-empty),
+.article-shell .article-metadata > .tag:has(.tag_text:empty),
+.article-shell .article-image.w-dyn-bind-empty,
+.article-shell .page-contents:not(:has(.page-contents_rows a)),
+.article-shell .article-prose:has(> .w-richtext:empty) > .article-share,
+.article-shell .article-related:not(:has(.w-dyn-item)) {
   display: none;
+}
+
+/* Inline article images fill the prose width without retaining HTML height attributes. */
+.text-rich-text.is-article img {
+  width: 100%;
+  height: auto;
+}
+
+/* Native video embeds need intrinsic figure height; iframe figures keep Webflow sizing. */
+.article-shell .is-article figure.w-richtext-figure-type-video:has(> .w-embed > video) {
+  height: auto;
+}
+
+/* Footnote jumps clear the current navigation height in both directions. */
+.text-rich-text.is-article .footnotes li[id],
+.text-rich-text.is-article sup[id^="fnref-"] {
+  scroll-margin-top: calc(var(--nav--height) + var(--space--m));
+}
+
+/* Generated footnotes need room for two-digit outside markers. */
+.text-rich-text.is-article .footnotes ol {
+  padding-inline-start: 2.5em;
 }

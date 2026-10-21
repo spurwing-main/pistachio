@@ -4,8 +4,7 @@
  *   data-accordion-first-open="true" opens the first valid item (default false).
  *   data-accordion-close-others="false" allows several open items (default true).
  * Items get is-open and data-accordion-open="true|false" for Designer styling.
- * A sibling data-accordion="label" forwards clicks only when its existing ID
- * is named by the button's aria-labelledby; selecting its text does not toggle.
+ * Questions live inside native buttons; selecting their text does not toggle.
  * data-accordion-item-toggle="true" on an ancestor opts its items into whole-item
  * pointer toggling. data-accordion-click-area on the card includes its outer
  * padding, retaining the native button and interactive answer content.
@@ -94,6 +93,13 @@ function setupItem(item, component, initiallyOpen) {
 
   const onClick = (event) => {
     event.preventDefault();
+    const selection = item.ownerDocument.defaultView.getSelection();
+    if (
+      event.detail > 0 &&
+      selection?.rangeCount &&
+      !selection.isCollapsed &&
+      selection.getRangeAt(0).intersectsNode(trigger)
+    ) return;
     if (!open && component.dataset.accordionCloseOthers?.toLowerCase() !== "false") {
       component.querySelectorAll(selector("item")).forEach((other) => {
         if (other !== item && other.closest(selector("component")) === component) {
@@ -104,21 +110,16 @@ function setupItem(item, component, initiallyOpen) {
     setOpen(!open);
   };
   trigger.addEventListener("click", onClick);
-  const label = owned(item, "label");
   const area = item.closest("[data-accordion-click-area]");
   const wholeItem =
     item.closest('[data-accordion-item-toggle="true"]') &&
     area?.querySelector(selector("item")) === item;
-  const useLabel =
-    !wholeItem &&
-    label?.id &&
-    trigger.getAttribute("aria-labelledby")?.split(/\s+/).includes(label.id);
-  const clickArea = wholeItem ? area : label;
+  const clickArea = wholeItem ? area : null;
   const onAreaClick = (event) => {
     if (
       event.defaultPrevented ||
       event.button !== 0 ||
-      (wholeItem && event.target.closest("[data-accordion-click-area]") !== clickArea) ||
+      event.target.closest("[data-accordion-click-area]") !== clickArea ||
       (event.target.closest(selector("item")) && event.target.closest(selector("item")) !== item) ||
       event.target.closest(
         "a,button,input,select,textarea,label,summary,[contenteditable],[role='button'],[role='link']",
@@ -130,7 +131,7 @@ function setupItem(item, component, initiallyOpen) {
     trigger.focus();
     trigger.click();
   };
-  if ((wholeItem && clickArea) || useLabel) clickArea.addEventListener("click", onAreaClick);
+  if (clickArea) clickArea.addEventListener("click", onAreaClick);
   setOpen(initiallyOpen, false);
   const record = {
     setOpen,
@@ -139,7 +140,7 @@ function setupItem(item, component, initiallyOpen) {
       animation?.cancel();
       animation = null;
       trigger.removeEventListener("click", onClick);
-      if ((wholeItem && clickArea) || useLabel) clickArea.removeEventListener("click", onAreaClick);
+      if (clickArea) clickArea.removeEventListener("click", onAreaClick);
       restore.forEach((reset) => reset());
       records.delete(item);
     },

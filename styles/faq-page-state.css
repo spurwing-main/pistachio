@@ -6,7 +6,6 @@
   .faq-item_trigger:hover .faq-item_icon-wrap,
   :is(
       [data-wf--items-faq-item--variant="rich-question" i],
-      [data-wf--items-faq-item--variant="page-question" i],
       [data-wf--items-faq-item--variant="page-question-spacing" i]
     )
     .faq-item_question-row:hover
@@ -23,10 +22,6 @@
 .faq-item_trigger:focus-visible .faq-item_icon-wrap {
   background-color: color-mix(in srgb, var(--_color---violet--200) 18%, var(--_color---warm--000));
   color: var(--_theme---section--heading);
-}
-/* Category targets clear the existing 7rem contents/header offset. */
-.faq-page_groups > [id] {
-  scroll-margin-top: 7rem;
 }
 /* FAQ category Current styling. */
 .text-link:is(

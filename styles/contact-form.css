@@ -9,13 +9,9 @@
 }
 .contact-form .form_input.is-message {
   field-sizing: content;
-  resize: vertical;
 }
 
 /* Contact owns these relationships; shared Eyebrow and Button defaults stay unchanged. */
-.contact-form_reasons > .text-eyebrow {
-  color: var(--_color---neutral--500);
-}
 .contact-form_fields > .button {
   margin-top: 0;
 }

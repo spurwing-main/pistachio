@@ -1,9 +1,6 @@
 /* Footer: link arrows and the reveal. Legal underlines and colour transitions are on
      the classes in the Designer. */
 
-.footer_link svg {
-  transition: transform var(--motion-base) var(--ease-out);
-}
 
 @media (hover: hover) {
   .footer_link:hover svg {

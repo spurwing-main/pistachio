@@ -29,10 +29,6 @@
   transform: scale(1);
 }
 
-.form_checkbox:focus-visible {
-  outline: 2px solid var(--_color---violet--600);
-  outline-offset: 2px;
-}
 
 /* The whole option responds, including keyboard focus on its checkbox. */
 .form_check:has(.form_checkbox:checked) .form_check-label {
@@ -45,10 +41,6 @@
   background-color: var(--_color---rose--000);
 }
 
-.form_input:focus-visible {
-  outline: 2px solid var(--_color---violet--600);
-  outline-offset: 3px;
-}
 
 /* Webflow's bot check adds an empty box after the submit button; keep it out of the form's gap. */
 .w-form form > div:empty:last-child {

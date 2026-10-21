@@ -53,15 +53,6 @@ html.nav-menu-open {
 
 /* Menu button: the outer bars slide to the middle and the middle one goes, then they turn
      into a close. Closing runs the same steps backwards. */
-.nav_toggle-icon path {
-  transform-box: fill-box;
-  transform-origin: center;
-  transition:
-    rotate var(--motion-fast) var(--ease-out),
-    translate var(--motion-fast) var(--ease-out) 120ms,
-    scale var(--motion-fast) var(--ease-out) 120ms,
-    opacity var(--motion-fast) var(--ease-out) 120ms;
-}
 
 .nav_toggle[aria-expanded="true"] .nav_toggle-icon path {
   transition:

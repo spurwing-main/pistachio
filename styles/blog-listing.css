@@ -1,13 +1,4 @@
 /* Blog filters: states belong to these controls, not shared component defaults. */
-.page-wrap.is-blog-page .resource-filter {
-  cursor: pointer;
-  text-decoration: none;
-}
-.page-wrap.is-blog-page .resource-filter:focus-within {
-  outline: 2px solid var(--_color---violet--700);
-  outline-offset: 3px;
-  border-radius: 8px;
-}
 .page-wrap.is-blog-page
   .resource-filter:is(.is-list-active, :has(input:checked))
   > .resource-category,

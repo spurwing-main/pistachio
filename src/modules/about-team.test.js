@@ -1,13 +1,14 @@
 import { beforeEach, expect, it, vi } from 'vitest';
 import { initAboutTeam } from './about-team.js';
 let reduce;
+let resized;
 beforeEach(() => {
  reduce = { matches: false, addEventListener: (_, fn) => { reduce.change = fn; } };
  vi.stubGlobal('matchMedia', () => reduce);
- vi.stubGlobal('ResizeObserver', class { observe() {} });
+ vi.stubGlobal('ResizeObserver', class { constructor(fn) { resized = fn; } observe() {} });
  vi.stubGlobal('IntersectionObserver', class { constructor(fn) { this.fn = fn; } observe() { this.fn([{ isIntersecting: true }]); } });
  document.body.innerHTML = `<section data-about-team><div data-about-team-row><div data-about-team-track><div><a href="/person" id="person">Person</a></div></div></div></section>`;
- Object.defineProperty(document.querySelector('[data-about-team-row]'), 'clientWidth', { value: 390 });
+ Object.defineProperty(document.querySelector('[data-about-team-row]'), 'clientWidth', { configurable: true, value: 390 });
  document.querySelector('[data-about-team-track] > div').getBoundingClientRect = () => ({ width: 200 });
 });
 it('starts automatic rows once without a manual control and excludes copies from keyboard navigation', () => {
@@ -23,6 +24,30 @@ it('responds to reduced motion without leaving copies', () => {
  initAboutTeam(); reduce.matches = true; reduce.change();
  expect(document.querySelectorAll('[data-about-team-clone]')).toHaveLength(0);
  reduce.matches = false; reduce.change();
+ expect(document.querySelectorAll('[data-about-team-clone]')).toHaveLength(2);
+});
+it('keeps existing copies on unchanged resize notifications and rebuilds for a wider row', () => {
+ initAboutTeam();
+ const row = document.querySelector('[data-about-team-row]');
+ const copy = row.querySelector('[data-about-team-clone]');
+ resized();
+ resized();
+ expect(row.querySelector('[data-about-team-clone]')).toBe(copy);
+ expect(row.querySelectorAll('[data-about-team-clone]')).toHaveLength(2);
+ Object.defineProperty(row, 'clientWidth', { configurable: true, value: 780 });
+ resized();
+ expect(row.querySelector('[data-about-team-clone]')).not.toBe(copy);
+ expect(row.querySelectorAll('[data-about-team-clone]')).toHaveLength(4);
+ expect(row.style.getPropertyValue('--about-team-duration')).toBe('20s');
+});
+it('keeps the moving copies when a photo finishes loading inside a fixed-size card', () => {
+ const image = document.createElement('img');
+ Object.defineProperty(image, 'complete', { value: false });
+ document.querySelector('[data-about-team-track] > div').append(image);
+ initAboutTeam();
+ const copy = document.querySelector('[data-about-team-clone]');
+ image.dispatchEvent(new Event('load'));
+ expect(document.querySelector('[data-about-team-clone]')).toBe(copy);
  expect(document.querySelectorAll('[data-about-team-clone]')).toHaveLength(2);
 });
 it('initialises two independent component instances without a manual control', () => {

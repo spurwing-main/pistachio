@@ -23,16 +23,13 @@
   --arrow-hover-fg: var(--_color---violet--800);
 }
 
-.arrow[data-wf--core-arrow--variant="clear" i] {
+.arrow[data-wf--core-arrow--variant="clear" i],
+.arrow[data-wf--core-arrow--variant="clear-fill" i] {
   --arrow-hover-bg: color-mix(in srgb, currentColor 12%, transparent);
   --arrow-hover-fg: currentColor;
 }
 
 /* Figma: a 13 × 9 arrow in a 32px circle, kept in proportion for other circle sizes. */
-.arrow_icon svg {
-  width: 40.625%;
-  height: auto;
-}
 
 /* A Core / Button holds its link or submit beside the arrow, so the button itself is the
      hover and focus target; other links and buttons still carry their arrow inside. */

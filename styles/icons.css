@@ -1,13 +1,12 @@
 /* Icons dropped into a slot take the size Figma draws: 26 in a 56 tile, 20 in a proof row. */
-.icon-tile svg,
-.icon-tile img {
+.icon-tile svg {
   width: 46%;
   height: 46%;
 }
 
 /* A proof icon is 20 at every size; on phones it sits centred in a 32 box (Figma). */
 .proof_icon svg,
-.proof_icon img {
+.proof[data-wf--core-proof--variant="tag-compact"] .proof_icon img {
   width: 1.25rem;
   height: 1.25rem;
 }

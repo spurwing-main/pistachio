@@ -12,13 +12,18 @@ dev.mjs           local bundle server
 tag.mjs           commit-pinned script tag
 ```
 
-## Current JavaScript release
+## Current JavaScript source and observed delivery
 
-20 October 2026: added the Legal revisions module and matching generated bundle.
-All 222 tests across 16 files pass. It supports sibling document/history CMS
-lists, revision/date/body switching, dotted revision URLs and browser history.
-The native CMS setup and page acceptance checks remain in the private Legal
-page records. This source release alone does not publish Webflow.
+The 21 October source includes the About Team image-load/measurement
+optimisation and its matching generated bundle. All 244 tests across 19 files
+pass and the bundle builds successfully. Use the tag generated from the pushed
+commit to select this source; these checks alone do not publish Webflow.
+
+The retained Legal audit observed staging loading
+`a06fee3ecd4bd76bd9826069976b6a895423c06f`, including revision switching,
+contents rebuilding and tables. That dated served proof does not establish
+that the current source or About optimisation is deployed. Current page
+acceptance and later publication checks remain in the private project records.
 
 ### Previous release
 
@@ -31,7 +36,7 @@ loader and bundle returned 200 and matched the local files byte for byte.
 
 The saved Webflow loader was changed from 57dce345 to 3379ecc and read back after
 a settings reload. A separate staging publication was observed during that work;
-the staging HTML now references 3379ecc. No Publish action was run as part of
+the staging HTML at that check referenced 3379ecc. No Publish action was run as part of
 this release. Runtime/page acceptance remains separate from source/CDN proof.
 
 Custom CSS, schema and other local changes were not included in this commit.
@@ -94,4 +99,4 @@ Compare custom CSS with the actual saved code before an approved change, then
 check the served version. Keep planning in sibling private/ and raw work in sibling local/, outside
 both Git repos.
 
-Local unreleased update, 20 October: Legal TOC restores its template/body before Finsweet restarts and sets `data-legal-toc-ready="true"` on the manager after valid links exist. Revision switching preserves the surrounding layout. The previously released loader pin does not include this update.
+Legal TOC restores its template/body before Finsweet restarts and sets `data-legal-toc-ready="true"` after valid links exist. This is included in the dated a06fee3 staging observation above; remaining acceptance is separate.

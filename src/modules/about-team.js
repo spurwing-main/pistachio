@@ -5,16 +5,22 @@ function setupTeam(group) {
   group.dataset.aboutTeamStarted = "true";
   const rows = [...group.querySelectorAll("[data-about-team-row]")];
   const reduce = matchMedia("(prefers-reduced-motion: reduce)");
+  const measurements = new WeakMap();
   const layout = (row, track, originals) => {
+    const width = row.clientWidth;
+    const distance = originals.reduce((sum, item) => sum + item.getBoundingClientRect().width, 0);
+    const previous = measurements.get(row);
+    if (previous?.width === width && previous.distance === distance && previous.reduced === reduce.matches)
+      return;
+    measurements.set(row, { width, distance, reduced: reduce.matches });
     track.querySelectorAll("[data-about-team-clone]").forEach((item) => item.remove());
     row.dataset.aboutTeamEmpty = String(originals.length === 0);
     if (!originals.length) return;
-    const distance = originals.reduce((sum, item) => sum + item.getBoundingClientRect().width, 0);
-    if (!distance || !row.clientWidth) return;
+    if (!distance || !width) return;
     row.style.setProperty("--about-team-distance", distance + "px");
     row.style.setProperty("--about-team-duration", distance / 10 + "s");
     if (!reduce.matches) {
-      const repeats = Math.ceil(row.clientWidth / distance);
+      const repeats = Math.ceil(width / distance);
       const copies = document.createDocumentFragment();
       for (let i = 0; i < repeats; i++)
         originals.forEach((item) => {
@@ -50,9 +56,6 @@ function setupTeam(group) {
     new IntersectionObserver(([entry]) => {
       row.dataset.aboutTeamVisible = String(entry.isIntersecting);
     }).observe(row);
-    track.querySelectorAll("img").forEach((image) => {
-      if (!image.complete) image.addEventListener("load", refresh, { once: true });
-    });
     refresh();
   });
   reduce.addEventListener("change", () => layouts.forEach((refresh) => refresh()));

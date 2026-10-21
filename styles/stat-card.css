@@ -1,10 +1,4 @@
-/* Scoped to Items / Stat card; preserves standalone Stat styling. */
-.stat-card > .stat {
-  background-color: var(--_color---white--100);
-}
-.stat-card > .stat .stat_fact {
-  color: var(--_color---violet--400);
-}
+/* The nested Stat Card variant owns its white background and violet fact colour. */
 .stat-card_text > :is(p, ul, ol) {
   font-size: inherit;
   line-height: inherit;

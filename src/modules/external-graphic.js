@@ -98,9 +98,12 @@ function setupAnimation(root, svg, { fromBreakpoint = false, wasVisible = false 
     report(root, "Animation skipped: missing data-graphic-animation.", {}, "warn");
     return;
   }
-  const card = svg.querySelector('[id="main"]');
+  // Data hooks keep animation independent of document-wide SVG IDs.
+  // Retain old ID selectors while previously uploaded assets are in use.
+  const card = svg.querySelector('[data-graphic-item="card"]') || svg.querySelector('[id="main"]');
   const linear = svg.dataset.graphicLayout === "linear";
   const items = Array.from({ length: linear ? 4 : 11 }, (_, index) =>
+    svg.querySelector(`[data-graphic-item="${String(index + 1).padStart(2, "0")}"]`) ||
     svg.querySelector(`[id="item ${String(index + 1).padStart(2, "0")}"]`),
   );
   const lineNames = [

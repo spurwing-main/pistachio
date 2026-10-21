@@ -42,6 +42,36 @@ describe("external graphic animation", () => {
     return root;
   }
 
+  it("keeps both SAT assets unique alongside the page landmark and resolves SVG references", async () => {
+    const first = mountAnimated();
+    const second = first.cloneNode(true);
+    document.body.append(second);
+    document.body.insertAdjacentHTML("afterbegin", '<main id="main"></main>');
+    const roots = [first, second];
+    const sources = ["security-awareness-training.svg", "security-awareness-training-mbl.svg"];
+    sources.forEach((name) => fetch.mockResolvedValueOnce(new Response(readFileSync(`assets/graphics/${name}`, "utf8"))));
+    await initExternalGraphic();
+    const ids = [...document.querySelectorAll("[id]")].map((element) => element.id);
+    expect(new Set(ids).size).toBe(ids.length);
+    expect(ids.every((id) => id && !/\s/.test(id))).toBe(true);
+    expect(gsap.timeline).toHaveBeenCalledTimes(2);
+    roots.forEach((root, index) => {
+      const svg = root.querySelector("svg");
+      const card = svg.querySelector('[data-graphic-item="card"]');
+      expect(card).not.toBeNull();
+      expect(gsap.set.mock.calls.some(([target]) => target === card)).toBe(true);
+      const items = gsap.set.mock.calls.find(([target]) => Array.isArray(target) && target[0]?.closest("svg") === svg && target[0]?.hasAttribute("data-graphic-item"))?.[0];
+      expect(items).toHaveLength(index === 0 ? 11 : 4);
+      for (const element of svg.querySelectorAll("*")) {
+        for (const attribute of element.attributes) {
+          const refs = [...attribute.value.matchAll(/url\(#([^)]*)\)/g)].map((match) => match[1]);
+          if (attribute.localName === "href" && attribute.value.startsWith("#")) refs.push(attribute.value.slice(1));
+          for (const id of refs) expect([...svg.querySelectorAll("[id]")].filter((target) => target.id === id)).toHaveLength(1);
+        }
+      }
+    });
+  });
+
   it("waits for the SVG response and insertion before creating exactly one animation", async () => {
     const root = mountAnimated();
     let resolve;
@@ -253,10 +283,10 @@ describe("external graphic animation", () => {
     expect(masks).toHaveLength(4);
     const calls = timeline.to.mock.calls;
     expect(calls).toHaveLength(9);
-    expect(calls[0][0].id).toBe("main");
+    expect(calls[0][0].dataset.graphicItem).toBe("card");
     for (let i = 0; i < 4; i++) {
       expect(calls[1 + i * 2][0]).toBe(masks[i]);
-      expect(calls[2 + i * 2][0].id).toBe(`item ${String(i + 1).padStart(2, "0")}`);
+      expect(calls[2 + i * 2][0].dataset.graphicItem).toBe(String(i + 1).padStart(2, "0"));
       expect(calls[2 + i * 2][2]).toBeCloseTo(calls[1 + i * 2][2] + calls[1 + i * 2][1].duration);
     }
     expect(calls.at(-1)[1].repeat).toBeUndefined();

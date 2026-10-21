@@ -244,6 +244,21 @@ function setupNav(root) {
   });
 
   /* ---- Both ---- */
+  root.addEventListener("click", (event) => {
+    const link = closestWithin(root, event.target, "a[href]");
+    if (!link) return;
+    const url = new URL(link.href);
+    if (
+      url.origin === window.location.origin &&
+      url.pathname === window.location.pathname &&
+      url.search && url.search !== window.location.search && url.hash
+    ) {
+      // Webflow's delegated anchor scrolling ignores query strings. Preserve
+      // native navigation so Finsweet reads the requested filters on page load.
+      event.stopPropagation();
+    }
+  });
+
   let ticking = false;
   const onScroll = () => {
     ticking = false;

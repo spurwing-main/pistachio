@@ -269,3 +269,29 @@ describe("mobile menu", () => {
     expect(nav.dataset.navExpanded).toBe("false");
   });
 });
+
+describe("filter links on the current page", () => {
+  it.each(["Download", "Press"])("preserves native navigation to %s before delegated anchor scrolling", (type) => {
+    const { resources } = mount("/blog");
+    const link = resources.querySelector("[data-nav-panel] a");
+    link.href = `/blog?type_equal=${type}#latest-insights`;
+    const smoothScroll = vi.fn((event) => event.preventDefault());
+    document.addEventListener("click", smoothScroll);
+    const event = new MouseEvent("click", { bubbles: true, cancelable: true });
+    link.dispatchEvent(event);
+    document.removeEventListener("click", smoothScroll);
+    expect(smoothScroll).not.toHaveBeenCalled();
+    expect(event.defaultPrevented).toBe(false);
+  });
+
+  it.each(["/blog#latest-insights", "/blog?type_equal=Press#latest-insights", "/about#team"])("leaves ordinary anchor handling intact for %s", (href) => {
+    const { resources } = mount("/blog?type_equal=Press");
+    const link = resources.querySelector("[data-nav-panel] a");
+    link.href = href;
+    const smoothScroll = vi.fn((event) => event.preventDefault());
+    document.addEventListener("click", smoothScroll);
+    link.dispatchEvent(new MouseEvent("click", { bubbles: true, cancelable: true }));
+    document.removeEventListener("click", smoothScroll);
+    expect(smoothScroll).toHaveBeenCalledOnce();
+  });
+});

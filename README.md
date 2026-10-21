@@ -63,6 +63,7 @@ The panel reports the selected source, including fallback to the CDN.
 | Module | Owns |
 |---|---|
 | Nav | Header scroll state, dropdowns, mobile menu and focus |
+| Footer | Reveal pinned footer on focus entry; normal-flow fallback for short viewports, with module-owned keyboard override styles |
 | Marquee | Repeated logo/testimonial rows and their motion state |
 | About Team | About’s measured moving team rows |
 | Rotate | Demo quote timing and progress |

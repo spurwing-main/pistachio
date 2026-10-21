@@ -2,6 +2,7 @@
 import aboutTeam from "./about-team.js";
 import marquee from "./marquee.js";
 import nav from "./nav.js";
+import footer from "./footer.js";
 import rotate from "./rotate.js";
 import video from "./video.js";
 import reveal from "./reveal.js";
@@ -17,6 +18,7 @@ import legalTables from "./legal-tables.js";
 
 export const modules = [
   nav,
+  footer,
   marquee,
   aboutTeam,
   rotate,

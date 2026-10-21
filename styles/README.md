@@ -114,8 +114,6 @@ no CSS loader, repo release or publication follows from their local records.
 
 Article body long-link wrapping is native on `text-rich-text is-article`. The article-template embed retains inline-image sizing, empty-field/list relationships, native-video figure treatment, reference offsets and the generated footnotes list indentation needed to keep two-digit outside reference numbers visible: `.text-rich-text.is-article .footnotes ol` uses `padding-inline-start: 2.5em`. It does not change ordinary article lists or source reference text, IDs and return links.
 
-The uninstalled page-contents.css proposal was removed from active source on 16 October; its recovery copy is outside Git. Article delivery uses article-contents.css. That earlier cleanup removed no saved embed. On 16 October, the separate Customer Stories page embed and customer-stories.css mirror were removed after a fresh saved-page check: both selectors matched zero elements, and no inline script or repo runtime referenced the old class. The saved removal was read back; publication remains separate.
-
 The table accounts for every active local CSS file. Do not invent a code-field match
 from a similar filename. Check dependencies, loading order, once-per-page reach,
 headerless pages and affected existing variants/placements before an approved
@@ -137,8 +135,8 @@ establish a whole-page mobile or Figma pass.
 Two Password page snippets are generated form/runtime code and retain their page
 context. They are not authored global styling or application JS to relocate.
 
-The 16 October structure cleanup retired the hidden About media card in favour
-of the already-bound shared Resource card. The later photo-only Team cleanup removed the remaining information rules and
-its `about-cards` Embed; the local CSS file is absent. The earlier 41-file match
-precedes that removal and is not the current file count. Refresh saved-source
-agreement before release; this document correction changes no CSS, loader or site.
+The table lists 41 current CSS files, including the Legal mirror added after the
+20 October 40-body comparison. Historical 40/41 counts refer to those dated
+sources, not a fresh comparison of every current Embed. The retired About card
+information CSS is absent. Current affected-source checks remain required before
+any approved code move.

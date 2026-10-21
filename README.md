@@ -14,33 +14,28 @@ tag.mjs           commit-pinned script tag
 
 ## Current JavaScript source and observed delivery
 
-The current source includes Footer query handling and Legal TOC reuse. All 248
-tests across 19 files pass and the bundle builds. The existing pinned Finsweet
-setup continues to load List and TOC on every page. Source release, saved loader
-selection and Webflow publication are separate steps; the private verification
-record holds their checked versions.
+The released source is `8b905cf24cf09a26c6dd960478387bc5a5cec277`, pushed on
+21 October 2026. It includes About row-copy stability, Footer keyboard access and
+same-page Resource filters, SAT source changes, and Legal TOC reuse. The release
+check passed 248 tests across 19 files and the bundle build. Its CDN loader and
+bundle matched the released files.
 
-The retained Legal audit observed staging loading
-`a06fee3ecd4bd76bd9826069976b6a895423c06f`, including revision switching,
-contents rebuilding and tables. That dated served proof does not establish
-that the current source or About optimisation is deployed. Current page
-acceptance and later publication checks remain in the private project records.
+The existing pinned Finsweet setup still loads List and TOC globally. Selective
+loading was withdrawn. CSS files remain separate saved-Embed mirrors; committing
+them does not load or publish them.
 
-### Previous release
+The build lead will update the existing Webflow loader to the pinned URL below,
+keeping its existing attributes. That saved change has not been read back:
 
-The JavaScript source, tests and matching bundle were committed and pushed as
-3379ecc1e2a109a3ed31025f1c4a57e99bdc8b58 on 19 October 2026. This includes
-Article Device Share/LinkedIn and footnote focus, hidden-menu focus handling,
-and About Team’s automatic rows without a manual control. All 212 tests across
-15 files passed and the bundle built before the push. The commit-pinned CDN
-loader and bundle returned 200 and matched the local files byte for byte.
+```text
+https://cdn.jsdelivr.net/gh/spurwing-main/pistachio@8b905cf24cf09a26c6dd960478387bc5a5cec277/loader.js
+```
 
-The saved Webflow loader was changed from 57dce345 to 3379ecc and read back after
-a settings reload. A separate staging publication was observed during that work;
-the staging HTML at that check referenced 3379ecc. No Publish action was run as part of
-this release. Runtime/page acceptance remains separate from source/CDN proof.
-
-Custom CSS, schema and other local changes were not included in this commit.
+No Webflow publication follows from this source release. The dated Legal audit
+observed a06fee3 on staging; the earlier 19 October loader selection used 3379ecc.
+Neither establishes delivery of the latest source. Current published checks,
+loader review proposals and page acceptance stay in the private verification
+record. Preserve the current loader source until its separate review is approved.
 
 Ordinary layout, type and supported Current/focus styles stay native; necessary scoped state/relationship exceptions keep their existing CSS owner. The dated saved-source comparison is recorded in [styles/README.md](styles/README.md), including Article relationships, Legal table containment, Pricing visibility across slots/markers and Stories filter states. Pricing Current colours are native. Page plans, QA and client decisions stay in sibling private/.
 
@@ -100,4 +95,4 @@ Compare custom CSS with the actual saved code before an approved change, then
 check the served version. Keep planning in sibling private/ and raw work in sibling local/, outside
 both Git repos.
 
-Legal TOC restores its template/body before Finsweet restarts and sets `data-legal-toc-ready="true"` after valid links exist. This is included in the dated a06fee3 staging observation above; remaining acceptance is separate.
+Legal TOC keeps an already complete Finsweet list. When imported headings are incomplete or the revision changes, it rebuilds from the template/body and sets `data-legal-toc-ready="true"` after valid links exist. The reuse change is in the latest source release; the earlier a06fee3 staging observation does not verify that later change.

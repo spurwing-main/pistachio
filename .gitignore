@@ -12,3 +12,7 @@ local/
 
 # Raw settings input retained at its existing local path.
 /schema/page-settings.json
+
+# Raw browser captures and backup archives stay outside Git.
+*.har
+*.zip

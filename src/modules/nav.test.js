@@ -271,6 +271,19 @@ describe("mobile menu", () => {
 });
 
 describe("filter links on the current page", () => {
+  it.each(["Download", "Press"])("keeps the Footer %s query when clicked from Blog", (type) => {
+    mount("/blog");
+    document.body.insertAdjacentHTML("beforeend", `<footer><a href="/blog?type_equal=${type}#latest-insights"><span>${type}</span></a></footer>`);
+    initNav(document);
+    const smoothScroll = vi.fn((event) => event.preventDefault());
+    document.addEventListener("click", smoothScroll);
+    const event = new MouseEvent("click", { bubbles: true, cancelable: true });
+    document.querySelector("footer span").dispatchEvent(event);
+    document.removeEventListener("click", smoothScroll);
+    expect(smoothScroll).not.toHaveBeenCalled();
+    expect(event.defaultPrevented).toBe(false);
+  });
+
   it.each(["Download", "Press"])("preserves native navigation to %s before delegated anchor scrolling", (type) => {
     const { resources } = mount("/blog");
     const link = resources.querySelector("[data-nav-panel] a");

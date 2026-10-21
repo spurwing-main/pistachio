@@ -1,0 +1,81 @@
+/* Honor the revision manager’s single-revision hidden state. */
+  [data-legal-controls][hidden] {
+    display: none;
+  }
+  /* enable toc when init */
+  [data-legal-manager][data-legal-toc-ready='true'] .legal_layout-inner {
+    column-gap: 10.0625rem;
+    grid-template-rows: auto;
+    grid-template-columns: 19.125rem minmax(0px, 1fr);
+    align-items: start;
+    display: grid;
+    margin-inline: 0;
+    max-width: none;
+  }
+  [data-legal-manager]:not([data-legal-toc-ready='true']) .page-contents {
+    display: none;
+  }
+  @media (max-width: 991px) {
+    [data-legal-manager][data-legal-toc-ready='true'] .legal_layout-inner {
+      grid-template-columns: minmax(0, 1fr);
+      column-gap: 0;
+    }
+  }
+
+  /* Keep desktop prose in its final column while contents initialise. */
+  @media (min-width: 992px) {
+    [data-legal-manager]:has([data-legal-current] [data-legal-body] h2) .legal_layout-inner {
+      column-gap: 10.0625rem;
+      grid-template-rows: auto;
+      grid-template-columns: 19.125rem minmax(0px, 1fr);
+      align-items: start;
+      display: grid;
+      margin-inline: 0;
+      max-width: none;
+    }
+    [data-legal-manager]:not([data-legal-toc-ready='true']):has([data-legal-current] [data-legal-body] h2) .page-contents {
+      display: flex;
+      visibility: hidden;
+    }
+  }
+
+  /* Keep legal tables readable without changing article prose wrapping. */
+  [data-legal-body] table,
+  [data-legal-body] table :is(th, td, a) {
+    overflow-wrap: normal;
+    word-break: normal;
+    white-space: normal;
+  }
+
+  /* Scrollable fallback before JavaScript adds the focusable wrapper. */
+  [data-legal-body] table {
+    display: block;
+    max-width: 100%;
+    overflow-x: auto;
+    border-collapse: collapse;
+  }
+
+  [data-legal-body] :is(th, td) {
+    min-width: 12rem;
+    padding: 0.5rem 0.75rem;
+    vertical-align: top;
+    text-align: left;
+  }
+
+  [data-legal-body] .legal-table-scroll {
+    min-width: 0;
+    max-width: 100%;
+    overflow-x: auto;
+  }
+
+  [data-legal-body] .legal-table-scroll > table {
+    display: table;
+    width: 100%;
+    max-width: none;
+    overflow: visible;
+  }
+
+  [data-legal-body] .legal-table-scroll:focus-visible {
+    outline: 2px solid currentColor;
+    outline-offset: 3px;
+  }

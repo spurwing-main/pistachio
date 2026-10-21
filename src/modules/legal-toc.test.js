@@ -166,3 +166,34 @@ it("includes headings inside anonymous CMS divs without removing styled containe
   expect([...root.querySelectorAll('nav a')].map(el => el.textContent)).toEqual(['First', 'Second']);
   expect(root.querySelector('[data-legal-body] .custom h2').textContent).toBe('Styled');
 });
+
+it("keeps a complete automatic TOC without replacing the body or restarting it", async () => {
+  const controls = installRestart();
+  cleanup = initLegalToc();
+  await controls.restart();
+  const heading = root.querySelector('[data-legal-body] h2');
+  const link = root.querySelector('nav a');
+  ready();
+  await settle();
+  expect(controls.restart).toHaveBeenCalledTimes(1);
+  expect(root.querySelector('[data-legal-body] h2')).toBe(heading);
+  expect(root.querySelector('nav a')).toBe(link);
+  expect(root.getAttribute('data-legal-toc-ready')).toBe('true');
+  root.querySelector('[data-legal-body]').innerHTML = '<h2 id="changed">Changed revision</h2>';
+  root.dispatchEvent(new CustomEvent('legal:revisionchange'));
+  await settle();
+  expect(controls.restart).toHaveBeenCalledTimes(2);
+  expect(root.querySelector('nav a').hash).toBe('#changed');
+});
+
+it("rebuilds an automatic TOC that missed an imported heading", async () => {
+  const controls = installRestart();
+  root.querySelector('[data-legal-body]').insertAdjacentHTML('beforeend', '<div><h2>Imported</h2></div>');
+  cleanup = initLegalToc();
+  await controls.restart();
+  expect(root.querySelectorAll('nav a')).toHaveLength(1);
+  ready();
+  await settle();
+  expect(controls.restart).toHaveBeenCalledTimes(2);
+  expect([...root.querySelectorAll('nav a')].map(el => el.textContent)).toEqual(['Introduction', 'Imported']);
+});

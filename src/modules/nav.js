@@ -244,20 +244,7 @@ function setupNav(root) {
   });
 
   /* ---- Both ---- */
-  root.addEventListener("click", (event) => {
-    const link = closestWithin(root, event.target, "a[href]");
-    if (!link) return;
-    const url = new URL(link.href);
-    if (
-      url.origin === window.location.origin &&
-      url.pathname === window.location.pathname &&
-      url.search && url.search !== window.location.search && url.hash
-    ) {
-      // Webflow's delegated anchor scrolling ignores query strings. Preserve
-      // native navigation so Finsweet reads the requested filters on page load.
-      event.stopPropagation();
-    }
-  });
+  root.addEventListener("click", preserveFilterNavigation);
 
   let ticking = false;
   const onScroll = () => {
@@ -292,8 +279,24 @@ function setupNav(root) {
   });
 }
 
+function preserveFilterNavigation(event) {
+  const link = closestWithin(event.currentTarget, event.target, "a[href]");
+  if (!link) return;
+  const url = new URL(link.href);
+  if (
+    url.origin === window.location.origin &&
+    url.pathname === window.location.pathname &&
+    url.search && url.search !== window.location.search && url.hash
+  ) {
+    // Webflow's delegated anchor scrolling ignores query strings. Let native
+    // navigation load the query so Finsweet can select the requested filter.
+    event.stopPropagation();
+  }
+}
+
 export function initNav(root = document) {
   qsa(root, "[data-nav]").forEach(setupNav);
+  qsa(root, "footer").forEach((footer) => footer.addEventListener("click", preserveFilterNavigation));
 }
 
 export default { name: "nav", init: initNav };

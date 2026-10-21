@@ -21,6 +21,21 @@ The earlier 41-CSS record is historical, before About information-only removal.
 This is saved-source/snapshot agreement, not publication or served-code proof.
 Refresh affected contents/order/reach before any later approved code move.
 
+## Legal revision controls — 21 October 2026
+
+The existing global `legal` Embed is mirrored in [legal.css](legal.css). Its
+single-revision `[hidden]` rule respects the revision manager’s existing state;
+no second visibility controller was added. The native `legal_revisions-select`
+phone style uses the existing `body/l` variable and fits its parent width. These
+are saved changes with unpublished desktop/mobile checks, not published proof.
+Other previously recorded mirror differences remain outside this correction.
+
+The later speed follow-up reserves Legal's final desktop columns while its
+contents initialise. The existing hidden-state behaviour remains on mobile;
+finished desktop/mobile dimensions match in the compared Terms preview. This
+CSS is saved in the global Legal Embed and mirrored in legal.css, but is not
+published. No component defaults or policy text changed.
+
 ## Native style ownership — 20 October 2026
 
 Arrow glyph sizing, Footer resting transitions, Nav toggle-path resting styles,

@@ -84,6 +84,21 @@ function mount(root) {
     requested++;
     void rebuild();
   }
+  function hasCompleteContents() {
+    const headings = [...(bodyCopy?.children || [])].filter(el => el.matches("h2,h3,h4,h5,h6"));
+    const links = [...(toc?.querySelectorAll('a[href^="#"]:not([href="#"])') || [])];
+    const normalise = value => value.trim().replace(/\s+/g, " ");
+    return headings.length > 0 && headings.length === links.length && headings.every((heading, index) => {
+      const link = links[index];
+      let target;
+      try { target = root.ownerDocument.getElementById(decodeURIComponent(link.hash.slice(1))); }
+      catch { return false; }
+      const targetHeading = target?.matches("h2,h3,h4,h5,h6") ? target : target?.firstElementChild;
+      return body.contains(target) && targetHeading?.matches("h2,h3,h4,h5,h6") &&
+        normalise(targetHeading.textContent) === normalise(heading.textContent) &&
+        normalise(link.textContent) === normalise(heading.textContent);
+    });
+  }
   const observer = new view.MutationObserver(update);
   observer.observe(root, {
     subtree: true, childList: true, attributes: true,
@@ -100,8 +115,9 @@ function mount(root) {
       update();
       return;
     }
-    // Rebuild once from the clean snapshot even if auto-init produced links:
-    // imported CMS wrappers may have hidden some headings from its first pass.
+    // Keep a complete auto-init result. Only missing imported headings or a
+    // pending revision need a second body replacement and Finsweet restart.
+    if (completed === 0 && requested === 0 && hasCompleteContents() && update()) return;
     if (completed === 0 || requested > completed || !update()) {
       requested++;
       invalidate();

@@ -14,10 +14,11 @@ tag.mjs           commit-pinned script tag
 
 ## Current JavaScript source and observed delivery
 
-The 21 October source includes the About Team image-load/measurement
-optimisation and its matching generated bundle. All 244 tests across 19 files
-pass and the bundle builds successfully. Use the tag generated from the pushed
-commit to select this source; these checks alone do not publish Webflow.
+The current source includes Footer query handling and Legal TOC reuse. All 248
+tests across 19 files pass and the bundle builds. The existing pinned Finsweet
+setup continues to load List and TOC on every page. Source release, saved loader
+selection and Webflow publication are separate steps; the private verification
+record holds their checked versions.
 
 The retained Legal audit observed staging loading
 `a06fee3ecd4bd76bd9826069976b6a895423c06f`, including revision switching,

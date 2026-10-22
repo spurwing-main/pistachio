@@ -22,6 +22,26 @@ beforeEach(() => {
 afterEach(() => { cleanup(); vi.restoreAllMocks(); vi.unstubAllGlobals(); vi.useRealTimers(); });
 const current = () => document.querySelector('[aria-current="location"]')?.textContent;
 
+it('keeps valid topic navigation working when a linked topic is missing', () => {
+  cleanup();
+  document.querySelector('#partners').remove();
+  cleanup = initSectionNav();
+  expect(current()).toBe('Onboarding');
+  tops.pricing = 100;
+  scroll();
+  expect(current()).toBe('Pricing');
+  document.querySelector('a[href="#onboarding"]').click();
+  expect(window.location.hash).toBe('#onboarding');
+});
+
+it('tolerates malformed fragments and a contents list with no matching topics', () => {
+  cleanup();
+  document.querySelector('[data-section-nav]').innerHTML = '<a href="#%E0%A4%A">Invalid</a><a href="#missing">Missing</a>';
+  cleanup = initSectionNav();
+  scroll();
+  expect(current()).toBeUndefined();
+});
+
 it('keeps a short or empty group current until the next group reaches the header offset', () => {
   expect(current()).toBe('Onboarding');
   tops = { onboarding: -300, partners: 70, pricing: 160 }; scroll();

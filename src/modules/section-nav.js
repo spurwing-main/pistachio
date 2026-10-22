@@ -10,11 +10,18 @@ export function initSectionNav(
   const created = [];
   for (const root of roots) {
     if (records.has(root)) continue;
-    const entries = [...root.querySelectorAll('a[href^="#"]')].map((link) => ({
-      link,
-      target: root.ownerDocument.getElementById(decodeURIComponent(link.hash.slice(1))),
-      original: link.getAttribute("aria-current"),
-    }));
+    const entries = [...root.querySelectorAll('a[href^="#"]')].flatMap((link) => {
+      let id;
+      try {
+        id = decodeURIComponent(link.hash.slice(1));
+      } catch {
+        return [];
+      }
+      const target = root.ownerDocument.getElementById(id);
+      if (!target) return [];
+      return [{ link, target, original: link.getAttribute("aria-current") }];
+    });
+    if (!entries.length) continue;
     const view = root.ownerDocument.defaultView;
     const select = (entry) =>
       entries.forEach((item) => {

@@ -80,7 +80,7 @@
   })();
 
   const isLoopback = (hostname) => ["localhost", "127.0.0.1", "[::1]"].includes(hostname);
-  // Query flags cannot grant permission to change which code runs.
+  // Development hosts enable development metadata without an explicit flag.
   const isDevHost = isLoopback(location.hostname) || location.hostname.endsWith(".webflow.io");
 
   const owner = self?.owner || DEFAULTS.owner;
@@ -98,21 +98,22 @@
   };
   const defaultBase = parseBase(DEFAULTS.localBase);
   const scriptBase = parseBase(script?.dataset.localBase);
-  const requestedBase = isDevHost ? parseBase(getParam("local")) : null;
-  const trustedOrigins = [defaultBase?.origin, scriptBase?.origin];
-  const allowedBase = requestedBase && (isLoopback(requestedBase.hostname) || trustedOrigins.includes(requestedBase.origin))
-    ? requestedBase : null;
-  const localBase = (allowedBase || scriptBase || defaultBase)?.href.replace(/\/$/, "") || null;
+  // A URL may select Local mode, but never its script address.
+  const localBase = (scriptBase || defaultBase)?.href.replace(/\/$/, "") || null;
   const localUrl = localBase ? `${localBase}/bundle.js` : null;
   const liveUrl = `https://cdn.jsdelivr.net/gh/${owner}/${repository}@${commit}/dist/bundle.js`;
   const devFlag = getFlag("dev") ?? getFlag("mode");
-  const devMode = isDevHost && devFlag !== false;
-  const requestedEnvironment = isDevHost ? getParam("env") : null;
-  const storedEnvironment = devMode ? store.get() : null;
+  const requestedEnvironment = getParam("env");
+  const storedEnvironment = devFlag !== false ? store.get() : null;
+  // Persist explicit choices across same-origin page navigation in this tab.
+  if (devFlag === false) store.clear();
+  else if (["auto", "local", "live"].includes(requestedEnvironment)) store.set(requestedEnvironment);
   const selectedEnvironment = requestedEnvironment || storedEnvironment || DEFAULTS.environment;
-  const environment = !isDevHost ? "live" : ["auto", "local", "live"].includes(selectedEnvironment)
-    ? selectedEnvironment : DEFAULTS.environment;
-  const hasOverride = Boolean(requestedEnvironment || allowedBase || storedEnvironment);
+  const environment = devFlag === false ? "live"
+    : ["auto", "local", "live"].includes(selectedEnvironment)
+      ? selectedEnvironment : DEFAULTS.environment;
+  const hasOverride = Boolean(requestedEnvironment || storedEnvironment);
+  const devMode = devFlag !== false && (devFlag === true || isDevHost || hasOverride);
 
   project.boot = {
     namespace,
@@ -249,7 +250,7 @@
       button.addEventListener("click", () => {
         store.set(value);
         const url = new URL(location.href);
-        url.searchParams.delete("env");
+        url.searchParams.set("env", value);
         location.href = url.toString();
       });
     });
@@ -267,7 +268,7 @@
 
   getSource().then((source) => {
     inject(source);
-    const showPanel = devMode && (devFlag === true || hasOverride || source.localUp === true);
+    const showPanel = devFlag !== false && (devFlag === true || hasOverride || source.localUp === true);
     if (showPanel) mountPanel(source);
   });
 })();

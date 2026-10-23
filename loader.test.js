@@ -1,5 +1,6 @@
 import { readFileSync } from "node:fs";
 import { JSDOM } from "jsdom";
+import { runInNewContext } from "node:vm";
 import { beforeEach, describe, expect, it, vi } from "vitest";
 
 const code = readFileSync("loader.js", "utf8");
@@ -153,7 +154,7 @@ describe("loader", () => {
 
 
 describe("code source boundaries", () => {
-  async function boot({ host = "example.webflow.io", query = "?env=local", data = {}, stored, defaultsBase, defaultsEnvironment } = {}) {
+  async function boot({ host = "example.webflow.io", query = "?env=local", data = {}, stored, defaultsBase, defaultsEnvironment, clickEnvironment, reset = false } = {}) {
     const dom = new JSDOM("<!doctype html><html><head></head><body></body></html>", {
       url: `https://${host}/${query}`,
       runScripts: "outside-only",
@@ -167,33 +168,113 @@ describe("code source boundaries", () => {
     if (stored) dom.window.sessionStorage.setItem("pistachio_environment", stored);
     let source = defaultsBase ? code.replace('localBase: "http://localhost:5500"', `localBase: ${JSON.stringify(defaultsBase)}`) : code;
     if (defaultsEnvironment) source = source.replace('environment: "auto"', `environment: ${JSON.stringify(defaultsEnvironment)}`);
-    dom.window.eval(source);
+    const location = { hostname: host, search: query, href: `https://${host}/${query}` };
+    runInNewContext(source, {
+      window: dom.window, document: dom.window.document, location,
+      sessionStorage: dom.window.sessionStorage, URL, URLSearchParams,
+      AbortController, fetch: fetchMock, console: dom.window.console,
+    });
     for (let step = 0; step < 8; step += 1) await Promise.resolve();
     const urls = [...dom.window.document.querySelectorAll('script[type="module"]')].map((script) => script.src);
     const config = dom.window.pistachio.boot;
     const panel = Boolean(dom.window.document.querySelector("[data-loader-panel]"));
+    if (clickEnvironment) dom.window.document.querySelector(`[data-environment="${clickEnvironment}"]`).click();
+    if (reset) dom.window.document.querySelector("[data-loader-reset]").click();
+    const savedEnvironment = dom.window.sessionStorage.getItem("pistachio_environment");
+    const destination = location.href;
     dom.window.close();
-    return { fetchMock, urls, config, panel };
+    return { fetchMock, urls, config, panel, destination, savedEnvironment };
   }
 
-  it.each(["example.com", "example.webflow.io.attacker.test", "localhost.attacker.test"])(
-    "ignores URL and session overrides on %s even with dev enabled", async (host) => {
-      const result = await boot({ host, query: "?dev=1&env=local&local=https://attacker.test&commit=abcdef1234567", stored: "local" });
-      expect(result.fetchMock).not.toHaveBeenCalled();
-      expect(result.urls).toEqual([loaderSource.replace("/loader.js", "/dist/bundle.js")]);
-      expect(result.config.environment).toBe("live");
-      expect(result.panel).toBe(false);
-    }
-  );
+  describe.each(["pistachioapp.com", "www.pistachioapp.com", "example.webflow.io", "localhost"])("development controls on %s", (host) => {
+    const data = { localBase: "https://pistachio.beta.localcan.dev" };
+    it.each(["?env=local", "?dev=1&env=local", "?mode=dev&env=local"])("loads the configured source for %s", async (query) => {
+      const result = await boot({ host, query, data });
+      expect(result.urls).toEqual([`${data.localBase}/bundle.js`]);
+      expect(result.panel).toBe(true);
+    });
 
-  it.each(["?mode=dev&env=local", "?dev=1&commit=abcdef1234567", "?dev=1", ""])(
-    "keeps the pinned production bundle for %s and stored local mode", async (query) => {
-      const result = await boot({ host: "example.com", query, stored: "local", data: { localBase: "https://trusted-tunnel.example" } });
+    it.each(["", "?env=auto", "?env=live", "?dev=1", "?mode=dev", "?local=https://attacker.test"])("does not probe for %s without a Local selection", async (query) => {
+      const result = await boot({ host, query, data });
       expect(result.fetchMock).not.toHaveBeenCalled();
       expect(result.urls).toEqual([loaderSource.replace("/loader.js", "/dist/bundle.js")]);
-      expect(result.panel).toBe(false);
-    }
-  );
+      expect(result.panel).toBe(query.includes("dev") || query.includes("env="));
+    });
+
+    it("uses a stored Local selection when the developer panel is enabled", async () => {
+      const result = await boot({ host, query: "?dev=1", stored: "local", data });
+      expect(result.urls).toEqual([`${data.localBase}/bundle.js`]);
+      expect(result.panel).toBe(true);
+    });
+
+    it.each(["?dev=1&env=auto", "?dev=1&env=live", "?dev=0"])("does not probe for %s despite a stored Local selection", async (query) => {
+      const result = await boot({ host, query, stored: "local", data });
+      expect(result.fetchMock).not.toHaveBeenCalled();
+      expect(result.urls).toEqual([loaderSource.replace("/loader.js", "/dist/bundle.js")]);
+    });
+
+    it.each(["https://attacker.test", "http://localhost:5501", "https://pistachio.beta.localcan.dev/other"])("ignores source override %s", async (base) => {
+      const result = await boot({ host, query: `?env=local&local=${encodeURIComponent(base)}`, data });
+      expect(result.fetchMock).toHaveBeenCalledExactlyOnceWith(`${data.localBase}/bundle.js`, expect.any(Object));
+      expect(result.urls).toEqual([`${data.localBase}/bundle.js`]);
+    });
+  });
+
+  it.each(["local", "live", "auto"])("keeps panel selection %s after reloading production", async (selection) => {
+    const first = await boot({ host: "pistachioapp.com", query: "?env=local", clickEnvironment: selection });
+    const query = new URL(first.destination).search;
+    const next = await boot({ host: "pistachioapp.com", query, stored: selection });
+    expect(next.config.environment).toBe(selection);
+    expect(next.panel).toBe(true);
+    expect(next.urls).toEqual([selection === "local" ? "http://localhost:5500/bundle.js" : loaderSource.replace("/loader.js", "/dist/bundle.js")]);
+  });
+
+  describe.each(["pistachioapp.com", "example.webflow.io"])("navigation persistence on %s", (host) => {
+    const data = { localBase: "https://pistachio.beta.localcan.dev" };
+    it.each(["url", "panel"])("keeps an explicit %s Local selection on the next page", async (via) => {
+      const first = await boot({ host, data, query: via === "url" ? "?env=local" : "?dev=1", clickEnvironment: via === "panel" ? "local" : undefined });
+      const next = await boot({ host, data, query: "", stored: first.savedEnvironment });
+      expect(next.urls).toEqual([`${data.localBase}/bundle.js`]);
+      expect(next.panel).toBe(true);
+      expect(next.config.devMode).toBe(true);
+    });
+
+    it.each(["live", "auto"])("persists an explicit %s override of stored Local mode", async (selection) => {
+      const first = await boot({ host, data, query: `?env=${selection}`, stored: "local" });
+      const next = await boot({ host, data, query: "", stored: first.savedEnvironment });
+      expect(next.fetchMock).not.toHaveBeenCalled();
+      expect(next.urls).toEqual([loaderSource.replace("/loader.js", "/dist/bundle.js")]);
+      expect(next.config.environment).toBe(selection);
+    });
+
+    it("Reset clears the selection for subsequent pages", async () => {
+      const first = await boot({ host, data, query: "?env=local&dev=1", reset: true });
+      const next = await boot({ host, data, query: "", stored: first.savedEnvironment });
+      expect(first.savedEnvironment).toBeNull();
+      expect(new URL(first.destination).search).toBe("");
+      expect(next.fetchMock).not.toHaveBeenCalled();
+      expect(next.panel).toBe(false);
+    });
+
+    it.each(["?dev=0", "?dev=0&env=local", "?dev=0&env=live", "?dev=0&mode=dev&env=local", "?mode=off&env=local"])("clears Local and forces published code for %s", async (query) => {
+      const first = await boot({ host, data, query, stored: "local" });
+      expect(first.savedEnvironment).toBeNull();
+      expect(first.config.environment).toBe("live");
+      expect(first.panel).toBe(false);
+      expect(first.fetchMock).not.toHaveBeenCalled();
+      expect(first.urls).toEqual([loaderSource.replace("/loader.js", "/dist/bundle.js")]);
+      const next = await boot({ host, data, query: "", stored: first.savedEnvironment });
+      expect(next.fetchMock).not.toHaveBeenCalled();
+      expect(next.panel).toBe(false);
+      expect(next.urls).toEqual([loaderSource.replace("/loader.js", "/dist/bundle.js")]);
+    });
+
+    it("does not persist an invalid environment", async () => {
+      const result = await boot({ host, data, query: "?env=invalid" });
+      expect(result.savedEnvironment).toBeNull();
+      expect(result.fetchMock).not.toHaveBeenCalled();
+    });
+  });
 
   it.each(["example.com", "example.webflow.io", "localhost"])(
     "ignores all commit query values on %s", async (host) => {
@@ -242,9 +323,9 @@ describe("code source boundaries", () => {
   });
 
   it.each(["http://localhost:5501", "http://127.0.0.1:5501", "http://[::1]:5501"])(
-    "allows loopback %s on staging", async (base) => {
+    "ignores URL-selected loopback %s on staging", async (base) => {
       const result = await boot({ query: `?env=local&local=${encodeURIComponent(base)}` });
-      expect(result.urls).toEqual([`${base}/bundle.js`]);
+      expect(result.urls).toEqual(["http://localhost:5500/bundle.js"]);
     }
   );
 
@@ -259,9 +340,9 @@ describe("code source boundaries", () => {
     expect(result.urls).toEqual([`${tunnel}/bundle.js`]);
   });
 
-  it("allows a query path on the configured tunnel origin", async () => {
+  it("ignores a query path on the configured tunnel origin", async () => {
     const result = await boot({ data: { localBase: "https://trusted-tunnel.example" }, query: "?env=local&local=https://trusted-tunnel.example/dev" });
-    expect(result.urls).toEqual(["https://trusted-tunnel.example/dev/bundle.js"]);
+    expect(result.urls).toEqual(["https://trusted-tunnel.example/bundle.js"]);
   });
 
   it.each(["javascript://localhost/evil", "https://user:pass@trusted-tunnel.example", "ftp://localhost", "https://trusted-tunnel.example?", "https://trusted-tunnel.example#"])(

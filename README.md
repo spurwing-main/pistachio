@@ -48,14 +48,33 @@ existing classes, variables and startup order. Register modules in
 src/modules/index.js. Returned startup promises settle before the module-ready
 marker; one module fault does not stop other modules starting.
 
-Production ignores development overrides and uses the tag’s revision or its
-configured default. URL ?commit= values never select code on any host. Release
-with a commit-pinned tag. Local is selected deliberately with ?env=local, the
-panel/session choice or trusted default on a development host. Auto and Live use
-the CDN without probing the visitor’s local network. A tunnel
-must be configured through loader.js DEFAULTS.localBase or data-local-base on
-the trusted loader tag; URL parameters cannot select an arbitrary outside host.
-The panel reports the selected source, including fallback to the CDN.
+Ordinary visits use the tag’s pinned revision or its configured default. URL
+`?commit=` values never select code on any host. Release with a commit-pinned tag.
+Development controls work on staging and production: `?dev=1` (or `?mode=dev`)
+opens the panel, and `?env=local` explicitly selects the development bundle.
+Auto and Live use the CDN without probing the visitor’s local network.
+
+The development source comes only from the loader tag’s validated `data-local-base`
+or, if absent or invalid, `DEFAULTS.localBase`. The `local` URL parameter is ignored,
+including localhost addresses, ports and paths on the configured tunnel. A link
+can select Local mode but cannot supply its script address.
+
+Explicit `env` URL choices and panel selections are saved in `sessionStorage`.
+The choice persists across same-origin page navigation in that tab on both staging
+and production, without carrying query parameters onto every link. The panel also
+sets `env` before reloading. An explicit environment query takes precedence and
+updates the stored choice; Live or Auto therefore replaces a previous Local choice.
+Reset clears storage and removes the development parameters.
+
+`?dev=0` clears the stored choice, forces published code and hides the panel.
+It takes precedence over `env`, including `?env=local`, and does not save that
+conflicting choice. The existing false-valued dev/mode aliases behave the same way;
+`dev` takes precedence over `mode`. Opening the panel alone does not probe unless
+Local was already selected for that tab. A fresh session without
+an explicit choice uses published code without probing. Session storage is scoped
+to the origin and tab; staging and production do not share selections.
+Unavailable development code falls back to the pinned CDN bundle, and the panel
+reports the selected source.
 
 ## JavaScript owners
 
